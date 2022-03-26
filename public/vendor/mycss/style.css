@@ -1,0 +1,23 @@
+td.details-control {
+    background: url('../../storage/img/iconos/plus-circle-solid.svg') no-repeat center center;
+    background-size: 70%;
+    cursor: pointer;
+}
+
+tr.shown td.details-control {
+    background: url('../../storage/img/iconos/minus-circle-solid.svg') no-repeat center center;
+    background-size: 70%;
+    cursor: pointer;
+}
+
+.flash {
+    
+    animation-name: example;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+  }
+
+@keyframes example {
+from {color: black;}
+to {color: red;}
+}
