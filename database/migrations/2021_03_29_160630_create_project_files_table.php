@@ -13,14 +13,11 @@ class CreateProjectFilesTable extends Migration
      */
     public function up()
     {
-        
+
         Schema::create('project_files', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('project_id')->unsigned();
-            $table->foreign('project_id')
-            ->references('id')
-            ->on('projects')
-            ->onDelete('cascade');
+            $table->foreignId('project_id')->unsigned();
+            $table->integer('id_padre');
             $table->string('name', 150);
             $table->string('ruta');
             $table->timestamps();

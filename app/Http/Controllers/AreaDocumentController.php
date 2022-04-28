@@ -20,9 +20,9 @@ class AreaDocumentController extends Controller
      */
     public function index($area)
     {
-        $ariasValidas = ['almacen', 'calidad', 'operaciones', 'compras', 'direccion', 'finanzas', 'ingenieria', 'manufactura', 'recursos humanos', 'ventas', 'servicio', 'desarrollo'];
+        $ariasValidas = ['calidad', 'tesoreria', 'compras', 'direccion', 'recursos humanos', 'ventas', 'servicio'];
         $aria = Area::where('name', 'like', '%' . $area . '%')->take(1)->get();
-        
+
         $folders = [];
         if (in_array($area, $ariasValidas)) {
             foreach ($aria as $ariax) {
@@ -52,16 +52,16 @@ class AreaDocumentController extends Controller
                         $f['nivel'] = 0;
                         $f['empty'] = true;
                         array_push($aux, $f);
-                    }                    
+                    }
                     $folders = $aux;
                 }
             }
         } else {
             $area = 'almacen';
         }
-        
+
         if(!is_array($folders))$folders = $folders->toArray();
-        
+
 
         return view('areafolders.areafolders')->with('folders', $folders)->with('area', $area);
     }
@@ -76,15 +76,15 @@ class AreaDocumentController extends Controller
             $areaId = $ariax->id;
             $folders = AreaDocument::where('area_id', $areaId)->where('folder_area_id', $folderId)->get();
         }
-        
+
         $folders->each(function($f){
-            
+
 
             $f->created_at = strval(date('Y-m-d H:i:s', strtotime($f->created_at)));
             $f->updated_at = strval(date('Y-m-d H:i:s', strtotime($f->updated_at)));
             #dd( $f->created_at);
         });
-        
+
 
         return response()->json(['folders'=>$folders, 'area_user'=>$area_user], Response::HTTP_OK);
     }
@@ -226,29 +226,29 @@ class AreaDocumentController extends Controller
         $r = $this->getPathFolder($idFolder);
         $pathFile = 'public/Documents/' . $folderAreaName . $r;
         if ($request->TotalFiles > 0) {
-            
+
             for ($x = 0; $x < $request->TotalFiles; $x++) {
                 if ($request->hasFile('files' . $x)) {
-                    
-                    
+
+
                     $file = $request->file('files' . $x);
                     $path = $file->storeAs(
                         $pathFile, $file->getClientOriginalName()
                     );
-                    
+
                     if(Storage::disk('public')->exists('Documents/' . $folderAreaName . $r.'/'.$file->getClientOriginalName())){
-                        
+
                         $name = $file->getClientOriginalName();
                         $areaDocument = new AreaDocument;
                         $areaDocument->area_id = $areaId;
                         $areaDocument->folder_area_id = $idFolder;
                         $areaDocument->name = $name;
                         $areaDocument->ruta = 'storage/app/' . $pathFile;
-                    
+
                         $areaDocument->save();
-                            
+
                     }
-                    
+
                 }else{
                     return response()->json(["message" => "No se pudo guardar el archivo, ".$request->file('files' . $x)->getClientOriginalName()], Response::HTTP_INTERNAL_SERVER_ERROR);
                 }

@@ -329,68 +329,37 @@ return [
             'icon'    => 'fas fa-folder',
             'submenu' => [
                 [
-                    'text' => 'Almacén',
-                    'url'  => '/folder/almacen',
-                ],
-                [
-                    'text' => 'Calidad',
+                    'text' => 'CALIDAD',
                     'url'  => '/folder/calidad',
                 ],
                 [
-                    'text' => 'Operaciones',
-                    'url'  => '/folder/operaciones',
+                    'text' => 'TESORERÍA',
+                    'url'  => '/folder/tesoreria',
                 ],
                 [
-                    'text' => 'Compras',
+                    'text' => 'COMPRAS',
                     'url'  => '/folder/compras',
                 ],
                 [
-                    'text' => 'Dirección',
-                    'url'  => '/folder/direccion',
+                    'text' => 'DIRECCIÓN',
+                    'url'  => '/folder/direcion',
                 ],
                 [
-                    'text' => 'Finanzas',
-                    'url'  => '/folder/finanzas',
-                ],
-                [
-                    'text' => 'Ingeniería',
-                    'url'  => '/folder/ingenieria',
-                ],
-                [
-                    'text' => 'Manufactura',
-                    'url'  => '/folder/manufactura',
-                ],
-                [
-                    'text' => 'Recursos Humanos',
+                    'text' => 'RECURSOS HUMANOS',
                     'url'  => '/folder/recursos humanos',
                 ],
                 [
-                    'text' => 'Ventas',
+                    'text' => 'VENTAS',
                     'url'  => '/folder/ventas',
                 ],
                 [
-                    'text' => 'Servicio',
+                    'text' => 'SERVICIO',
                     'url'  => '/folder/servicio',
                 ],
-                
+
             ],
         ],
-        /*['header' => 'labelsx'],
-        [
-            'text'       => 'important',
-            'icon_color' => 'red',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'warning',
-            'icon_color' => 'yellow',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'information',
-            'icon_color' => 'cyan',
-            'url'        => '#',
-        ],*/
+
     ],
 
     /*
@@ -476,7 +445,7 @@ return [
                     'asset' => true,
                     'location' => 'vendor/datatables-plugins/buttons/css/buttons.bootstrap4.min.css',
                 ],
-                
+
             ],
         ],
         'Select2' => [

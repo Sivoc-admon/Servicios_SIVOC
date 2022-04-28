@@ -61,17 +61,17 @@
         }
         body {
             height: 100%;
-            background-image: url({{asset('storage/img/SIVOC.jpg')}});
-            
+            background-image: url({{asset('storage/img/SIVOC_4.jpg')}});
+
             /* Center and scale the image nicely */
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
-            
+
         }
-    
+
         */
-        
+
     </style>
 
     {{-- Favicon --}}
@@ -102,7 +102,7 @@
 <body>
 
     <div class="container-fluid">
-        
+
         <div>
             @if (Route::has('login'))
                 <div  style="margin-left: 90%; margin-top: 10px; ">
@@ -118,15 +118,62 @@
                 </div>
             @endif
 
+
+            <div class="col-md-12">
+                <div class="card" >
+                  <div class="card-header">
+                    <h3 class="card-title" >EVENTOS</h3>
+                  </div>
+                  <!-- /.card-header -->
+                  <div class="card-body">
+                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                      <ol class="carousel-indicators">
+                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                      </ol>
+                      <div class="carousel-inner">
+                        <div class="carousel-item active">
+                          <img class="d-block w-100" src="https://mdbootstrap.com/img/Photos/Slides/img%20(15).jpg" alt="First slide">
+                        </div>
+                        <div class="carousel-item">
+                          <img class="d-block w-100" src="https://mdbootstrap.com/img/Photos/Slides/img%20(22).jpg" alt="Second slide">
+                        </div>
+                        <div class="carousel-item">
+                          <img class="d-block w-100" src="https://mdbootstrap.com/img/Photos/Slides/img%20(23).jpg" alt="Third slide">
+                        </div>
+                      </div>
+                      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                        <span class="carousel-control-custom-icon" aria-hidden="true">
+                          <i class="fas fa-chevron-left"></i>
+                        </span>
+                        <span class="sr-only">Previous</span>
+                      </a>
+                      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                        <span class="carousel-control-custom-icon" aria-hidden="true">
+                          <i class="fas fa-chevron-right"></i>
+                        </span>
+                        <span class="sr-only">Next</span>
+                      </a>
+                    </div>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+              <!-- /.col -->
+            </div>
+
+
             <div role="group" aria-label="Basic example" style="margin-top: 550px; padding-inline: 30px;">
                 @foreach ($buttons as $button)
-                    
+
                 <a href="storage/Documents/welcome/{{$button->id}}/{{$button->nameFile}}" target="_blank" style="font-size:12px;"><button class="btn btn-{{$button->color}}"> <b style="color: white !important">{{$button->button}}</b></button></a>
                 @endforeach
 
             </div>
 
-            
+
         </div>
     </div>
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRuleFilesTable extends Migration
+class CreateProjectFoldersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,18 @@ class CreateRuleFilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('rule_files', function (Blueprint $table) {
+        Schema::create('project_folders', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('rule_id');
-            $table->foreign('rule_id')
+            $table->unsignedInteger('project_id')->unsigned();
+            $table->foreign('project_id')
             ->references('id')
-            ->on('rules')
+            ->on('projects')
             ->onDelete('cascade');
-            $table->string('name', 150);
-            $table->string('ruta');
+            $table->string('name', 250);
+            $table->integer('id_padre');
             $table->timestamps();
             $table->softDeletes();
+
         });
     }
 
@@ -34,6 +35,6 @@ class CreateRuleFilesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rule_files');
+        Schema::dropIfExists('project_folders');
     }
 }
