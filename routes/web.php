@@ -54,6 +54,11 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::get('projects/board/showBoards/{tablero}', 'ProjectController@showBoards');
     Route::post('/register_project', 'ProjectController@store');
     Route::get('projects/board/showBoards/{tablero}', 'ProjectController@showBoards');
+    Route::get('projects/folder/{project}', 'ProjectController@showFolder')->name('projects.showFolder');
+    Route::post('projects/folder/create', 'ProjectController@createFolder')->name('projects.createFolder');
+    Route::get('projects/{folder}/files', 'ProjectController@showFolderFiles')->name('projects.showFolderFiles');
+    Route::get('projects/total', 'ProjectController@totalProyectos')->name('projects.totalProyectos');
+    Route::get('projects/folder/adicional/{id_project}', 'ProjectController@adicional')->name('projects.adicional');
     Route::resource('projects', 'ProjectController');
 
 });

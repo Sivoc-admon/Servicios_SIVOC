@@ -6,16 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ProjectFile extends Model
+class ProjectFolder extends Model
 {
     use Notifiable;
     use SoftDeletes;
 
     protected $fillable = [
         'project_id',
-        'id_padre',
         'name',
-        'ruta',
+        'id_padre',
     ];
 
     public function projects()
@@ -23,8 +22,14 @@ class ProjectFile extends Model
         return $this->belongsTo('App\Project');
     }
 
-    public function folder()
+    public function childs()
     {
-        return $this->belongsTo('App\ProjectFolder');
+        return $this->hasMany('App\ProjectFolder', 'id_padre', 'id');
     }
+
+    public function files()
+    {
+        return $this->hasMany('App\ProjectFile', 'id_padre');
+    }
+
 }

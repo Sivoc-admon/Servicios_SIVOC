@@ -26,6 +26,13 @@ class WelcomeController extends Controller
             ->whereNull('welcome.deleted_at')
             ->get();
 
+        $imagen = public_path()."/img/SIVOC.jpg";
+        if(@getimagesize($imagen)){
+            dd("existe imagen");
+        }else{
+
+        }
+
         return view('welcome',compact('buttons'));
     }
 
@@ -55,43 +62,43 @@ class WelcomeController extends Controller
      */
     public function store(Request $request)
     {
-                 
+
         $button=Welcome::create([
-            'name' => $request->name, 
+            'name' => $request->name,
             'color' => $request->color,
-            
+
         ]);
         $error=false;
         $msg="";
-        
+
         if ($button->save()) {
             $pathFile = 'public/Documents/welcome/'.$button->id;
 
-            for ($i=0; $i <$request->tamanoFiles ; $i++) { 
+            for ($i=0; $i <$request->tamanoFiles ; $i++) {
                 $nombre="file".$i;
                 $archivo = $request->file($nombre);
                 $welcomeFile=WelcomeFile::create([
                     'welcome_id' => $button->id,
                     'name' => $archivo->getClientOriginalName(),
                     'ruta' => 'storage/Documents/welcome/',
-    
+
                 ]);
                 $path = $archivo->storeAs(
                     $pathFile, $archivo->getClientOriginalName()
                 );
             }
-            
-            
+
+
             $welcomeFile->save();
             $msg="Registro guardado con exito";
-            
-            
+
+
         }else{
             $error=true;
         }
 
         $array=["msg"=>$msg, "error"=>$error];
-        
+
         return response()->json($array);
     }
 
@@ -115,7 +122,7 @@ class WelcomeController extends Controller
     public function edit($id)
     {
         $button = Welcome::find($id);
-        
+
         $msg="";
         $error=false;
         $array=["msg"=>$msg, "error"=>$error, "button"=>$button];
@@ -131,13 +138,13 @@ class WelcomeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+
         $button = Welcome::find($id);
-        
+
         $button->update([
             'name' => $request->inputEditButton,
             'color' => $request->sltEditColorButton,
-            
+
         ]);
     }
 
@@ -156,17 +163,17 @@ class WelcomeController extends Controller
 
     public function showButtonFile($minute)
     {
-        
+
         $files = Welcome::find($minute)->welcomeFile;
 
         $user = new User();
         $user = $user->find(Auth::user()->id);
-        
+
         $eliminaArchivo = $user->hasAnyRole(['admin', 'calidad']);
-        
+
         $msg="";
         $error=false;
-        
+
 
         $array=["msg"=>$msg, "error"=>$error, "buttonfiles"=>$files, "eliminaArchivo"=>$eliminaArchivo];
 
@@ -177,11 +184,11 @@ class WelcomeController extends Controller
     {
         $error=false;
         $msg="";
-        
-        
+
+
         $pathFile = 'public/Documents/welcome/'.$id;
 
-        for ($i=0; $i <$request->tamanoFiles ; $i++) { 
+        for ($i=0; $i <$request->tamanoFiles ; $i++) {
             $nombre="file".$i;
             $archivo = $request->file($nombre);
             $welcomeFile=WelcomeFile::create([
@@ -194,21 +201,21 @@ class WelcomeController extends Controller
                 $pathFile, $archivo->getClientOriginalName()
             );
         }
-            
-            
-           
-        
+
+
+
+
         if ($welcomeFile->save()) {
             $msg="Registro guardado con exito";
         }else{
             $error=true;
             $msg="Error al guardar archvio";
         }
-            
-            
+
+
 
         $array=["msg"=>$msg, "error"=>$error];
-        
+
         return response()->json($array);
     }
 

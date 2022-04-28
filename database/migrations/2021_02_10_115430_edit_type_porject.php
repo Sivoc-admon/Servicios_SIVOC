@@ -16,6 +16,7 @@ class EditTypePorject extends Migration
         Schema::table('projects', function (Blueprint $table) {
             $table->string('type', 10)->change();
             $table->string('name_project', 50)->after('type');
+            $table->string('adicional', 5)->nullable()->after('name_project');
         });
     }
 
