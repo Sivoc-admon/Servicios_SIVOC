@@ -350,7 +350,7 @@ function masDocumentos() {
 
                 messageAlert("Guardado Correctamente", "success", "");
 
-                location.reload();
+                showFolders();
 
             }
 

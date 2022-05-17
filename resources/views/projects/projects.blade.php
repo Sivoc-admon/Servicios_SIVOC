@@ -124,9 +124,9 @@
 
                                         <td>{{ $project->id }}</td>
                                         @if ( $project->adicional == null)
-                                            <td>{{ $project->name_project }}-{{ $project->name_customer }}-{{ $project->name }}</td>
+                                            <td>{{ $project->name_project }}_{{ $project->name_customer }}-{{ $project->name }}</td>
                                         @else
-                                            <td>{{ $project->name_project }}-{{ $project->name_customer }}-{{ $project->name }}-{{ $project->adicional }}</td>
+                                            <td>{{ $project->name_project }}_{{ $project->name_customer }}-{{ $project->name }}-{{ $project->adicional }}</td>
                                         @endif
 
                                         <td>{{ $project->status }}</td>
@@ -216,9 +216,9 @@
                             @isset($projects)
                                 @foreach ($projects as $project)
                                     @if ($project->adicional == null)
-                                        <option value="{{$project->id}}">{{$project->name_project}}-{{$project->name_customer}}-{{$project->name}}</option>
+                                        <option value="{{$project->id}}">{{$project->name_project}}_{{$project->name_customer}}-{{$project->name}}</option>
                                     @else
-                                        <option value="{{$project->id}}">{{$project->name_project}}-{{$project->name_customer}}-{{$project->name}}-{{$project->adicional}}</option>
+                                        <option value="{{$project->id}}">{{$project->name_project}}_{{$project->name_customer}}-{{$project->name}}-{{$project->adicional}}</option>
                                     @endif
 
                                 @endforeach
