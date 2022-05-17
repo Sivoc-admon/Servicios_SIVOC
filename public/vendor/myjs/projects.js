@@ -389,7 +389,7 @@ function eliminarArchivo(id) {
 
                 messageAlert("Archivo Eliminado", "success", "");
 
-                location.reload();
+                showFolders();
 
             }
 
