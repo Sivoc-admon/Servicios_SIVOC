@@ -390,7 +390,7 @@ class ProjectController extends Controller
         if(count($folder->files)){
             foreach ($folder->files as $file) {
                 $storage =asset($file->ruta.$file->name);
-                $html .= "<li><a href=".$storage." target='_blank'>$file->name</a></li>";
+                $html .= "<li><a href=".$storage." target='_blank'>$file->name</a><i style='padding-left: 5px; color: red;' class='fas fa-minus-square' onClick='eliminarArchivo(".$file->id.")'></i></li>";
             }
 
         }
@@ -414,7 +414,7 @@ class ProjectController extends Controller
                 if(count($arr->files)){
                     $html .= "<ul>";
                     foreach ($arr->files as $file) {
-                        $html .= "<li><a href='$file->ruta$file->name' target='_blank'>$file->name</a></li>";
+                        $html .= "<li><a href='$file->ruta$file->name' target='_blank'>$file->name</a><i style='padding-left: 5px; color: red;' class='fas fa-minus-square' onClick='eliminarArchivo(".$file->id.")'></i></li>";
                     }
                     $html .= "</ul>";
 
