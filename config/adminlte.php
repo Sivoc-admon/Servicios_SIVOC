@@ -342,7 +342,7 @@ return [
                 ],
                 [
                     'text' => 'DIRECCIÓN',
-                    'url'  => '/folder/direcion',
+                    'url'  => '/folder/direccion',
                 ],
                 [
                     'text' => 'RECURSOS HUMANOS',
