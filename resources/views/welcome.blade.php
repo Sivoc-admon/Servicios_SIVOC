@@ -135,9 +135,9 @@
                     </div>
 
             </div> -->
-            <div class="row justify-content-md-center  mt-5 ">
-                <div class="col-md-2"></div>
-                <div class="col-md-9">
+            <div class="row justify-content-md-center" style="margin-top: 150px" >
+                <div class="col-md-5"></div>
+                <div class="col-md-7">
                     <div class="card w-75" >
                       <div class="card-header">
                         <h3 class="card-title" >EVENTOS</h3>
