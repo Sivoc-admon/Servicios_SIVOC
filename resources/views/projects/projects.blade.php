@@ -53,7 +53,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    @if(Auth::user()->hasAnyRole(['admin', 'calidad', 'operaciones', 'manufactura', 'servicio']))
+                    @if(Auth::user()->hasAnyRole(['admin', 'calidad', 'operaciones', 'manufactura', 'servicio', 'ventas']))
                     <span >
                         <button type="button" class="btn btn-info" onclick="showDiv('divProject')" title="Mostrar Proyectos">
                             <i class="fas fa-project-diagram"></i>

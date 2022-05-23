@@ -9,7 +9,7 @@
 @stop
 
 @section('content')
-    @if(Auth::user()->hasRole('admin'))
+    @if(Auth::user()->hasRole(['admin', 'ventas']))
         <div class="row">
             <div class="col-12">
                 <div class="card">
