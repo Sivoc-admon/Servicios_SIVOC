@@ -61,7 +61,7 @@
         }
         body {
             height: 100%;
-            background-image: url({{asset('storage/img/SIVOC_4.jpg')}});
+            background-image: url({{asset('storage/img/welcome/SIVOC_4.jpg')}});
 
             /* Center and scale the image nicely */
             background-position: center;
@@ -118,7 +118,7 @@
                 </div>
             @endif
 
-
+            <!--
             <div class="row mt-3 justify-content-md-center">
 
                     <div class="col-md-3">
@@ -134,7 +134,7 @@
                         <img src="{{asset('storage/img/welcome/4.jpg')}}" width="50%" class="img-thumbnail" alt="Cinque Terre">
                     </div>
 
-            </div>
+            </div> -->
             <div class="row justify-content-md-center  mt-5 ">
                 <div class="col-md-2"></div>
                 <div class="col-md-9">
