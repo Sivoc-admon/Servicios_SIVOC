@@ -121,8 +121,8 @@
 
             <div class="row mt-3 justify-content-md-center">
 
-                    <div class="col-md-3 ">
-                        <img src="{{asset('storage/img/welcome/1.jpg')}}" class="img-fluid img-thumbnail" alt="Cinque Terre">
+                    <div class="col-md-3">
+                        <img src="{{asset('storage/img/welcome/1.jpg')}}" style="height: 200px;" class="img-thumbnail" alt="Cinque Terre">
                     </div>
                     <div class="col-md-3">
                         <img src="{{asset('storage/img/welcome/2.jpg')}}"  class="img-thumbnail" alt="Cinque Terre">
@@ -131,7 +131,7 @@
                         <img src="{{asset('storage/img/welcome/3.jpg')}}" width="50%" class="img-thumbnail" alt="Cinque Terre">
                     </div>
                     <div class="col-md-3">
-                        <img src="{{asset('storage/img/welcome/4.jpeg')}}" width="50%" class="img-thumbnail" alt="Cinque Terre">
+                        <img src="{{asset('storage/img/welcome/4.jpg')}}" width="50%" class="img-thumbnail" alt="Cinque Terre">
                     </div>
 
             </div>

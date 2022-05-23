@@ -144,14 +144,20 @@
                             @endif
                         
                             @break
+                        @case('tesoreria')
+                            @if (Auth::user()->hasAnyRole(['tesoreria', 'admin', 'ventas']))
+                                <button type="button" class="btn btn-primary" onclick="newFolder({{ $folders[0]['area_id'] }}, 0)">
+                                    Agregar carpeta en el primer nivel
+                                </button>
+            
+                                <input type="file" class="btn btn-warning" id="files_{{ $folders[0]['area_id'] }}_0" onchange="newFile({{ $folders[0]['area_id'] }}, 0)" multiple />
+                            @endif
+                        
+                            @break
                         @default
                             
                     @endswitch
 
-                   
-
-                    
-                    
                     @include('areafolders.modals')
                 </div>
             </div>
