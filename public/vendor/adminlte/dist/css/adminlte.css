@@ -13787,6 +13787,9 @@ body.text-sm .control-sidebar {
 .navbar-info {
   background-color: #17a2b8;
 }
+.navbar-edit {
+  background-color: #808080;
+}
 
 .navbar-warning {
   background-color: #ffc107;
