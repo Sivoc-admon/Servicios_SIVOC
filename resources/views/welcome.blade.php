@@ -61,7 +61,7 @@
         }
         body {
             height: 100%;
-            background-image: url({{asset('storage/img/SIVOC_4.jpg')}});
+            background-image: url({{asset('storage/img/welcome/SIVOC_4.jpg')}});
 
             /* Center and scale the image nicely */
             background-position: center;
@@ -118,11 +118,11 @@
                 </div>
             @endif
 
-
+            <!--
             <div class="row mt-3 justify-content-md-center">
 
-                    <div class="col-md-3 ">
-                        <img src="{{asset('storage/img/welcome/1.jpg')}}" class="img-fluid img-thumbnail" alt="Cinque Terre">
+                    <div class="col-md-3">
+                        <img src="{{asset('storage/img/welcome/1.jpg')}}" style="height: 200px;" class="img-thumbnail" alt="Cinque Terre">
                     </div>
                     <div class="col-md-3">
                         <img src="{{asset('storage/img/welcome/2.jpg')}}"  class="img-thumbnail" alt="Cinque Terre">
@@ -131,13 +131,13 @@
                         <img src="{{asset('storage/img/welcome/3.jpg')}}" width="50%" class="img-thumbnail" alt="Cinque Terre">
                     </div>
                     <div class="col-md-3">
-                        <img src="{{asset('storage/img/welcome/4.jpeg')}}" width="50%" class="img-thumbnail" alt="Cinque Terre">
+                        <img src="{{asset('storage/img/welcome/4.jpg')}}" width="50%" class="img-thumbnail" alt="Cinque Terre">
                     </div>
 
-            </div>
-            <div class="row justify-content-md-center  mt-5 ">
-                <div class="col-md-2"></div>
-                <div class="col-md-9">
+            </div> -->
+            <div class="row justify-content-md-center" style="margin-top: 150px" >
+                <div class="col-md-5"></div>
+                <div class="col-md-7">
                     <div class="card w-75" >
                       <div class="card-header">
                         <h3 class="card-title" >EVENTOS</h3>

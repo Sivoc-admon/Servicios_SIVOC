@@ -53,7 +53,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    @if(Auth::user()->hasAnyRole(['admin', 'calidad', 'operaciones', 'manufactura', 'servicio']))
+                    @if(Auth::user()->hasAnyRole(['admin', 'calidad', 'tesoreria', 'manufactura', 'servicio', 'ventas']))
                     <span >
                         <button type="button" class="btn btn-info" onclick="showDiv('divProject')" title="Mostrar Proyectos">
                             <i class="fas fa-project-diagram"></i>
@@ -110,7 +110,7 @@
                                                     <i class="fas fa-list"></i>
                                                 </button>
                                             </span>
-                                        @if (Auth::user()->hasAnyRole(['admin', 'calidad', 'operaciones', 'manufactura', 'servicio', 'ventas']))
+                                        @if (Auth::user()->hasAnyRole(['admin', 'calidad', 'tesoreria', 'manufactura', 'servicio', 'ventas']))
 
                                             <!-- <span data-toggle="modal" data-target="#ModalShowBoard">
                                                 <button type="button" class="btn btn-info" data-toggle="tooltip" data-placement="top" title="Mostrar Tableros" onclick="showBoards({{$project->id}})">
