@@ -163,7 +163,7 @@ class ProjectController extends Controller
 
         $finanza = new ProjectFolder;
         $finanza->project_id = $project->id;
-        $finanza->name = 'FINANZAS';
+        $finanza->name = 'TESORERIA';
         $finanza->id_padre = '0';
 
         $finanza->save();
