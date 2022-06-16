@@ -181,6 +181,15 @@ Route::middleware(['auth', 'verified'])->group(function(){
 
 });
 
+//REQUISICIONES
+Route::middleware(['auth', 'verified'])->group(function(){
+
+    Route::delete('requisitions/{requisition}/destroyFile', 'RequisitionController@destroyFile')->name('requisitions.destroyFile');
+    Route::post('requisitions/{requisition}/uploadFile', 'RequisitionController@uploadFile')->name('requisitions.uploadFile');
+    Route::get('requisitions/{requisition}/files', 'RequisitionController@files')->name('requisitions.files');
+    Route::resource('requisitions', 'RequisitionController');
+});
+
 
 
 
