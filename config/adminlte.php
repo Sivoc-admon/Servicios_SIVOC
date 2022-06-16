@@ -306,6 +306,11 @@ return [
             'icon' => 'fas fa-chart-bar',
         ],
         [
+            'text' => 'Requisiciones',
+            'url'  => '/requisitions',
+            'icon' => 'fas fa-chart-bar',
+        ],
+        [
             'text' => 'Activos',
             'url'  => 'assets',
             'icon' => 'far fa-check-square',
