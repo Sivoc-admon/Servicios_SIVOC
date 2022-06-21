@@ -60,8 +60,8 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <div >
-                        <img id="preview" src="" alt="">
+                    <div style='display:flex; justify-content:center;'>
+                        <img id="preview" style="width:50%">
                     </div>
                 </div>
             </div>
