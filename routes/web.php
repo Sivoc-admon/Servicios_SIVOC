@@ -20,6 +20,10 @@ Route::get('inicio/button', 'WelcomeController@buttons')->name('welcome.button')
 Route::post('inicio/save', 'WelcomeController@store')->name('welcome.store');
 Route::resource('inicio', 'WelcomeController');
 
+//Routes of images
+Route::post('inicio/uploadImage', 'WelcomeController@storeImage')->name('welcome.storeImage');
+Route::delete('inicio/{id}/destroyImage', 'WelcomeController@destroyImage')->name('welcome.destroyImage');
+
 
 Auth::routes();
 
