@@ -93,6 +93,8 @@ function saveRequisition() {
         messageAlert("No hay items.", "warning");
         return;
     }
+    let noRequisition = $("#name_project").val();
+    formdata.append("noRequisition", noRequisition);
     let i = 1;
     for (const key in items) {
         console.log(items[key]);

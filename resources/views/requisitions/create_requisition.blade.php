@@ -26,7 +26,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="name_project">No. Requisición</label>
-                            <input type="text" class="form-control" id="name_project" name="name_project" placeholder="Nombre del Proyecto" value="{{$newRequisition}}">
+                            <input type="text" class="form-control" id="name_project" name="name_project" placeholder="Nombre del Proyecto" value="R-{{$newRequisition}}">
                         </div>
                     </div>
                 </div>
