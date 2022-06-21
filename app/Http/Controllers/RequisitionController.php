@@ -18,10 +18,12 @@ class RequisitionController extends Controller
     public function index()
     {
         $requisitions = Requisition::all();
-        $areas = Area::all();
-        $newRequisitionsCount = Requisition::all()->count();
 
-        $newRequisition = $newRequisitionsCount + 1;
+        $areas = Area::all();
+        $newRequisitionsCount = Requisition::latest()->first();
+        $test = Requisition::latest()->first();
+
+        $newRequisition = $newRequisitionsCount->id + 1;
         //dd($newRequisition);
 
         return view('requisitions.requisitions', compact('requisitions','areas', 'newRequisition'));
@@ -112,7 +114,7 @@ class RequisitionController extends Controller
      * @param  \App\Requisition  $requisition
      * @return \Illuminate\Http\Response
      */
-    public function show(Requisition $requisition)
+    public function show($id)
     {
         //
     }
@@ -125,7 +127,7 @@ class RequisitionController extends Controller
      */
     public function edit(Requisition $requisition)
     {
-        //
+
     }
 
     /**

@@ -110,8 +110,8 @@
                                                         <i class="fas fa-plus"></i>
                                                     </button>
                                                 </span> -->
-                                                <span data-toggle="modal" data-target="#ModalEditRequision">
-                                                    <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Editar requisicion" onclick="editProject({{$requisiton->id}})">
+                                                <span data-toggle="modal" data-target="#modalCreateRequisition">
+                                                    <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Editar requisicion" onclick="showRequisition({{$requisiton->id}})">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
                                                 </span>
