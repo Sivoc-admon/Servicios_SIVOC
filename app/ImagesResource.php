@@ -6,14 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Requisition extends Model
+class ImagesResource extends Model
 {
     use Notifiable;
     use SoftDeletes;
 
+    protected $table = 'images_resource';
+
     protected $fillable = [
-        'no_requisition',
-        'id_area',
-        'id_user',
+        'name',
+        'path',
     ];
 }

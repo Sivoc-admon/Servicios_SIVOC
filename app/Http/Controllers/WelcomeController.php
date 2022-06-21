@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Welcome;
+use App\ImagesResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\WelcomeFile;
@@ -33,7 +34,10 @@ class WelcomeController extends Controller
 
         }
 
-        return view('welcome',compact('buttons'));
+        //get Images records
+        $images = ImagesResource::all();
+
+        return view('welcome',compact('buttons','images'));
     }
 
     public function buttons()
@@ -41,7 +45,10 @@ class WelcomeController extends Controller
 
         $buttons = Welcome::get();
 
-        return view('buttons.buttons',compact('buttons'));
+        //get Images records
+        $images = ImagesResource::all();
+
+        return view('buttons.buttons',compact('buttons', 'images'));
     }
 
     /**
@@ -230,4 +237,49 @@ class WelcomeController extends Controller
 
         return response()->json($array);
     }
+
+
+    //Images Functions
+    public function storeImage(Request $request)
+    {
+        $error=false;
+        $msg="";
+
+        $pathFile = 'public/welcome/images';
+
+        for ($i=0; $i <$request->tamanoFiles ; $i++) {
+            $nameFile="file".$i;
+            $tempFile = $request->file($nameFile);
+            $imageFile=ImagesResource::create([
+                'name' => $request->name.'.'.$tempFile->extension(),
+                'path' => 'storage/welcome/images',
+
+            ]);
+            $newName = $imageFile->id.'-'.$request->name.'.'.$tempFile->extension();
+            $path = $tempFile->storeAs(
+                $pathFile,$newName
+            );
+        }
+
+
+        $imageFile->save();
+        $msg="Registro guardado con exito";
+
+        $array=["msg"=>$msg, "error"=>$error];
+
+        return response()->json($array);
+    }
+
+    public function destroyImage($id)
+    {
+        $msg="";
+        $error=false;
+
+        $file = ImagesResource::find($id);
+        $file->delete();
+        $array=["msg"=>$msg, "error"=>$error];
+
+        return response()->json($array);
+    }
+
 }
