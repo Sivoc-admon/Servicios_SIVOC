@@ -37,7 +37,7 @@ class WelcomeController extends Controller
         //get Images records
         $images = ImagesResource::all();
 
-        return view('welcome',compact('buttons'));
+        return view('welcome',compact('buttons','images'));
     }
 
     public function buttons()
@@ -245,14 +245,14 @@ class WelcomeController extends Controller
         $error=false;
         $msg="";
 
-        $pathFile = 'public/Documents/welcome/images';
+        $pathFile = 'public/welcome/images';
 
         for ($i=0; $i <$request->tamanoFiles ; $i++) {
             $nameFile="file".$i;
             $tempFile = $request->file($nameFile);
             $imageFile=ImagesResource::create([
                 'name' => $request->name.'.'.$tempFile->extension(),
-                'path' => 'storage/Documents/welcome/images',
+                'path' => 'storage/welcome/images',
 
             ]);
             $newName = $request->name.'.'.$tempFile->extension();
