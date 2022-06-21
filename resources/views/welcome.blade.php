@@ -153,7 +153,7 @@
                           <div class="carousel-inner">
                                 @foreach($images as $img)
                                     <div class="carousel-item {{($loop->index === 0) ? 'active' : ''}}">
-                                        <img class="d-block w-100" src="{{$img->path}}/{{$img->name}}">
+                                        <img class="d-block w-100" src="{{asset($img->path.'/'.$img->id.'-'.$img->name)}}">
                                     </div>
                                 @endforeach
                           </div>

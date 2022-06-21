@@ -1,3 +1,4 @@
+var public_path = '{{ path("public") }}';
 function saveImg(){
     let name = $("#inputImage").val();
     let file = $('#fileImage')[0];
@@ -52,10 +53,6 @@ function eliminarImage(id) {
         },
         type: "DELETE",
         url: `../inicio/${id}/destroyImage`,
-        /*data: data,
-        cache: false,
-        contentType: false,
-        processData: false,*/
         dataType: 'json',
         success: function(data) {
 
@@ -77,7 +74,7 @@ function eliminarImage(id) {
             } else {
                 messageAlert("Ha ocurrido un problema.", "error", "");
             }
-            //messageAlert("Datos incompletos", "error", `${data.responseJSON.errors.apellido_paterno}` + "\n" + `${data.responseJSON.errors.name}`);
         }
     });
 }
+

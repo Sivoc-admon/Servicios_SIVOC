@@ -255,7 +255,7 @@ class WelcomeController extends Controller
                 'path' => 'storage/welcome/images',
 
             ]);
-            $newName = $request->name.'.'.$tempFile->extension();
+            $newName = $imageFile->id.'-'.$request->name.'.'.$tempFile->extension();
             $path = $tempFile->storeAs(
                 $pathFile,$newName
             );
@@ -281,4 +281,5 @@ class WelcomeController extends Controller
 
         return response()->json($array);
     }
+
 }
