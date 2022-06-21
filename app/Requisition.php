@@ -12,6 +12,7 @@ class Requisition extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'no_requisition',
         'id_area',
         'id_user',
     ];
