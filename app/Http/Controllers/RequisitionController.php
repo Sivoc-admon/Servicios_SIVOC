@@ -7,6 +7,7 @@ use App\Requisition;
 use Illuminate\Http\Request;
 use App\DetailRequisition;
 use App\ProvidersRequisitions;
+use Illuminate\Support\Facades\DB;
 
 class RequisitionController extends Controller
 {
@@ -19,9 +20,10 @@ class RequisitionController extends Controller
     {
         $requisitions = Requisition::all();
         $areas = Area::all();
-        $newRequisitionsCount = Requisition::all()->count();
+        $newRequisitionsCount = Requisition::latest()->first();
+        $test = Requisition::latest()->first();
 
-        $newRequisition = $newRequisitionsCount + 1;
+        $newRequisition = $newRequisitionsCount->id + 1;
         //dd($newRequisition);
 
         return view('requisitions.requisitions', compact('requisitions','areas', 'newRequisition'));
@@ -50,6 +52,7 @@ class RequisitionController extends Controller
 
         $id_user = auth()->user()->id;
         $requisition = new Requisition();
+        $requisition->no_requisition = $request->noRequisition;
         $requisition->id_user = $id_user;
         $requisition->id_area = $request->area_id;
 
@@ -112,9 +115,13 @@ class RequisitionController extends Controller
      * @param  \App\Requisition  $requisition
      * @return \Illuminate\Http\Response
      */
-    public function show(Requisition $requisition)
+    public function show(Request $request, $id)
     {
-        //
+        $requisition = Requisition::find($id);
+        $detailRequisition = DetailRequisition::where("id_requisition", $id)->get();
+
+        $array=["requisition"=>$requisition, "detailRequisition"=>$detailRequisition];
+        return response()->json($array);
     }
 
     /**
@@ -149,5 +156,44 @@ class RequisitionController extends Controller
     public function destroy(Requisition $requisition)
     {
         //
+    }
+
+    public function uploadFile(Request $request, $idProject){
+        $error=false;
+        $msg="";
+
+        $projectName = Project::find($idProject)->name;
+        $r = $this->getPathFolder($request->folder);
+        $pathFile = 'public/Documents/Projects/'.$projectName.$r;
+
+        for ($i=0; $i <$request->tamanoFiles ; $i++) {
+            $nombre="file".$i;
+            $archivo = $request->file($nombre);
+
+
+            $projectFile=ProjectFile::create([
+                'project_id' => $request->id,
+                'id_padre' => $request->folder,
+                'name' => $archivo->getClientOriginalName(),
+                'ruta' => 'storage/Documents/Projects/'.$projectName.$r,
+
+            ]);
+            $path = $archivo->storeAs(
+                $pathFile, $archivo->getClientOriginalName()
+            );
+        }
+
+        if ($projectFile->save()) {
+            $msg="Registro guardado con exito";
+        }else{
+            $error=true;
+            $msg="Error al guardar archvio";
+        }
+
+
+
+        $array=["msg"=>$msg, "error"=>$error];
+
+        return response()->json($array);
     }
 }
