@@ -1,4 +1,34 @@
 var items = [];
+let row = 0;
+
+
+function newRequisition() {
+    //limpiaTabla();
+
+    let table = $("#createRequisition").DataTable({
+        scrollX: true,
+        searching: false,
+        paging: false,
+
+        columns: [
+            { title: '#', "width": "50%" },
+            { title: 'Cant.', "width": "50%" },
+            { title: 'Unidad', "width": "70%" },
+            { title: 'Descripción', "width": "80%" },
+            { title: 'Modelo', "width": "80%" },
+            { title: 'Clasificación', "width": "50%" },
+            { title: 'Referencia', "width": "80%" },
+            { title: 'Nivel de Urgencia', "width": "50%" },
+            { title: 'Estatus', "width": "50%" },
+            { title: 'Accion', "width": "50%" },
+
+
+        ]
+    });
+
+    //t
+
+}
 
 function addRow() {
     let rowCount = $('#tableBodyCreateRequisition tr').length;
@@ -13,29 +43,63 @@ function addRow() {
     }
 
     items.push(row);
-    let cell = `<tr>` +
-        `<td>${row}</td>` +
-        `<td><input type="number" class="form-control" id="item_cantidad_${row}" name="item_cantidad_${row}" placeholder="Cantidad" value="0"></td>` +
-        `<td><select class="form-control" id="item_unidad_${row}"><option value="Pieza">Pieza</option><option value="Servicio">Servicio</option></select></td>` +
-        `<td><textarea id="item_descripcion_${row}" class="form-control"></textarea></td>` +
-        `<td><input id="item_modelo_${row}" class="form-control"></input></td>` +
-        `<td><select id="item_clasificacion_${row}"><option value="1">G202001 HERRAMIENTAS EPP</optin></select></td>` +
-        `<td><input type="text" id="item_referencia_${row}" class="form-control"></input></td>` +
-        `<td><select id="item_urgencia_${row}"><option value="Alto">Alto</optin><option value="Bajo">Bajo</optin></select></td>` +
-        `<td><select id="item_status_${row}"><option value="Proceso">Proceso</optin><option value="Cotizado">Cotizado</optin>` +
-        `<option value="Entregado">Entregado</optin><option value="Devolucion"></optin>` +
-        `<option value="Cancelada">Cancelada</optin></select></td>` +
-        `<td><input type="text" id="item_prov1_${row}" class="form-control"></input></td>` +
-        `<td><input type="number" id="item_unitatio1_${row}" class="form-control"></input></td>` +
-        `<td><input type="number" id="item_subtotal1_${row}" class="form-control"></input></td>` +
-        `<td><input type="text" id="item_prov2_${row}" class="form-control"></input></td>` +
-        `<td><input type="number" id="item_unitario2_${row}" class="form-control"></input></td>` +
-        `<td><input type="number" id="item_subtotal2_${row}" class="form-control"></input></td>` +
-        `<td><input type="text" id="item_prov3_${row}" class="form-control"></input></td>` +
-        `<td><input type="number" id="item_unitario3_${row}" class="form-control"></input></td>` +
-        `<td><input type="number" id="item_subtotal3_${row}" class="form-control"></input></td>` +
-        `<td><button class='btn btn-danger' onclick='deleteRow(this)'>Eliminar</button></td>` +
-        `</tr>`;
+
+    let rowNode = table
+        .row.add([row,
+            `<input type="number" class="form-control" id="item_cantidad_${row}" name="item_cantidad_${row}" placeholder="Cantidad" value="0">`,
+            `<select class="form-control" id="item_unidad_${row}">` +
+            `<option value="Pieza">Pieza</option>` +
+            `<option value="Servicio">Servicio</option>` +
+            `</select>`,
+            `<textarea id="item_descripcion_${row}" class="form-control"></textarea>`,
+            `<textarea id="item_modelo_${row}" class="form-control"></textarea>`,
+            `<select id="item_clasificacion_${row}">` +
+            `<option value="1">G202001 HERRAMIENTAS EPP</option>` +
+            `</select>`,
+            `<textarea id="item_referencia_${row}" class="form-control"></textarea>`,
+            `<select id="item_urgencia_${row}"><option value="Alto">Alto</option><option value="Bajo">Bajo</option></select>`,
+            `<select id="item_status_${row}"><option value="Proceso">Proceso</option><option value="Cotizado">Cotizado</option>` +
+            `<option value="Entregado">Entregado</option><option value="Devolucion">Devolución</option>` +
+            `<option value="Cancelada">Cancelada</option></select>`,
+            "<button class='btn btn-danger' onclick='deleteRow(this)'>Eliminar</button>"
+        ])
+        .draw()
+        .node();
+    /*$("#tableBodyCreateRequisition").append(
+        cell
+    ); */
+
+}
+
+function calculaPrecio() {
+
+}
+
+function addProvider() {
+    let table = $('#createRequisition').DataTable({
+        "columns": [
+            { "data": "name" },
+            { "data": "place" },
+            { "data": "email" },
+            { "data": "phone" },
+            {
+                "data": null,
+                "name": "buttonColumn",
+                "render": function(data, type, row) {
+                    return '<button>Add Extra</button>';
+                }
+            },
+            {
+                "data": null,
+                "name": "buttonColumn",
+                "render": function(data, type, row) {
+                    return `<textarea id="item_prov1_${row}" class="form-control"></textarea>`;
+                }
+            }
+        ],
+
+    });
+
     let rowNode = table
         .row.add([row,
             `<input type="number" class="form-control" id="item_cantidad_${row}" name="item_cantidad_${row}" placeholder="Cantidad" value="0">`,
@@ -50,20 +114,11 @@ function addRow() {
             `<option value="Cancelada">Cancelada</optin></select>`,
             `<textarea id="item_prov1_${row}" class="form-control"></textarea>`,
             `<input type="number" id="item_unitatio1_${row}" class="form-control"></input>`,
-            `<input type="number" id="item_subtotal1_${row}" class="form-control"></input>`,
-            `<textarea id="item_prov2_${row}" class="form-control"></textarea>`,
-            `<input type="number" id="item_unitario2_${row}" class="form-control"></input>`,
-            `<input type="number" id="item_subtotal2_${row}" class="form-control"></input>`,
-            `<textarea id="item_prov3_${row}" class="form-control"></textarea>`,
-            `<input type="number" id="item_unitario3_${row}" class="form-control"></input>`,
-            `<input type="number" id="item_subtotal3_${row}" class="form-control"></input>`,
+            `<input type="number" id="item_subtotal1_${row}" onclick='calculaPrecio()' class="form-control"></input>`,
             "<button class='btn btn-danger' onclick='deleteRow(this)'>Eliminar</button>"
         ])
         .draw()
         .node();
-    /*$("#tableBodyCreateRequisition").append(
-        cell
-    ); */
 
 }
 
@@ -147,33 +202,74 @@ function saveRequisition() {
 }
 
 function showRequisition(id) {
+
     let row = 1;
-    let table = $('#createRequisition').DataTable();
-    let rowNode = table
-        .row.add([row,
-            `<input type="number" class="form-control" id="item_cantidad_${row}" name="item_cantidad_${row}" placeholder="Cantidad" value="0">`,
-            `<select class="form-control" id="item_unidad_${row}"><option value="Pieza">Pieza</option><option value="Servicio">Servicio</option></select>`,
-            `<textarea id="item_descripcion_${row}" class="form-control"></textarea>`,
-            `<input id="item_modelo_${row}" class="form-control"></input>`,
-            `<select id="item_clasificacion_${row}"><option value="1">G202001 HERRAMIENTAS EPP</optin></select>`,
-            `<input type="text" id="item_referencia_${row}" class="form-control"></input>`,
-            `<select id="item_urgencia_${row}"><option value="Alto">Alto</optin><option value="Bajo">Bajo</optin></select>`,
-            `<select id="item_status_${row}"><option value="Proceso">Proceso</optin><option value="Cotizado">Cotizado</optin>` +
-            `<option value="Entregado">Entregado</optin><option value="Devolucion">Devolución</optin>` +
-            `<option value="Cancelada">Cancelada</optin></select>`,
-            `<input type="text" id="item_prov1_${row}" class="form-control"></input>`,
-            `<input type="number" id="item_unitatio1_${row}" class="form-control"></input>`,
-            `<input type="number" id="item_subtotal1_${row}" class="form-control"></input>`,
-            `<input type="text" id="item_prov2_${row}" class="form-control"></input>`,
-            `<input type="number" id="item_unitario2_${row}" class="form-control"></input>`,
-            `<input type="number" id="item_subtotal2_${row}" class="form-control"></input>`,
-            `<input type="text" id="item_prov3_${row}" class="form-control"></input>`,
-            `<input type="number" id="item_unitario3_${row}" class="form-control"></input>`,
-            `<input type="number" id="item_subtotal3_${row}" class="form-control"></input>`,
-            "<button class='btn btn-danger' onclick='deleteRow(this)'>Eliminar</button>"
-        ])
-        .draw()
-        .node();
+    let table = $("#createRequisition").DataTable({
+        scrollX: true,
+        searching: false,
+        paging: false,
+
+        columns: [
+            { title: '#', "width": "50%" },
+            { title: 'Cant.', "width": "50%" },
+            { title: 'Unidad', "width": "70%" },
+            { title: 'Descripción', "width": "80%" },
+            { title: 'Modelo', "width": "80%" },
+            { title: 'Clasificación', "width": "50%" },
+            { title: 'Referencia', "width": "80%" },
+            { title: 'Nivel de Urgencia', "width": "50%" },
+            { title: 'Estatus', "width": "50%" },
+            { title: 'Proveedor', "width": "50%" },
+            { title: 'Unitario', "width": "50%" },
+            { title: 'Total', "width": "50%" },
+            { title: 'Accion', "width": "50%" },
+        ]
+    });
+    table.clear().draw();
+
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: "GET",
+        url: `requisitions/${id}`,
+
+        success: function(data) {
+            console.log(data);
+            for (const key in data.detailRequisition) {
+                let rowNode = table
+                    .row.add([data.detailRequisition[key].id,
+                        `<input type="number" class="form-control" id="item_cantidad_${row}" name="item_cantidad_${row}" placeholder="Cantidad" value="0">`,
+                        `<select class="form-control" id="item_unidad_${row}"><option value="Pieza">Pieza</option><option value="Servicio">Servicio</option></select>`,
+                        `<textarea id="item_descripcion_${row}" class="form-control"></textarea>`,
+                        `<input id="item_modelo_${row}" class="form-control"></input>`,
+                        `<select id="item_clasificacion_${row}"><option value="1">G202001 HERRAMIENTAS EPP</optin></select>`,
+                        `<input type="text" id="item_referencia_${row}" class="form-control"></input>`,
+                        `<select id="item_urgencia_${row}"><option value="Alto">Alto</optin><option value="Bajo">Bajo</optin></select>`,
+                        `<select id="item_status_${row}"><option value="Proceso">Proceso</optin><option value="Cotizado">Cotizado</optin>` +
+                        `<option value="Entregado">Entregado</optin><option value="Devolucion">Devolución</optin>` +
+                        `<option value="Cancelada">Cancelada</optin></select>`,
+                        `<textarea id="item_prov1_${row}" class="form-control"></textarea>`,
+                        `<input type="number" id="item_unitatio1_${row}" onclick='calculaPrecio()' class="form-control"></input>`,
+                        `<input type="number" id="item_subtotal1_${row}" class="form-control"></input>`,
+                        "<button class='btn btn-danger' onclick='deleteRow(this)'>Eliminar</button>"
+                    ])
+                    .draw()
+                    .node();
+            }
+        },
+        error: function(data) {
+            console.log(data.responseJSON);
+            if (data.responseJSON.message == "The given data was invalid.") {
+                messageAlert("Datos incompletos.", "warning");
+            } else {
+                messageAlert("Ha ocurrido un problema.", "error", "");
+            }
+            //messageAlert("Datos incompletos", "error", `${data.responseJSON.errors.apellido_paterno}` + "\n" + `${data.responseJSON.errors.name}`);
+        }
+    });
+
+
 
     /*ajax({
         headers: {
@@ -187,4 +283,12 @@ function showRequisition(id) {
     });*/
 
 
+}
+
+function limpiaTabla() {
+    $("#createRequisition").dataTable();
+
+    $("#createRequisition").dataTable({
+        "bDestroy": true
+    }).fnDestroy();
 }

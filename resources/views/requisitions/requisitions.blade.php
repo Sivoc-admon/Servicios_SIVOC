@@ -56,10 +56,10 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    @if(Auth::user()->hasAnyRole(['admin', 'calidad', 'tesoreria', 'servicio', 'ventas']))
+                    @if(Auth::user()->hasAnyRole(['admin', 'calidad', 'tesoreria', 'servicio', 'ventas', 'lider calidad', 'lider compras', 'lider recursos humanos', 'lider tesoreria', 'lider ventas', 'lider servicio']))
 
                     <span data-toggle="modal" data-target="#modalCreateRequisition">
-                        <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Nueva Requisición">
+                        <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Nueva Requisición" onclick="newRequisition()">
                             <i class="fas fa-plus"></i>
                         </button>
                     </span>
@@ -105,14 +105,14 @@
 
                                         @if (Auth::user()->hasAnyRole(['admin', 'calidad', 'operaciones', 'manufactura', 'servicio', 'ventas']))
                                             <td>
-                                                <!-- <span data-toggle="modal" data-target="#ModalRegisterBoard">
-                                                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Nuevo tablero" onclick="datosTablero({{$requisiton->id}}, '{{$requisiton->name_project}}')">
-                                                        <i class="fas fa-plus"></i>
-                                                    </button>
-                                                </span> -->
                                                 <span data-toggle="modal" data-target="#modalCreateRequisition">
                                                     <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Editar requisicion" onclick="showRequisition({{$requisiton->id}})">
                                                         <i class="fas fa-edit"></i>
+                                                    </button>
+                                                </span>
+                                                <span data-toggle="modal" data-target="#modalCreateRequisition">
+                                                    <button type="button" class="btn btn-secundary" data-toggle="tooltip" data-placement="top" title="Archivos" onclick="uploadFile({{$requisiton->id}})">
+                                                        <i class="fas fa-list"></i>
                                                     </button>
                                                 </span>
                                             </td>
@@ -129,6 +129,8 @@
                         <tfoot>
                             <tr>
                                 <th>#</th>
+                                <th>Area</th>
+                                <th>Fecha</th>
                                 <th>Estatus</th>
                                 <th>Acción</th>
                             </tr>
@@ -148,7 +150,7 @@
     <script>
         $(document).ready(function() {
 
-            let row = 0;
+
 
             $("#tableRequisitions").DataTable({
                 dom: 'Bfrtip',
@@ -167,32 +169,7 @@
                     targets:   -1
                 } ]
             });
-            $("#createRequisition").DataTable({
-                scrollX: true,
-                searching: false,
-                paging: false,
-                columns: [
-                    { "width": "50%" },
-                    { "width": "50%" },
-                    { "width": "70%" },
-                    { "width": "80%" },
-                    { "width": "50%" },
-                    { "width": "50%" },
-                    { "width": "50%" },
-                    { "width": "50%" },
-                    { "width": "50%" },
-                    { "width": "50%" },
-                    { "width": "50%" },
-                    { "width": "50%" },
-                    { "width": "50%" },
-                    { "width": "50%" },
-                    { "width": "50%" },
-                    { "width": "50%" },
-                    { "width": "50%" },
-                    { "width": "50%" },
-                    { "width": "50%" },
-                ]
-            });
+
 
 
         } );
