@@ -125,6 +125,11 @@
                                             <td>{{ $img->name }}</td>
                                             <td>{{ $img->path }}</td>
                                             <td>
+                                                <span data-toggle="modal" data-target="#ModalPreview">
+                                                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Mostrar imagen" onClick="currentImg({{$img}})">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                </span>
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar"  onClick="eliminarImage({{$img->id}})"><i class="fas fa-minus-square"></i></button>
                                                 </div>
