@@ -26,7 +26,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="name_project">No. Requisición</label>
-                            <input type="text" class="form-control" id="name_project" name="name_project" placeholder="Nombre del Proyecto" value="{{$newRequisition}}">
+                            <input type="text" class="form-control" id="name_project" name="name_project" placeholder="Nombre del Proyecto" value="R-{{$newRequisition}}">
                         </div>
                     </div>
                 </div>
@@ -41,30 +41,7 @@
                 <div class="row">
                     <div style="overflow-x: scroll">
                         <table id="createRequisition" class="table table-striped" width="100%">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Cant.</th>
-                                    <th>Unidad</th>
-                                    <th>Descripción</th>
-                                    <th>Modelo</th>
-                                    <th>Clasificación</th>
-                                    <th>Referencia</th>
-                                    <th>Nivel de Urgencia</th>
-                                    <th>Estatus</th>
-                                    <th>Proveedor</th>
-                                    <th>Unitario</th>
-                                    <th>Subtotal</th>
-                                    <th>Proveedor</th>
-                                    <th>Unitario</th>
-                                    <th>Subtotal</th>
-                                    <th>Proveedor</th>
-                                    <th>Unitario</th>
-                                    <th>Subtotal</th>
-                                    <th>Accion</th>
-                                </tr>
 
-                            </thead>
                             <tbody id="tableBodyCreateRequisition"></tbody>
                         </table>
                     </div>
@@ -74,7 +51,7 @@
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-success" onclick="saveRequisition()">Guardar</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="limpiaTabla()">Close</button>
           </div>
       </div>
     </div>
