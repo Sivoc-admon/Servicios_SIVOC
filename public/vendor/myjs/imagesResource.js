@@ -1,4 +1,3 @@
-var public_path = '{{ path("public") }}';
 function saveImg(){
     let name = $("#inputImage").val();
     let file = $('#fileImage')[0];
@@ -77,4 +76,9 @@ function eliminarImage(id) {
         }
     });
 }
+
+function currentImg(img) {
+    $('#preview').attr('src', location.origin+'/'+img.path+'/'+img.id+'-'+img.name);
+}
+
 
