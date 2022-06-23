@@ -162,7 +162,7 @@ class RequisitionController extends Controller
         $error=false;
         $msg="";
 
-        $projectName = Project::find($idProject)->name;
+        $projectName = Requisition::find($idProject)->name;
         $r = $this->getPathFolder($request->folder);
         $pathFile = 'public/Documents/Projects/'.$projectName.$r;
 
@@ -171,7 +171,7 @@ class RequisitionController extends Controller
             $archivo = $request->file($nombre);
 
 
-            $projectFile=ProjectFile::create([
+            $projectFile=Requisition::create([
                 'project_id' => $request->id,
                 'id_padre' => $request->folder,
                 'name' => $archivo->getClientOriginalName(),
