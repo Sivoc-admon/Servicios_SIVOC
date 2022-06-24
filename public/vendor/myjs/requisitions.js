@@ -381,3 +381,7 @@ function showModalFile(id) {
 
 
 }
+
+function aprobar(id) {
+
+}

@@ -104,7 +104,7 @@
                                         <td>{{ $requisiton->created_at }}</td>
                                         <td>Creada</td>
 
-                                        @if (Auth::user()->hasAnyRole(['admin', 'calidad', 'operaciones', 'manufactura', 'servicio', 'ventas']))
+                                        @if (Auth::user()->hasAnyRole(['admin', 'calidad', 'compras', 'manufactura', 'servicio', 'ventas']))
                                             <td>
                                                 <span data-toggle="modal" data-target="#modalCreateRequisition">
                                                     <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Editar requisicion" onclick="showRequisition({{$requisiton->id}})">
@@ -114,6 +114,14 @@
                                                 <span data-toggle="modal" data-target="#modalFilesRequisition">
                                                     <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Archivos" onclick="showModalFile({{$requisiton->id}})">
                                                         <i class="fas fa-list"></i>
+                                                    </button>
+                                                </span>
+                                                @if (Auth::user()->hasAnyRole(['admin', 'lider calidad', 'lider compras', 'lider recursos humanos', 'lider servicio', 'lider ventas', 'lider tesoreria']))
+
+                                                @endif
+                                                <span >
+                                                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}})">
+                                                        <i class="fas fa-check"></i>
                                                     </button>
                                                 </span>
                                             </td>
