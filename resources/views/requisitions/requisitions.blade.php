@@ -67,6 +67,7 @@
 
                     @endif
                     @include('requisitions.create_requisition')
+                    @include('requisitions.files')
 
 
                 </div>
@@ -110,8 +111,8 @@
                                                         <i class="fas fa-edit"></i>
                                                     </button>
                                                 </span>
-                                                <span data-toggle="modal" data-target="#modalCreateRequisition">
-                                                    <button type="button" class="btn btn-secundary" data-toggle="tooltip" data-placement="top" title="Archivos" onclick="uploadFile({{$requisiton->id}})">
+                                                <span data-toggle="modal" data-target="#modalFilesRequisition">
+                                                    <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Archivos" onclick="showModalFile({{$requisiton->id}})">
                                                         <i class="fas fa-list"></i>
                                                     </button>
                                                 </span>
