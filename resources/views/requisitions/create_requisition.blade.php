@@ -96,6 +96,9 @@
                             <input type="number" id="unit_price" min=0>
                         </div>
                     </div>
+                    <div class="col-2">
+                        <div id="totalProvider"></div>
+                    </div>
                     <div class="col-3">
                         <div class="form-group">
                             <button class="btn btn-success" onclick="saveProvider()"><i class="fas fa-plus"></i> Agregar</button>
@@ -108,6 +111,7 @@
                     <tr>
                         <th>Name</th>
                         <th>Precio Unitario</th>
+                        <th>Total</th>
                         <th>Accion</th>
                     </tr>
                 </thead>

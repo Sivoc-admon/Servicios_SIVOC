@@ -2,11 +2,18 @@ var items = [];
 let row = 0;
 
 //Elements Provider
-let currentDetail = 0;
+let currentDetail;
+let currentQuantity=0;
 let tableProviders = $('#provderTable').DataTable({
     columns: [
         { data: "name" },
         { data: "unit_price" },
+        {
+            data: "id_detail_requisition",
+            render: function (data, type, row, meta) {
+                return '<span>'+(row.unit_price * currentQuantity)+'</span>'
+            },
+        },
         {
             data: "id",
             render: function (data, type, row, meta) {
@@ -117,7 +124,6 @@ function addProvider() {
 }
 
 function deleteRow(fila) {
-    console.log(items);
     let table = $('#createRequisition').DataTable();
     console.log($(fila).parents("tr")[0].cells[0].innerHTML);
     let itemIndex = $(fila).parents("tr")[0].cells[0].innerHTML - 1;
@@ -146,7 +152,6 @@ function saveRequisition(action = null) {
     formdata.append("noRequisition", noRequisition);
     let i = 1;
     for (const key in items) {
-        console.log(items[key]);
         formdata.append("area_id", $("#project_id").val());
         formdata.append("item_cantidad_" + i, $("#item_cantidad_" + items[key]).val());
         formdata.append("item_unidad_" + i, $("#item_unidad_" + items[key]).val());
@@ -231,7 +236,7 @@ function showRequisition(id) {
                         // `<textarea id="item_prov1_${row}" class="form-control"></textarea>`,
                         // `<input type="number" id="item_unitatio1_${row}" onclick='calculaPrecio()' class="form-control"></input>`,
                         // `<input type="number" id="item_subtotal1_${row}" class="form-control"></input>`,
-                        `<div><button ${(isValid) ? 'disabled' : ''}   class='btn btn-danger' data-toggle="tooltip" data-placement="top" title="Eliminar" onclick='deleteRow(this)'><i class="fas fa-trash"></i></button> ${(data.permission === 5) ? "<span data-toggle='modal' data-target='#modalProvider' data-backdrop='static'><button class='btn btn-primary' onclick='showProvider("+data.detailRequisition[key].id+")' data-toggle='tooltip' data-placement='top' title='Agregar Proveedores'><i class='fas fa-box' /></button></span>" : ''}</div>`
+                        `<div><button ${(isValid) ? 'disabled' : ''}   class='btn btn-danger' data-toggle="tooltip" data-placement="top" title="Eliminar" onclick='deleteRow(this)'><i class="fas fa-trash"></i></button> ${(data.permission === 5) ? "<span data-toggle='modal' data-target='#modalProvider' data-backdrop='static'><button class='btn btn-primary' onclick='showProvider("+data.detailRequisition[key].id+","+data.detailRequisition[key].quantity+")' data-toggle='tooltip' data-placement='top' title='Agregar Proveedores'><i class='fas fa-box' /></button></span>" : ''}</div>`
                     ])
                     .draw()
                     .node();
@@ -272,8 +277,9 @@ function limpiaTabla() {
 }
 
 //Provider Functions
-function showProvider(detail) {
+function showProvider(detail, quantity) {
     currentDetail = detail;
+    currentQuantity = quantity;
     $.ajax({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -344,8 +350,8 @@ function editRequisition(){
         processData: false,
         contentType: false,
         success: function(data) {
-            messageAlert("Requisición creada.", "success");
-            //location.reload();
+            messageAlert("Requisición Editada.", "success");
+            location.reload();
             return;
         },
         error: function(data) {
@@ -362,11 +368,17 @@ function editRequisition(){
 
 function saveProvider(){
     let count = $('#provderTable').DataTable().rows().data().length;
+
     let data = {
         id_detail_requisition: currentDetail,
         num_item: count + 1,
         name: $('#name').val(),
         unit_price: $('#unit_price').val(),
+    }
+
+    if(data.name === '' || data.unit_price === ''){
+        messageAlert("Datos incompletos.", "warning");
+        return;
     }
 
     $.ajax({
@@ -384,7 +396,10 @@ function saveProvider(){
                     name:data.provider.name,
                     unit_price:data.provider.unit_price,
                 }
+
                 $('#provderTable').dataTable().fnAddData([item]);
+                $('#totalProvider').empty();
+                $('#totalProvider').append(`<h5>Total: ${(currentQuantity * data.provider.unit_price)}</h5>`);
 
                 $('#num_item').val('');
                 $('#name').val('');
