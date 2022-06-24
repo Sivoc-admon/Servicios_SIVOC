@@ -58,7 +58,7 @@
                 <div class="card-body">
                     @if(Auth::user()->hasAnyRole(['admin', 'calidad', 'tesoreria', 'servicio', 'ventas', 'lider calidad', 'lider compras', 'lider recursos humanos', 'lider tesoreria', 'lider ventas', 'lider servicio']))
 
-                    <span data-toggle="modal" data-target="#modalCreateRequisition">
+                    <span data-toggle="modal" data-target="#modalCreateRequisition" data-backdrop='static'>
                         <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Nueva Requisición" onclick="newRequisition()">
                             <i class="fas fa-plus"></i>
                         </button>
@@ -106,7 +106,7 @@
 
                                         @if (Auth::user()->hasAnyRole(['admin', 'calidad', 'operaciones', 'manufactura', 'servicio', 'ventas']))
                                             <td>
-                                                <span data-toggle="modal" data-target="#modalCreateRequisition">
+                                                <span data-toggle="modal" data-target="#modalCreateRequisition" data-backdrop='static'>
                                                     <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Editar requisicion" onclick="showRequisition({{$requisiton->id}})">
                                                         <i class="fas fa-edit"></i>
                                                     </button>

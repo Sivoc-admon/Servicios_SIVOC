@@ -191,6 +191,10 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::delete('requisitions/{requisition}/destroyFile', 'RequisitionController@destroyFile')->name('requisitions.destroyFile');
     Route::post('requisitions/{requisition}/uploadFile', 'RequisitionController@uploadFile')->name('requisitions.uploadFile');
     Route::get('requisitions/{requisition}/files', 'RequisitionController@files')->name('requisitions.files');
+    Route::get('requisitions/{detail}/providers/', 'RequisitionController@providers')->name('requisitions.providers');
+    Route::post('requisitions/providers/', 'RequisitionController@saveProvider')->name('requisitions.saveProvider');
+    Route::post('requisitions/providers/{id}', 'RequisitionController@deleteProvider')->name('requisitions.deleteProvider');
+    Route::post('requisitions/{id}/customUpdate', 'RequisitionController@customUpdate')->name('requisitions.customUpdate');
     Route::resource('requisitions', 'RequisitionController');
 });
 
