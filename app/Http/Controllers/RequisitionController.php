@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\DetailRequisition;
 use App\ProvidersRequisitions;
 use Illuminate\Support\Facades\DB;
+use App\RequisitionFile;
 
 class RequisitionController extends Controller
 {
@@ -158,24 +159,21 @@ class RequisitionController extends Controller
         //
     }
 
-    public function uploadFile(Request $request, $idProject){
+    public function uploadFile(Request $request, $idRequisition){
         $error=false;
         $msg="";
 
-        $projectName = Requisition::find($idProject)->name;
-        $r = $this->getPathFolder($request->folder);
-        $pathFile = 'public/Documents/Projects/'.$projectName.$r;
+        $pathFile = 'public/Documents/Requisitions/Files/'.$idRequisition;
 
         for ($i=0; $i <$request->tamanoFiles ; $i++) {
             $nombre="file".$i;
             $archivo = $request->file($nombre);
 
 
-            $projectFile=Requisition::create([
-                'project_id' => $request->id,
-                'id_padre' => $request->folder,
+            $requisitionFile=RequisitionFile::create([
+                'requisition_id' => $request->id,
                 'name' => $archivo->getClientOriginalName(),
-                'ruta' => 'storage/Documents/Projects/'.$projectName.$r,
+                'ruta' => 'storage/Documents/Requisitions/Files/'.$idRequisition,
 
             ]);
             $path = $archivo->storeAs(
@@ -183,7 +181,7 @@ class RequisitionController extends Controller
             );
         }
 
-        if ($projectFile->save()) {
+        if ($requisitionFile->save()) {
             $msg="Registro guardado con exito";
         }else{
             $error=true;
@@ -193,6 +191,16 @@ class RequisitionController extends Controller
 
 
         $array=["msg"=>$msg, "error"=>$error];
+
+        return response()->json($array);
+    }
+
+    public function files($idRequisition)
+    {
+        $requisitionFiles = Requisition::find($idRequisition)->requisitionFiles;
+
+
+        $array=["requisitionFiles"=>$requisitionFiles];
 
         return response()->json($array);
     }

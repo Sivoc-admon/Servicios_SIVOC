@@ -6,19 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Requisition extends Model
+class RequisitionFile extends Model
 {
     use Notifiable;
     use SoftDeletes;
 
     protected $fillable = [
-        'no_requisition',
-        'id_area',
-        'id_user',
+        'requisition_id',
+        'name',
+        'ruta'
     ];
 
-    public function requisitionFiles()
+    public function requisition()
     {
-        return $this->hasMany('App\RequisitionFile');
+        return $this->belongsTo('App\Requisition');
     }
 }
