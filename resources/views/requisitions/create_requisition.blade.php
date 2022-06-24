@@ -86,17 +86,11 @@
                 <div class="row">
                     <div class="col-3">
                         <div class="form-group">
-                            <label for="num_item">Cantidad:</label>
-                            <input type="number" id="num_item" min=0>
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="form-group">
                             <label for="name">Nombre:</label>
                             <input type="text" id="name">
                         </div>
                     </div>
-                    <div class="col-3">
+                    <div class="col-4">
                         <div class="form-group">
                             <label for="unit_price">Precio Unitario:</label>
                             <input type="number" id="unit_price" min=0>
@@ -112,7 +106,6 @@
             <table id="provderTable" class="table table-striped" width="100%">
                 <thead>
                     <tr>
-                        <th>Cantidad</th>
                         <th>Name</th>
                         <th>Precio Unitario</th>
                         <th>Accion</th>

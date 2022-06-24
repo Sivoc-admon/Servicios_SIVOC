@@ -5,7 +5,6 @@ let row = 0;
 let currentDetail = 0;
 let tableProviders = $('#provderTable').DataTable({
     columns: [
-        { data: "num_item" },
         { data: "name" },
         { data: "unit_price" },
         {
@@ -288,7 +287,6 @@ function showProvider(detail) {
                     let item = {
                         id:d.id,
                         id_detail_requisition:d.id_detail_requisition,
-                        num_item:d.num_item,
                         name:d.name,
                         unit_price:d.unit_price,
                     }
@@ -363,12 +361,14 @@ function editRequisition(){
 }
 
 function saveProvider(){
+    let count = $('#provderTable').DataTable().rows().data().length;
     let data = {
         id_detail_requisition: currentDetail,
-        num_item: $('#num_item').val(),
+        num_item: count + 1,
         name: $('#name').val(),
         unit_price: $('#unit_price').val(),
     }
+
     $.ajax({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -378,15 +378,12 @@ function saveProvider(){
         url: `requisitions/providers`,
         success: function(data) {
             if(data.error === false){
-                console.log(data);
                 let item = {
                     id:data.provider.id,
                     id_detail_requisition:data.provider.id_detail_requisition,
-                    num_item:data.provider.num_item,
                     name:data.provider.name,
                     unit_price:data.provider.unit_price,
                 }
-                $('#provderTable').dataTable().fnClearTable();
                 $('#provderTable').dataTable().fnAddData([item]);
 
                 $('#num_item').val('');
