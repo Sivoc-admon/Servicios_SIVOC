@@ -3,21 +3,21 @@ let row = 0;
 
 //Elements Provider
 let currentDetail;
-let currentQuantity=0;
+let currentQuantity = 0;
 let tableProviders = $('#provderTable').DataTable({
     columns: [
         { data: "name" },
         { data: "unit_price" },
         {
             data: "id_detail_requisition",
-            render: function (data, type, row, meta) {
-                return '<span>'+(row.unit_price * currentQuantity)+'</span>'
+            render: function(data, type, row, meta) {
+                return '<span>' + (row.unit_price * currentQuantity) + '</span>'
             },
         },
         {
             data: "id",
-            render: function (data, type, row, meta) {
-                return '<button class="btn btn-danger" onclick="deleteProvider('+data+', '+meta.row+')"><i class="fas fa-trash" /></button>'
+            render: function(data, type, row, meta) {
+                return '<button class="btn btn-danger" onclick="deleteProvider(' + data + ', ' + meta.row + ')"><i class="fas fa-trash" /></button>'
             },
         },
     ]
@@ -270,10 +270,10 @@ function showRequisition(id) {
 }
 
 function limpiaTabla() {
- $("#createRequisition").DataTable()
- .clear()
- .draw();
- $('#modalCreateRequisition').modal('hide');
+    $("#createRequisition").DataTable()
+        .clear()
+        .draw();
+    $('#modalCreateRequisition').modal('hide');
 }
 
 //Provider Functions
@@ -287,14 +287,14 @@ function showProvider(detail, quantity) {
         type: "GET",
         url: `requisitions/${detail}/providers`,
         success: function(response) {
-            if(response.data.length > 0){
+            if (response.data.length > 0) {
                 let temp = [];
                 for (const d of response.data) {
                     let item = {
-                        id:d.id,
-                        id_detail_requisition:d.id_detail_requisition,
-                        name:d.name,
-                        unit_price:d.unit_price,
+                        id: d.id,
+                        id_detail_requisition: d.id_detail_requisition,
+                        name: d.name,
+                        unit_price: d.unit_price,
                     }
                     temp.push(item);
                 }
@@ -304,11 +304,11 @@ function showProvider(detail, quantity) {
         },
         error: function(data) {
             console.log(data.responseJSON);
-       }
+        }
     });
 }
 
-function editRequisition(){
+function editRequisition() {
     let formdata = new FormData();
 
     if ($("#project_id").val() == 0) {
@@ -366,7 +366,7 @@ function editRequisition(){
     });
 }
 
-function saveProvider(){
+function saveProvider() {
     let count = $('#provderTable').DataTable().rows().data().length;
 
     let data = {
@@ -376,7 +376,7 @@ function saveProvider(){
         unit_price: $('#unit_price').val(),
     }
 
-    if(data.name === '' || data.unit_price === ''){
+    if (data.name === '' || data.unit_price === '') {
         messageAlert("Datos incompletos.", "warning");
         return;
     }
@@ -386,15 +386,15 @@ function saveProvider(){
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         type: "POST",
-        data:data,
+        data: data,
         url: `requisitions/providers`,
         success: function(data) {
-            if(data.error === false){
+            if (data.error === false) {
                 let item = {
-                    id:data.provider.id,
-                    id_detail_requisition:data.provider.id_detail_requisition,
-                    name:data.provider.name,
-                    unit_price:data.provider.unit_price,
+                    id: data.provider.id,
+                    id_detail_requisition: data.provider.id_detail_requisition,
+                    name: data.provider.name,
+                    unit_price: data.provider.unit_price,
                 }
 
                 $('#provderTable').dataTable().fnAddData([item]);
@@ -408,11 +408,11 @@ function saveProvider(){
         },
         error: function(data) {
             console.log(data.responseJSON);
-       }
+        }
     });
 }
 
-function deleteProvider(id, index){
+function deleteProvider(id, index) {
     $.ajax({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -420,16 +420,17 @@ function deleteProvider(id, index){
         type: "POST",
         url: `requisitions/providers/${id}`,
         success: function(data) {
-            if(data.error === false){
+            if (data.error === false) {
                 $('#provderTable').dataTable().fnDeleteRow(index);
             }
         },
         error: function(data) {
             console.log(data.responseJSON);
-       }
+        }
     });
 }
-function closeModalProvider(){
+
+function closeModalProvider() {
     $('#provderTable').dataTable().fnClearTable();
     $('#modalProvider').modal('hide');
 }
@@ -524,10 +525,7 @@ function showModalFile(id) {
 
 
 }
-<<<<<<< HEAD
-=======
 
 function aprobar(id, status) {
 
 }
->>>>>>> francisco
