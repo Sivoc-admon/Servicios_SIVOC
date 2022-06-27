@@ -195,6 +195,7 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::post('requisitions/providers/', 'RequisitionController@saveProvider')->name('requisitions.saveProvider');
     Route::post('requisitions/providers/{id}', 'RequisitionController@deleteProvider')->name('requisitions.deleteProvider');
     Route::post('requisitions/{id}/customUpdate', 'RequisitionController@customUpdate')->name('requisitions.customUpdate');
+    Route::post('requisitions/{id}/updateStatusRequisition', 'RequisitionController@updateStatusRequisition')->name('requisitions.updateStatusRequisition');
     Route::resource('requisitions', 'RequisitionController');
 });
 

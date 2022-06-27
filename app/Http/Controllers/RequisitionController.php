@@ -282,4 +282,21 @@ class RequisitionController extends Controller
 
         return response()->json($array);
     }
+
+    public function updateStatusRequisition(Request $request, $id){
+        $msg = "";
+        $error = false;
+        $requisition = Requisition::find($id);
+        $requisition->status = $request->status;
+
+        if(!$requisition->update()){
+            $error = true;
+            $msg = "Error al actualizar el status";
+        }{
+            $msg = "Se actualizo el status de la requisición";
+        }
+
+        $array = ["msg"=>$msg, "error"=>$error];
+        return response()->json($array);
+    }
 }

@@ -527,5 +527,35 @@ function showModalFile(id) {
 }
 
 function aprobar(id, status) {
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: "POST",
+        url: `requisitions/${id}/updateStatusRequisition`,
+        data: { "status": status },
+        /*cache: false,
+        contentType: false,
+        processData: false,*/
+        dataType: 'json',
+        success: function(data) {
 
+            if (data.error == true) {
+                messageAlert(data.msg, "error", "");
+            } else {
+                messageAlert(data.msg, "success", "");
+                location.reload();
+            }
+
+        },
+        error: function(data) {
+            console.log(data.responseJSON);
+            if (data.responseJSON.message == "The given data was invalid.") {
+                messageAlert("Datos incompletos.", "warning");
+            } else {
+                messageAlert("Ha ocurrido un problema.", "error", "");
+            }
+            //messageAlert("Datos incompletos", "error", `${data.responseJSON.errors.apellido_paterno}` + "\n" + `${data.responseJSON.errors.name}`);
+        }
+    });
 }
