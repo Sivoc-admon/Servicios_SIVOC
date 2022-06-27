@@ -502,9 +502,10 @@ function showModalFile(id) {
                 messageAlert(data.msg, "error", "");
             } else {
                 let html = "";
+                var url = "{{asset('')}}";
                 for (const key in data.requisitionFiles) {
                     html = `<td>${data.requisitionFiles[key].id}</td>` +
-                        `<td>${data.requisitionFiles[key].name}</td>`;
+                        `<td><a href="${data.requisitionFiles[key].ruta}/${data.requisitionFiles[key].name}" target="_blank">${data.requisitionFiles[key].name}</a></td>`;
                 }
                 $("#bodyFiles").append(html);
             }
@@ -523,3 +524,10 @@ function showModalFile(id) {
 
 
 }
+<<<<<<< HEAD
+=======
+
+function aprobar(id, status) {
+
+}
+>>>>>>> francisco

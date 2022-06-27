@@ -15,7 +15,7 @@ class AddStatusRequistionTable extends Migration
     {
         Schema::table('requisitions', function ($table) {
 
-            $table->string('no_requisition')->after('id_user');
+            $table->string('status')->after('id_user');
 
         });
     }

@@ -164,7 +164,7 @@ class RequisitionController extends Controller
             $requisitionFile=RequisitionFile::create([
                 'requisition_id' => $request->id,
                 'name' => $archivo->getClientOriginalName(),
-                'ruta' => 'storage/Documents/Requisitions/Files/'.$idRequisition,
+                'ruta' => 'storage/Documents/Requisitions/Files/'.$idRequisition.'/',
 
             ]);
             $path = $archivo->storeAs(
@@ -277,7 +277,6 @@ class RequisitionController extends Controller
     public function files($idRequisition)
     {
         $requisitionFiles = Requisition::find($idRequisition)->requisitionFiles;
-
 
         $array=["requisitionFiles"=>$requisitionFiles];
 
