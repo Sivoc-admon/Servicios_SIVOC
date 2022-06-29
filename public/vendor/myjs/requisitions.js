@@ -215,7 +215,8 @@ function showRequisition(id) {
                 let row = parseInt(key) + 1;
                 let rowNode = $("#createRequisition").DataTable()
                     .row.add([
-                        `<input type="text" disabled class="form-control" id="item_id_${row}" name="item_id_${row}"  value="${data.detailRequisition[key].id}">`,
+                        `<input type="text" style="display:none" disabled class="form-control" id="item_id_${row}" name="item_id_${row}"  value="${data.detailRequisition[key].id}">
+                        <input type="text" disabled class="form-control" value="${data.detailRequisition[key].num_item}">`,
                         `<input type="number" ${(isValid) ? 'disabled' : ''}  class="form-control" id="item_cantidad_${row}" name="item_cantidad_${row}" placeholder="Cantidad" value="${data.detailRequisition[key].quantity}">`,
                         `<select ${(isValid) ? 'disabled' : ''}   class="form-control" id="item_unidad_${row}"><option value="Pieza" ${(unit === 1)? 'selected' : ''}>Pieza</option><option value="Servicio" ${(unit === 2)? 'selected' : ''}>Servicio</option></select>`,
                         `<input ${(isValid) ? 'disabled' : ''}   id="item_descripcion_${row}" class="form-control" value="${data.detailRequisition[key].description}"></input>`,
