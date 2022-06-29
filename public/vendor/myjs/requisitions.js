@@ -236,7 +236,9 @@ function showRequisition(id) {
                         // `<textarea id="item_prov1_${row}" class="form-control"></textarea>`,
                         // `<input type="number" id="item_unitatio1_${row}" onclick='calculaPrecio()' class="form-control"></input>`,
                         // `<input type="number" id="item_subtotal1_${row}" class="form-control"></input>`,
-                        `<div><button ${(isValid) ? 'disabled' : ''}   class='btn btn-danger' data-toggle="tooltip" data-placement="top" title="Eliminar" onclick='deleteRow(this)'><i class="fas fa-trash"></i></button> ${(data.permission === 5) ? "<span data-toggle='modal' data-target='#modalProvider' data-backdrop='static'><button class='btn btn-primary' onclick='showProvider("+data.detailRequisition[key].id+","+data.detailRequisition[key].quantity+")' data-toggle='tooltip' data-placement='top' title='Agregar Proveedores'><i class='fas fa-box' /></button></span>" : ''}</div>`
+                        `<div><button ${(isValid) ? 'disabled' : ''}
+                        class='btn btn-danger' data-toggle="tooltip" data-placement="top" title="Eliminar" onclick='deleteRow(this)'><i class="fas fa-trash"></i></button>
+                        ${(data.permission === 3) ? "<span data-toggle='modal' data-target='#modalProvider' data-backdrop='static'><button class='btn btn-primary' onclick='showProvider("+data.detailRequisition[key].id+","+data.detailRequisition[key].quantity+")' data-toggle='tooltip' data-placement='top' title='Agregar Proveedores'><i class='fas fa-box' /></button></span>" : ''}</div>`
                     ])
                     .draw()
                     .node();

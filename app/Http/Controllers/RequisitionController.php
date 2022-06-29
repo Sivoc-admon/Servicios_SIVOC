@@ -60,6 +60,7 @@ class RequisitionController extends Controller
         $requisition->no_requisition = $request->noRequisition;
         $requisition->id_user = $id_user;
         $requisition->id_area = $request->area_id;
+        $requisition->status = "creada";
 
         if ($requisition->save()) {
             for ($i=1; $i <= $request->totalItems; $i++) {
@@ -107,6 +108,7 @@ class RequisitionController extends Controller
             'permission' => $user->area_id,
             'currentUser' => $user->id,
             'requisition'=>$requisition['id'],
+            'requisition_status'=> $requisition->status,
             'no_requisition'=>$requisition['no_requisition'],
             'id_area'=>$requisition['id_area'],
             'id_user'=>$requisition['id_user'],

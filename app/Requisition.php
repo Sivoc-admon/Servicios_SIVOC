@@ -15,6 +15,7 @@ class Requisition extends Model
         'no_requisition',
         'id_area',
         'id_user',
+        'status'
     ];
 
     public function requisitionFiles()

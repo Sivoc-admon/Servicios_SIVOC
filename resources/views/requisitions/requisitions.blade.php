@@ -94,7 +94,7 @@
                             @isset($requisitions)
                                 @foreach ($requisitions as $requisiton)
                                     <tr>
-                                        <td>{{ $requisiton->id }}</td>
+                                        <td>{{ $requisiton->no_requisition }}</td>
                                         @foreach ($areas as $area)
                                             @if($requisiton->id_area == $area->id)
                                                 <td>{{ $area->name }}</td>
@@ -104,7 +104,7 @@
                                         <td>{{ $requisiton->created_at }}</td>
                                         <td>{{ $requisiton->status }}</td>
 
-                                        @if (Auth::user()->hasAnyRole(['admin', 'calidad', 'compras', 'manufactura', 'servicio', 'ventas']))
+                                        @if (Auth::user()->hasAnyRole(['admin', 'calidad', 'compras', 'manufactura', 'servicio', 'ventas', 'lider calidad', 'lider compras', 'lider recursos humanos', 'lider servicio', 'lider ventas', 'lider tesoreria']))
                                             <td>
                                                 <span data-toggle="modal" data-target="#modalCreateRequisition" data-backdrop='static'>
                                                     <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Editar requisicion" onclick="showRequisition({{$requisiton->id}})">
