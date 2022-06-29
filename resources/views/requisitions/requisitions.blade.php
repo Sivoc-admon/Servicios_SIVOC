@@ -102,7 +102,12 @@
                                             @endif
                                         @endforeach
                                         <td>{{ $requisiton->created_at }}</td>
-                                        <td>{{ $requisiton->status }}</td>
+                                        @if ($requisiton->status == "cancelada")
+                                            <td style="color:red">{{ $requisiton->status }}</td>
+                                        @else
+                                            <td>{{ $requisiton->status }}</td>
+                                        @endif
+
 
                                         @if (Auth::user()->hasAnyRole(['admin', 'calidad', 'compras', 'manufactura', 'servicio', 'ventas', 'lider calidad', 'lider compras', 'lider recursos humanos', 'lider servicio', 'lider ventas', 'lider tesoreria']))
                                             <td>
@@ -190,6 +195,11 @@
                                                                             <i class="fas fa-reply"></i>
                                                                         </button>
                                                                     </span>
+                                                                    <span >
+                                                                        <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Cancelar" onclick="aprobar({{$requisiton->id}}, 'cancelada')">
+                                                                            <i class="fas fa-minus-square"></i>
+                                                                        </button>
+                                                                    </span>
                                                                 @endif
                                                             @break
                                                         @case("cotizada")
@@ -197,6 +207,11 @@
                                                                     <span >
                                                                         <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'entregada')">
                                                                             <i class="fas fa-check"></i>
+                                                                        </button>
+                                                                    </span>
+                                                                    <span >
+                                                                        <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Cancelar" onclick="aprobar({{$requisiton->id}}, 'cancelada')">
+                                                                            <i class="fas fa-minus-square"></i>
                                                                         </button>
                                                                     </span>
                                                                 @endif
