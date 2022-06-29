@@ -25,6 +25,8 @@ let tableProviders = $('#provderTable').DataTable({
 
 
 function newRequisition() {
+    $('#project_id').val('');
+    $('#name_project').val('');
     $('#edit_req').hide();
     $('#save_req').show();
     let table = $("#createRequisition").DataTable();
@@ -32,12 +34,11 @@ function newRequisition() {
 }
 
 function addRow() {
-    let rowCount = $('#tableBodyCreateRequisition tr').length;
-    let table = $('#createRequisition').DataTable();
+    //let rowCount = $('#tableBodyCreateRequisition tr').length;
+    let rowCount = $('#createRequisition').DataTable().rows().data().length;
 
-    //table.data().count()
-    if (table.data().count() > 0) {
-        row = row + 1;
+    if (rowCount > 0) {
+        row = rowCount + 1;
 
     } else {
         row = 1;
@@ -45,7 +46,7 @@ function addRow() {
 
     items.push(row);
 
-    let rowNode = table
+    let rowNode = $('#createRequisition').DataTable()
         .row.add([row,
             `<input type="number" class="form-control" id="item_cantidad_${row}" name="item_cantidad_${row}" placeholder="Cantidad" value="0">`,
             `<select class="form-control" id="item_unidad_${row}">` +
@@ -62,7 +63,7 @@ function addRow() {
             `<select id="item_status_${row}"><option value="Proceso">Proceso</option><option value="Cotizado">Cotizado</option>` +
             `<option value="Entregado">Entregado</option><option value="Devolucion">Devolución</option>` +
             `<option value="Cancelada">Cancelada</option></select>`,
-            "<button class='btn btn-danger' onclick='deleteRow(this)'>Eliminar</button>"
+            `<div><button class='btn btn-danger' data-toggle="tooltip" data-placement="top" title="Eliminar" onclick='deleteRow(this)'><i class="fas fa-trash"></i></button>`
         ])
         .draw()
         .node();
@@ -161,15 +162,6 @@ function saveRequisition(action = null) {
         formdata.append("item_referencia_" + i, $("#item_referencia_" + items[key]).val());
         formdata.append("item_urgencia_" + i, $("#item_urgencia_" + items[key]).val());
         formdata.append("item_status_" + i, $("#item_status_" + items[key]).val());
-        formdata.append("item_prov1_" + i, $("#item_prov1_" + items[key]).val());
-        formdata.append("item_unitatio1_" + i, $("#item_unitatio1_" + items[key]).val());
-        formdata.append("item_subtotal1_" + i, $("#item_subtotal1_" + items[key]).val());
-        formdata.append("item_prov2_" + i, $("#item_prov2_" + items[key]).val());
-        formdata.append("item_unitario2_" + i, $("#item_unitario2_" + items[key]).val());
-        formdata.append("item_subtotal2_" + i, $("#item_subtotal2_" + items[key]).val());
-        formdata.append("item_prov3_" + i, $("#item_prov3_" + items[key]).val());
-        formdata.append("item_unitario3_" + i, $("#item_unitario3_" + items[key]).val());
-        formdata.append("item_subtotal3_" + i, $("#item_subtotal3_" + items[key]).val());
         i++;
     }
     formdata.append("totalItems", i - 1);
@@ -215,11 +207,12 @@ function showRequisition(id) {
             $('#name_project').val(data.no_requisition);
             $('#requisition_').val(data.requisition);
             for (const key in data.detailRequisition) {
-                items.push(key);
+                items.push(parseInt(key) + 1);
                 let unit = (data.detailRequisition[key].unit === 'Servicio') ? 2 : 1;
                 let clasification = data.detailRequisition[key].id_classification;
                 let status = data.detailRequisition[key].status;
                 let isValid = (data.currentUser === data.id_user) ? false : true;
+                let row = parseInt(key) + 1;
                 let rowNode = $("#createRequisition").DataTable()
                     .row.add([
                         `<input type="text" disabled class="form-control" id="item_id_${row}" name="item_id_${row}"  value="${data.detailRequisition[key].id}">`,
@@ -233,9 +226,6 @@ function showRequisition(id) {
                         `<select ${(isValid) ? 'disabled' : ''}   id="item_status_${row}"><option value="Proceso" ${(status === 'Proceso') ? 'selected' : ''}>Proceso</option><option value="Cotizado" ${(status === 'Cotizado') ? 'selected' : ''}>Cotizado</optin>` +
                         `<option value="Entregado" ${(status === 'Entregado') ? 'selected' : ''}>Entregado</optin><option value="Devolucion" ${(status === 'Devolucion') ? 'selected' : ''}>Devolución</optin>` +
                         `<option value="Cancelada" ${(status === 'Cancelada') ? 'selected' : ''}>Cancelada</optin></select>`,
-                        // `<textarea id="item_prov1_${row}" class="form-control"></textarea>`,
-                        // `<input type="number" id="item_unitatio1_${row}" onclick='calculaPrecio()' class="form-control"></input>`,
-                        // `<input type="number" id="item_subtotal1_${row}" class="form-control"></input>`,
                         `<div><button ${(isValid) ? 'disabled' : ''}
                         class='btn btn-danger' data-toggle="tooltip" data-placement="top" title="Eliminar" onclick='deleteRow(this)'><i class="fas fa-trash"></i></button>
                         ${(data.permission === 3) ? "<span data-toggle='modal' data-target='#modalProvider' data-backdrop='static'><button class='btn btn-primary' onclick='showProvider("+data.detailRequisition[key].id+","+data.detailRequisition[key].quantity+")' data-toggle='tooltip' data-placement='top' title='Agregar Proveedores'><i class='fas fa-box' /></button></span>" : ''}</div>`
@@ -329,7 +319,7 @@ function editRequisition() {
     let i = 1;
     for (const key in items) {
         formdata.append("area_id", $("#project_id").val());
-        formdata.append("item_id_" + i, $("#item_id_" + items[key]).val());
+        formdata.append("item_id_" + i, ($("#item_id_" + items[key]).val()) === undefined ? null : $("#item_id_" + items[key]).val());
         formdata.append("item_cantidad_" + i, $("#item_cantidad_" + items[key]).val());
         formdata.append("item_unidad_" + i, $("#item_unidad_" + items[key]).val());
         formdata.append("item_descripcion_" + i, $("#item_descripcion_" + items[key]).val());
@@ -561,3 +551,5 @@ function aprobar(id, status) {
         }
     });
 }
+
+
