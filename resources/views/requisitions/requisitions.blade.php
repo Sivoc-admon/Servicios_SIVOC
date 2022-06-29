@@ -94,7 +94,7 @@
                             @isset($requisitions)
                                 @foreach ($requisitions as $requisiton)
                                     <tr>
-                                        <td>{{ $requisiton->id }}</td>
+                                        <td>{{ $requisiton->no_requisition }}</td>
                                         @foreach ($areas as $area)
                                             @if($requisiton->id_area == $area->id)
                                                 <td>{{ $area->name }}</td>
@@ -102,9 +102,9 @@
                                             @endif
                                         @endforeach
                                         <td>{{ $requisiton->created_at }}</td>
-                                        <td>Creada</td>
+                                        <td>{{ $requisiton->status }}</td>
 
-                                        @if (Auth::user()->hasAnyRole(['admin', 'calidad', 'operaciones', 'manufactura', 'servicio', 'ventas']))
+                                        @if (Auth::user()->hasAnyRole(['admin', 'calidad', 'compras', 'manufactura', 'servicio', 'ventas', 'lider calidad', 'lider compras', 'lider recursos humanos', 'lider servicio', 'lider ventas', 'lider tesoreria']))
                                             <td>
                                                 <span data-toggle="modal" data-target="#modalCreateRequisition" data-backdrop='static'>
                                                     <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Editar requisicion" onclick="showRequisition({{$requisiton->id}})">
@@ -116,6 +116,98 @@
                                                         <i class="fas fa-list"></i>
                                                     </button>
                                                 </span>
+                                                @if (Auth::user()->hasAnyRole(['admin', 'lider calidad', 'lider compras', 'lider recursos humanos', 'lider servicio', 'lider ventas', 'lider tesoreria']))
+                                                    @switch($requisiton->status)
+                                                        @case("creada")
+                                                                @switch($requisiton->id_area)
+                                                                    @case(1)
+                                                                            @if (Auth::user()->hasAnyRole('lider calidad') || Auth::user()->hasAnyRole('admin'))
+                                                                                <span >
+                                                                                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'proceso')">
+                                                                                        <i class="fas fa-check"></i>
+                                                                                    </button>
+                                                                                </span>
+                                                                            @endif
+                                                                        @break
+                                                                    @case(2)
+                                                                            @if (Auth::user()->hasAnyRole('lider tesoreria') || Auth::user()->hasAnyRole('admin'))
+                                                                                <span >
+                                                                                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'proceso')">
+                                                                                        <i class="fas fa-check"></i>
+                                                                                    </button>
+                                                                                </span>
+                                                                            @endif
+                                                                        @break
+                                                                    @case(3)
+                                                                            @if (Auth::user()->hasAnyRole('lider compras') || Auth::user()->hasAnyRole('admin'))
+                                                                                <span >
+                                                                                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'proceso')">
+                                                                                        <i class="fas fa-check"></i>
+                                                                                    </button>
+                                                                                </span>
+                                                                            @endif
+                                                                        @break
+                                                                    @case(5)
+                                                                            @if (Auth::user()->hasAnyRole('lider recursos humanos') || Auth::user()->hasAnyRole('admin'))
+                                                                                <span >
+                                                                                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'proceso')">
+                                                                                        <i class="fas fa-check"></i>
+                                                                                    </button>
+                                                                                </span>
+                                                                            @endif
+                                                                        @break
+                                                                    @case(6)
+                                                                            @if (Auth::user()->hasAnyRole('lider ventas') || Auth::user()->hasAnyRole('admin'))
+                                                                                <span >
+                                                                                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'proceso')">
+                                                                                        <i class="fas fa-check"></i>
+                                                                                    </button>
+                                                                                </span>
+                                                                            @endif
+                                                                        @break
+                                                                    @case(7)
+                                                                            @if (Auth::user()->hasAnyRole('lider servicio') || Auth::user()->hasAnyRole('admin'))
+                                                                                <span >
+                                                                                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'proceso')">
+                                                                                        <i class="fas fa-check"></i>
+                                                                                    </button>
+                                                                                </span>
+                                                                            @endif
+                                                                        @break
+                                                                    @default
+                                                                @endswitch
+
+                                                            @break
+                                                        @case("proceso")
+                                                                @if (Auth::user()->hasAnyRole('lider compras') || Auth::user()->hasAnyRole('compras') || Auth::user()->hasAnyRole('admin'))
+                                                                    <span >
+                                                                        <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'cotizada')">
+                                                                            <i class="fas fa-check"></i>
+                                                                        </button>
+                                                                    </span>
+                                                                @endif
+                                                            @break
+                                                        @case("cotizada")
+                                                                @if (Auth::user()->hasAnyRole('lider compras') || Auth::user()->hasAnyRole('compras') || Auth::user()->hasAnyRole('admin'))
+                                                                    <span >
+                                                                        <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'entregada')">
+                                                                            <i class="fas fa-check"></i>
+                                                                        </button>
+                                                                    </span>
+                                                                @endif
+                                                            @break
+                                                        @case("entregada")
+                                                                @if (Auth::user()->hasAnyRole('lider compras') || Auth::user()->hasAnyRole('compras') || Auth::user()->hasAnyRole('admin'))
+                                                                    <span >
+                                                                        <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'devolucion')">
+                                                                            <i class="fas fa-check"></i>
+                                                                        </button>
+                                                                    </span>
+                                                                @endif
+                                                            @break
+                                                    @endswitch
+                                                @endif
+
                                             </td>
                                         @else
                                             <td></td>
