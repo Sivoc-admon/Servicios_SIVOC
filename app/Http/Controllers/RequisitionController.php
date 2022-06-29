@@ -60,6 +60,7 @@ class RequisitionController extends Controller
         $requisition->no_requisition = $request->noRequisition;
         $requisition->id_user = $id_user;
         $requisition->id_area = $request->area_id;
+        $requisition->status = "creada";
 
         if ($requisition->save()) {
             for ($i=1; $i <= $request->totalItems; $i++) {
@@ -107,6 +108,7 @@ class RequisitionController extends Controller
             'permission' => $user->area_id,
             'currentUser' => $user->id,
             'requisition'=>$requisition['id'],
+            'requisition_status'=> $requisition->status,
             'no_requisition'=>$requisition['no_requisition'],
             'id_area'=>$requisition['id_area'],
             'id_user'=>$requisition['id_user'],
@@ -280,6 +282,23 @@ class RequisitionController extends Controller
 
         $array=["requisitionFiles"=>$requisitionFiles];
 
+        return response()->json($array);
+    }
+
+    public function updateStatusRequisition(Request $request, $id){
+        $msg = "";
+        $error = false;
+        $requisition = Requisition::find($id);
+        $requisition->status = $request->status;
+
+        if(!$requisition->update()){
+            $error = true;
+            $msg = "Error al actualizar el status";
+        }{
+            $msg = "Se actualizo el status de la requisición";
+        }
+
+        $array = ["msg"=>$msg, "error"=>$error];
         return response()->json($array);
     }
 }
