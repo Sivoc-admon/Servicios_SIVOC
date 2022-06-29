@@ -236,7 +236,6 @@ class RequisitionController extends Controller
         $error = false;
         $msg = "";
         $petition = $request->all();
-
         $requisition = Requisition::find($id);
         $reqUpdate = [
             'no_requisition' => $request->noRequisition,
@@ -245,22 +244,36 @@ class RequisitionController extends Controller
 
         if ($requisition->update($reqUpdate)) {
             for ($i=1; $i <= $request->totalItems; $i++) {
+                if($petition['item_id_'.$i] != "null"){
+                    $detailRequisition = DetailRequisition::find($petition['item_id_'.$i]);
+                    $detUpdate = [
+                        'num_item' => $i,
+                        'id_classification' => $petition['item_clasificacion_'.$i],
+                        'id_requisition' => $id,
+                        'quantity' => $petition['item_cantidad_'.$i],
+                        'unit' => $petition['item_unidad_'.$i],
+                        'description' => $petition['item_descripcion_'.$i],
+                        'model' => $petition['item_modelo_'.$i],
+                        'preference' => $petition['item_referencia_'.$i],
+                        'urgency' => $petition['item_urgencia_'.$i],
+                        'status' => $petition['item_status_'.$i],
+                    ];
 
-                $detailRequisition = DetailRequisition::find($petition['item_id_'.$i]);
-                $detUpdate = [
-                    'num_item' => $i,
-                    'id_classification' => $petition['item_clasificacion_'.$i],
-                    'id_requisition' => $id,
-                    'quantity' => $petition['item_cantidad_'.$i],
-                    'unit' => $petition['item_unidad_'.$i],
-                    'description' => $petition['item_descripcion_'.$i],
-                    'model' => $petition['item_modelo_'.$i],
-                    'preference' => $petition['item_referencia_'.$i],
-                    'urgency' => $petition['item_urgencia_'.$i],
-                    'status' => $petition['item_status_'.$i],
-                ];
-
-                $detailRequisition->update($detUpdate);
+                    $detailRequisition->update($detUpdate);
+                }else{
+                    $detailRequisition = new DetailRequisition();
+                    $detailRequisition->num_item = $i;
+                    $detailRequisition->id_classification = $petition['item_clasificacion_'.$i];
+                    $detailRequisition->id_requisition = $requisition->id;
+                    $detailRequisition->quantity = $petition['item_cantidad_'.$i];
+                    $detailRequisition->unit = $petition['item_unidad_'.$i];
+                    $detailRequisition->description = $petition['item_descripcion_'.$i];
+                    $detailRequisition->model = $petition['item_modelo_'.$i];
+                    $detailRequisition->preference = $petition['item_referencia_'.$i];
+                    $detailRequisition->urgency = $petition['item_urgencia_'.$i];
+                    $detailRequisition->status = $petition['item_status_'.$i];
+                    $detailRequisition->save();
+                }
             }
         } else {
             $msg = "Error al actualizar la requisición";
