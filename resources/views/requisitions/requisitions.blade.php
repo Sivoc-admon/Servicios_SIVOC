@@ -185,6 +185,11 @@
                                                                             <i class="fas fa-check"></i>
                                                                         </button>
                                                                     </span>
+                                                                    <span >
+                                                                        <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="aprobar({{$requisiton->id}}, 'creada')">
+                                                                            <i class="fas fa-reply"></i>
+                                                                        </button>
+                                                                    </span>
                                                                 @endif
                                                             @break
                                                         @case("cotizada")
