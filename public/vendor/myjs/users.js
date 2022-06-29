@@ -75,9 +75,10 @@ function editUser(id) {
                     }
 
                 }
-
+                console.log(data.roles);
+                console.log(data.roleUser);
                 for (const i in data.roles) {
-                    if (data.roleUser.role_id == data.roles[i].id) {
+                    if (data.roleUser[0].id == data.roles[i].id) {
                         optionRoles += `<option value='${data.roles[i].id}' selected>${data.roles[i].name}</option>`
                     } else {
                         optionRoles += `<option value='${data.roles[i].id}'>${data.roles[i].name}</option>`;
@@ -116,7 +117,13 @@ function updateUser() {
     });*/
 
     //e.preventDefault();
+    let rol = $("#inputRoleEditUser").val();
     let id = $("#idUser").val();
+
+    if (rol == 0) {
+        messageAlert("Falta seleccionar el rol", "info", "");
+        return;
+    }
     $.ajax({
         type: "PUT",
         url: "users/" + id,
@@ -292,7 +299,7 @@ function showRHFile(id) {
                 let table = "";
                 for (const i in data.files) {
                     table += `<tr>"
-                        <td> ${data.files[i].id}</td> 
+                        <td> ${data.files[i].id}</td>
                         <td>
                             <a href="storage/Documents/RH/${id}/${data.files[i].name}" target="_blank">${data.files[i].name}</a>
                         </td>
