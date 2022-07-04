@@ -10,6 +10,8 @@ use App\ProvidersRequisitions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\RequisitionFile;
+use App\User;
+use Illuminate\Support\Facades\Storage;
 
 class RequisitionController extends Controller
 {
@@ -20,15 +22,36 @@ class RequisitionController extends Controller
      */
     public function index()
     {
-        $requisitions = Requisition::all();
+        $requisitions = Requisition::orderByDesc('id')->get();
         $areas = Area::all();
-        $newRequisitionsCount = Requisition::latest()->first();
+
         $test = Requisition::latest()->first();
 
-        $newRequisition = ($newRequisitionsCount != null) ? $newRequisitionsCount->id + 1 : 1;
-        //dd($newRequisition);
+        foreach ($requisitions as $key => $value) {
 
-        return view('requisitions.requisitions', compact('requisitions','areas', 'newRequisition'));
+            if($files = Storage::files("public/Documents/Requisitions/Files/".$value->id."/Factura")){
+
+                $totalFacturas = count($files);
+                $requisitions[$key]->factura = true;
+
+            }else{
+                $requisitions[$key]->factura = false;
+
+            }
+        }
+
+
+        return view('requisitions.requisitions', compact('requisitions','areas'));
+    }
+
+    public function newRequisition(){
+        $msg = "";
+        $error = false;
+        $newRequisitionsCount = Requisition::latest()->first();
+        $newRequisition = ($newRequisitionsCount != null) ? $newRequisitionsCount->id + 1 : 1;
+        $array=["msg"=>$msg, "error"=>$error, 'newRequisition'=>$newRequisition];
+
+        return response()->json($array);
     }
 
     /**
@@ -156,17 +179,23 @@ class RequisitionController extends Controller
         $error=false;
         $msg="";
 
-        $pathFile = 'public/Documents/Requisitions/Files/'.$idRequisition;
+
+        $tipo = "";
+        if($request->tipo != "normal"){
+            $tipo = "Factura/";
+        }
+        $pathFile = 'public/Documents/Requisitions/Files/'.$idRequisition.'/'.$tipo;
 
         for ($i=0; $i <$request->tamanoFiles ; $i++) {
             $nombre="file".$i;
             $archivo = $request->file($nombre);
 
 
+
             $requisitionFile=RequisitionFile::create([
                 'requisition_id' => $request->id,
                 'name' => $archivo->getClientOriginalName(),
-                'ruta' => 'storage/Documents/Requisitions/Files/'.$idRequisition.'/',
+                'ruta' => 'storage/Documents/Requisitions/Files/'.$idRequisition.'/'.$tipo,
 
             ]);
             $path = $archivo->storeAs(
@@ -292,8 +321,16 @@ class RequisitionController extends Controller
     public function files($idRequisition)
     {
         $requisitionFiles = Requisition::find($idRequisition)->requisitionFiles;
+        $totalFacturas=0;
+        if($files = Storage::files("public/Documents/Requisitions/Files/".$idRequisition."/Factura")){
 
-        $array=["requisitionFiles"=>$requisitionFiles];
+            $totalFacturas = count($files);
+        }
+        $idUser = auth()->id();
+        $user = User::find($idUser);
+        $userAdmin = $user->hasRole('admin');
+
+        $array=["requisitionFiles"=>$requisitionFiles, "userAdmin"=>$userAdmin, "totalFacturas"=>$totalFacturas];
 
         return response()->json($array);
     }
@@ -312,6 +349,18 @@ class RequisitionController extends Controller
         }
 
         $array = ["msg"=>$msg, "error"=>$error];
+        return response()->json($array);
+    }
+
+    public function deleteFile($id)
+    {
+        $msg="";
+        $error=false;
+
+        $file = RequisitionFile::find($id);
+        $file->delete();
+        $array=["msg"=>$msg, "error"=>$error];
+
         return response()->json($array);
     }
 }

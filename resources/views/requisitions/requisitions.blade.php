@@ -203,12 +203,30 @@
                                                                 @endif
                                                             @break
                                                         @case("cotizada")
-                                                                @if (Auth::user()->hasAnyRole('lider compras') || Auth::user()->hasAnyRole('compras') || Auth::user()->hasAnyRole('admin'))
+                                                                @if (Auth::user()->hasAnyRole('direccion'))
                                                                     <span >
-                                                                        <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'entregada')">
+                                                                        <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'aprobada')">
                                                                             <i class="fas fa-check"></i>
                                                                         </button>
                                                                     </span>
+                                                                    <span >
+                                                                        <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Cancelar" onclick="aprobar({{$requisiton->id}}, 'cancelada')">
+                                                                            <i class="fas fa-minus-square"></i>
+                                                                        </button>
+                                                                    </span>
+                                                                @endif
+                                                            @break
+                                                        @case("aprobada")
+                                                                @if (Auth::user()->hasAnyRole('lider compras') || Auth::user()->hasAnyRole('compras'))
+                                                                    @if ($requisiton->factura != false)
+                                                                        <span >
+                                                                            <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'entregada')">
+                                                                                <i class="fas fa-check"></i>
+                                                                            </button>
+                                                                        </span>
+
+                                                                    @endif
+
                                                                     <span >
                                                                         <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Cancelar" onclick="aprobar({{$requisiton->id}}, 'cancelada')">
                                                                             <i class="fas fa-minus-square"></i>
@@ -267,6 +285,7 @@
 
             $("#tableRequisitions").DataTable({
                 dom: 'Bfrtip',
+                //order:[[2,"desc"]],
                 buttons: [
                     'csv', 'excel', 'pdf'
                 ],
@@ -276,11 +295,14 @@
                         target: -1
                     }
                 },
-                columnDefs: [ {
-                    className: 'control',
-                    orderable: false,
-                    targets:   -1
-                } ]
+                columnDefs: [
+                    {
+                        className: 'control',
+                        orderable: false,
+                        targets:   -1
+                    },
+
+                ]
             });
 
 

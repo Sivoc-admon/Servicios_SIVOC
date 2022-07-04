@@ -25,11 +25,36 @@ let tableProviders = $('#provderTable').DataTable({
 
 
 function newRequisition() {
+
+
     $('#project_id').val('');
     $('#name_project').val('');
     $('#edit_req').hide();
     $('#save_req').show();
     let table = $("#createRequisition").DataTable();
+
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: "GET",
+        url: `requisitions/newRequisition`,
+        /*data: formdata,
+        processData: false,
+        contentType: false,*/
+        success: function(data) {
+            $('#name_project').val("R-" + data.newRequisition);
+        },
+        error: function(data) {
+            console.log(data.responseJSON);
+            if (data.responseJSON.message == "The given data was invalid.") {
+                messageAlert("Datos incompletos.", "warning");
+            } else {
+                messageAlert("Ha ocurrido un problema.", "error", "");
+            }
+            //messageAlert("Datos incompletos", "error", `${data.responseJSON.errors.apellido_paterno}` + "\n" + `${data.responseJSON.errors.name}`);
+        }
+    });
 
 }
 
@@ -178,7 +203,7 @@ function saveRequisition(action = null) {
         success: function(data) {
             messageAlert("Requisición creada.", "success");
             location.reload();
-            return;
+
         },
         error: function(data) {
             console.log(data.responseJSON);
@@ -213,6 +238,11 @@ function showRequisition(id) {
                 let status = data.detailRequisition[key].status;
                 let isValid = (data.currentUser === data.id_user) ? false : true;
                 let row = parseInt(key) + 1;
+                let statusRequisition = data.requisition_status;
+                if (statusRequisition == "cancelada") {
+                    $('#edit_req').hide();
+                }
+
                 let rowNode = $("#createRequisition").DataTable()
                     .row.add([
                         `<input type="text" style="display:none" disabled class="form-control" id="item_id_${row}" name="item_id_${row}"  value="${data.detailRequisition[key].id}">
@@ -273,6 +303,7 @@ function limpiaTabla() {
 function showProvider(detail, quantity) {
     currentDetail = detail;
     currentQuantity = quantity;
+    $("#modalCreateRequisition").modal("hide");
     $.ajax({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -426,16 +457,23 @@ function deleteProvider(id, index) {
 function closeModalProvider() {
     $('#provderTable').dataTable().fnClearTable();
     $('#modalProvider').modal('hide');
+    $("#modalCreateRequisition").modal("show");
 }
 
 
 
-function uploadFiles() {
+function uploadFiles(tipo) {
     let id = $("#hiddeIdRequisicion").val();
-    let file = $('#inputFile')[0];
+    let file;
+    if (tipo == "normal") {
+        file = $('#inputFile')[0];
+    } else {
+        file = $('#inputFileFactura')[0];
+    }
 
     let data = new FormData();
     data.append("id", id);
+    data.append("tipo", tipo);
     data.append("tamanoFiles", file.files.length);
     for (let i = 0; i < file.files.length; i++) {
         data.append('file' + i, file.files[i]);
@@ -478,6 +516,7 @@ function uploadFiles() {
 function showModalFile(id) {
     $("#hiddeIdRequisicion").val(id);
     $("#bodyFiles").empty();
+    $("#divFactura").hide();
 
     $.ajax({
         headers: {
@@ -495,11 +534,25 @@ function showModalFile(id) {
             if (data.error == true) {
                 messageAlert(data.msg, "error", "");
             } else {
+                console.log(data.userAdmin);
                 let html = "";
                 var url = "{{asset('')}}";
+                if (data.totalFacturas <= 0) {
+                    $("#divFactura").show();
+                }
                 for (const key in data.requisitionFiles) {
-                    html = `<td>${data.requisitionFiles[key].id}</td>` +
+                    html += `<tr>` +
+                        `<td>${data.requisitionFiles[key].id}</td>` +
                         `<td><a href="${data.requisitionFiles[key].ruta}/${data.requisitionFiles[key].name}" target="_blank">${data.requisitionFiles[key].name}</a></td>`;
+                    if (data.userAdmin == true) {
+                        html += `<td><span >` +
+                            `<button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Cancelar" onclick="deleteFile(${data.requisitionFiles[key].id})">` +
+                            `<i class="fas fa-minus-square"></i>` +
+                            `</button>` +
+                            `</span></td>`;
+                    }
+                    html += `</tr>`;
+
                 }
                 $("#bodyFiles").append(html);
             }
@@ -553,4 +606,35 @@ function aprobar(id, status) {
     });
 }
 
+function deleteFile(id) {
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: "DELETE",
+        url: `requisitions/${id}/deleteFile`,
+        /*cache: false,
+        contentType: false,
+        processData: false,*/
+        dataType: 'json',
+        success: function(data) {
 
+            if (data.error == true) {
+                messageAlert(data.msg, "error", "");
+            } else {
+                messageAlert(data.msg, "success", "");
+                location.reload();
+            }
+
+        },
+        error: function(data) {
+            console.log(data.responseJSON);
+            if (data.responseJSON.message == "The given data was invalid.") {
+                messageAlert("Datos incompletos.", "warning");
+            } else {
+                messageAlert("Ha ocurrido un problema.", "error", "");
+            }
+            //messageAlert("Datos incompletos", "error", `${data.responseJSON.errors.apellido_paterno}` + "\n" + `${data.responseJSON.errors.name}`);
+        }
+    });
+}

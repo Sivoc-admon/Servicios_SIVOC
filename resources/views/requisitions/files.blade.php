@@ -16,10 +16,16 @@
                             <input type="hidden" name="hiddeIdRequisicion" id="hiddeIdRequisicion">
                             <input type="file" class="form-control" name="inputFile" id="inputFile" multiple>
                         </div>
-                    </div>
-                    <div class="col-md-6">
                         <div class="form-group">
-                            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="uploadFiles()">Guardar archivo</button>
+                            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="uploadFiles('normal')">Guardar archivo</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6" id="divFactura" style="display:none">
+                        <div class="form-group">
+                            <input type="file" class="form-control" name="inputFileFactura" id="inputFileFactura" multiple>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="uploadFiles('factura')">Guardar Factura</button>
                         </div>
                     </div>
                 </div>
@@ -29,7 +35,8 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>name</th>
+                            <th>Name</th>
+                            <th>Acción</th>
                         </tr>
                     </thead>
                     <tbody id="bodyFiles"></tbody>
