@@ -149,12 +149,11 @@ function addProvider() {
 
 }
 
-function deleteRow(fila) {
+function deleteRow(fila, num) {
     let table = $('#createRequisition').DataTable();
-    console.log($(fila).parents("tr")[0].cells[0].innerHTML);
     let itemIndex = $(fila).parents("tr")[0].cells[0].innerHTML - 1;
-    console.log(itemIndex);
-    items.splice(itemIndex, 1);
+    console.log(num);
+    items.splice(num - 1, 1);
     console.log(items)
     table.row($(fila).parents("tr")).remove().draw();
 }
@@ -231,12 +230,22 @@ function showRequisition(id) {
             $('#project_id').val(data.id_area);
             $('#name_project').val(data.no_requisition);
             $('#requisition_').val(data.requisition);
+            console.log(data);
+            items = [];
             for (const key in data.detailRequisition) {
                 items.push(parseInt(key) + 1);
                 let unit = (data.detailRequisition[key].unit === 'Servicio') ? 2 : 1;
                 let clasification = data.detailRequisition[key].id_classification;
                 let status = data.detailRequisition[key].status;
-                let isValid = (data.currentUser === data.id_user) ? false : true;
+                let isValid;
+                if (data.edit == true) {
+                    isValid = false;
+
+                } else {
+                    isValid = true;
+                }
+
+                //let isValid = (data.currentUser === data.id_user) ? false : true;
                 let row = parseInt(key) + 1;
                 let statusRequisition = data.requisition_status;
                 if (statusRequisition == "cancelada") {
@@ -258,12 +267,13 @@ function showRequisition(id) {
                         `<option value="Entregado" ${(status === 'Entregado') ? 'selected' : ''}>Entregado</optin><option value="Devolucion" ${(status === 'Devolucion') ? 'selected' : ''}>Devolución</optin>` +
                         `<option value="Cancelada" ${(status === 'Cancelada') ? 'selected' : ''}>Cancelada</optin></select>`,
                         `<div><button ${(isValid) ? 'disabled' : ''}
-                        class='btn btn-danger' data-toggle="tooltip" data-placement="top" title="Eliminar" onclick='deleteRow(this)'><i class="fas fa-trash"></i></button>
+                        class='btn btn-danger' data-toggle="tooltip" data-placement="top" title="Eliminar" onclick='deleteRow(this, ${row})'><i class="fas fa-trash"></i></button>
                         ${(data.permission === 3) ? "<span data-toggle='modal' data-target='#modalProvider' data-backdrop='static'><button class='btn btn-primary' onclick='showProvider("+data.detailRequisition[key].id+","+data.detailRequisition[key].quantity+")' data-toggle='tooltip' data-placement='top' title='Agregar Proveedores'><i class='fas fa-box' /></button></span>" : ''}</div>`
                     ])
                     .draw()
                     .node();
             }
+            console.log(items);
         },
         error: function(data) {
             console.log(data.responseJSON);
@@ -349,7 +359,9 @@ function editRequisition() {
     formdata.append("noRequisition", noRequisition);
     formdata.append("id", requisition_);
     let i = 1;
+
     for (const key in items) {
+        console.log(key);
         formdata.append("area_id", $("#project_id").val());
         formdata.append("item_id_" + i, ($("#item_id_" + items[key]).val()) === undefined ? null : $("#item_id_" + items[key]).val());
         formdata.append("item_cantidad_" + i, $("#item_cantidad_" + items[key]).val());
@@ -361,8 +373,10 @@ function editRequisition() {
         formdata.append("item_urgencia_" + i, $("#item_urgencia_" + items[key]).val());
         formdata.append("item_status_" + i, $("#item_status_" + items[key]).val());
         i++;
+
     }
-    formdata.append("totalItems", i - 1);
+
+    formdata.append("totalItems", items.length);
 
     $.ajax({
         headers: {
@@ -376,7 +390,7 @@ function editRequisition() {
         success: function(data) {
             messageAlert("Requisición Editada.", "success");
             location.reload();
-            return;
+
         },
         error: function(data) {
             console.log(data.responseJSON);
@@ -497,6 +511,7 @@ function uploadFiles(tipo) {
             } else {
 
                 messageAlert("Guardado Correctamente", "success", "");
+                location.reload();
 
             }
 

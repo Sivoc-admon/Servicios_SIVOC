@@ -30,7 +30,9 @@
                     </div>
                 </div>
             </div>
+
             <div class="row">
+                <h3>Archivos Generales</h3>
                 <table class="table">
                     <thead>
                         <tr>
@@ -42,6 +44,7 @@
                     <tbody id="bodyFiles"></tbody>
                 </table>
             </div>
+
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
