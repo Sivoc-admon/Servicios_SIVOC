@@ -1,5 +1,5 @@
 <!-- Modal  REGISTRAR PROYECTO-->
-<div class="modal fade bd-example-modal-lg" id="modalCreateRequisition" tabindex="-1" aria-labelledby="exampleModalLabel">
+<div class="modal fade bd-example-modal-lg" id="modalCreateRequisition" style="overflow-y: scroll;" tabindex="-1" aria-labelledby="exampleModalLabel">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
           <div class="modal-header">
@@ -23,7 +23,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="name_project">No. Requisición</label>
-                            <input type="text" class="form-control" id="name_project" name="name_project" placeholder="Nombre del Proyecto" value="R-{{$newRequisition}}">
+                            <input type="text" class="form-control" id="name_project" name="name_project" readonly>
                             <input type="text" style="display:none;" id="requisition_"  >
                         </div>
                     </div>

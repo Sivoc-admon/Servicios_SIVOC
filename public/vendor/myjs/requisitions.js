@@ -25,11 +25,36 @@ let tableProviders = $('#provderTable').DataTable({
 
 
 function newRequisition() {
+
+
     $('#project_id').val('');
     $('#name_project').val('');
     $('#edit_req').hide();
     $('#save_req').show();
     let table = $("#createRequisition").DataTable();
+
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: "GET",
+        url: `requisitions/newRequisition`,
+        /*data: formdata,
+        processData: false,
+        contentType: false,*/
+        success: function(data) {
+            $('#name_project').val("R-" + data.newRequisition);
+        },
+        error: function(data) {
+            console.log(data.responseJSON);
+            if (data.responseJSON.message == "The given data was invalid.") {
+                messageAlert("Datos incompletos.", "warning");
+            } else {
+                messageAlert("Ha ocurrido un problema.", "error", "");
+            }
+            //messageAlert("Datos incompletos", "error", `${data.responseJSON.errors.apellido_paterno}` + "\n" + `${data.responseJSON.errors.name}`);
+        }
+    });
 
 }
 
@@ -124,12 +149,11 @@ function addProvider() {
 
 }
 
-function deleteRow(fila) {
+function deleteRow(fila, num) {
     let table = $('#createRequisition').DataTable();
-    console.log($(fila).parents("tr")[0].cells[0].innerHTML);
     let itemIndex = $(fila).parents("tr")[0].cells[0].innerHTML - 1;
-    console.log(itemIndex);
-    items.splice(itemIndex, 1);
+    console.log(num);
+    items.splice(num - 1, 1);
     console.log(items)
     table.row($(fila).parents("tr")).remove().draw();
 }
@@ -178,7 +202,7 @@ function saveRequisition(action = null) {
         success: function(data) {
             messageAlert("Requisición creada.", "success");
             location.reload();
-            return;
+
         },
         error: function(data) {
             console.log(data.responseJSON);
@@ -206,13 +230,28 @@ function showRequisition(id) {
             $('#project_id').val(data.id_area);
             $('#name_project').val(data.no_requisition);
             $('#requisition_').val(data.requisition);
+            console.log(data);
+            items = [];
             for (const key in data.detailRequisition) {
                 items.push(parseInt(key) + 1);
                 let unit = (data.detailRequisition[key].unit === 'Servicio') ? 2 : 1;
                 let clasification = data.detailRequisition[key].id_classification;
                 let status = data.detailRequisition[key].status;
-                let isValid = (data.currentUser === data.id_user) ? false : true;
+                let isValid;
+                if (data.edit == true) {
+                    isValid = false;
+
+                } else {
+                    isValid = true;
+                }
+
+                //let isValid = (data.currentUser === data.id_user) ? false : true;
                 let row = parseInt(key) + 1;
+                let statusRequisition = data.requisition_status;
+                if (statusRequisition == "cancelada") {
+                    $('#edit_req').hide();
+                }
+
                 let rowNode = $("#createRequisition").DataTable()
                     .row.add([
                         `<input type="text" style="display:none" disabled class="form-control" id="item_id_${row}" name="item_id_${row}"  value="${data.detailRequisition[key].id}">
@@ -228,12 +267,13 @@ function showRequisition(id) {
                         `<option value="Entregado" ${(status === 'Entregado') ? 'selected' : ''}>Entregado</optin><option value="Devolucion" ${(status === 'Devolucion') ? 'selected' : ''}>Devolución</optin>` +
                         `<option value="Cancelada" ${(status === 'Cancelada') ? 'selected' : ''}>Cancelada</optin></select>`,
                         `<div><button ${(isValid) ? 'disabled' : ''}
-                        class='btn btn-danger' data-toggle="tooltip" data-placement="top" title="Eliminar" onclick='deleteRow(this)'><i class="fas fa-trash"></i></button>
+                        class='btn btn-danger' data-toggle="tooltip" data-placement="top" title="Eliminar" onclick='deleteRow(this, ${row})'><i class="fas fa-trash"></i></button>
                         ${(data.permission === 3) ? "<span data-toggle='modal' data-target='#modalProvider' data-backdrop='static'><button class='btn btn-primary' onclick='showProvider("+data.detailRequisition[key].id+","+data.detailRequisition[key].quantity+")' data-toggle='tooltip' data-placement='top' title='Agregar Proveedores'><i class='fas fa-box' /></button></span>" : ''}</div>`
                     ])
                     .draw()
                     .node();
             }
+            console.log(items);
         },
         error: function(data) {
             console.log(data.responseJSON);
@@ -273,6 +313,7 @@ function limpiaTabla() {
 function showProvider(detail, quantity) {
     currentDetail = detail;
     currentQuantity = quantity;
+    $("#modalCreateRequisition").modal("hide");
     $.ajax({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -318,7 +359,9 @@ function editRequisition() {
     formdata.append("noRequisition", noRequisition);
     formdata.append("id", requisition_);
     let i = 1;
+
     for (const key in items) {
+        console.log(key);
         formdata.append("area_id", $("#project_id").val());
         formdata.append("item_id_" + i, ($("#item_id_" + items[key]).val()) === undefined ? null : $("#item_id_" + items[key]).val());
         formdata.append("item_cantidad_" + i, $("#item_cantidad_" + items[key]).val());
@@ -330,8 +373,10 @@ function editRequisition() {
         formdata.append("item_urgencia_" + i, $("#item_urgencia_" + items[key]).val());
         formdata.append("item_status_" + i, $("#item_status_" + items[key]).val());
         i++;
+
     }
-    formdata.append("totalItems", i - 1);
+
+    formdata.append("totalItems", items.length);
 
     $.ajax({
         headers: {
@@ -345,7 +390,7 @@ function editRequisition() {
         success: function(data) {
             messageAlert("Requisición Editada.", "success");
             location.reload();
-            return;
+
         },
         error: function(data) {
             console.log(data.responseJSON);
@@ -426,16 +471,23 @@ function deleteProvider(id, index) {
 function closeModalProvider() {
     $('#provderTable').dataTable().fnClearTable();
     $('#modalProvider').modal('hide');
+    $("#modalCreateRequisition").modal("show");
 }
 
 
 
-function uploadFiles() {
+function uploadFiles(tipo) {
     let id = $("#hiddeIdRequisicion").val();
-    let file = $('#inputFile')[0];
+    let file;
+    if (tipo == "normal") {
+        file = $('#inputFile')[0];
+    } else {
+        file = $('#inputFileFactura')[0];
+    }
 
     let data = new FormData();
     data.append("id", id);
+    data.append("tipo", tipo);
     data.append("tamanoFiles", file.files.length);
     for (let i = 0; i < file.files.length; i++) {
         data.append('file' + i, file.files[i]);
@@ -459,6 +511,7 @@ function uploadFiles() {
             } else {
 
                 messageAlert("Guardado Correctamente", "success", "");
+                location.reload();
 
             }
 
@@ -478,6 +531,7 @@ function uploadFiles() {
 function showModalFile(id) {
     $("#hiddeIdRequisicion").val(id);
     $("#bodyFiles").empty();
+    $("#divFactura").hide();
 
     $.ajax({
         headers: {
@@ -495,11 +549,25 @@ function showModalFile(id) {
             if (data.error == true) {
                 messageAlert(data.msg, "error", "");
             } else {
+                console.log(data.userAdmin);
                 let html = "";
                 var url = "{{asset('')}}";
+                if (data.totalFacturas <= 0) {
+                    $("#divFactura").show();
+                }
                 for (const key in data.requisitionFiles) {
-                    html = `<td>${data.requisitionFiles[key].id}</td>` +
+                    html += `<tr>` +
+                        `<td>${data.requisitionFiles[key].id}</td>` +
                         `<td><a href="${data.requisitionFiles[key].ruta}/${data.requisitionFiles[key].name}" target="_blank">${data.requisitionFiles[key].name}</a></td>`;
+                    if (data.userAdmin == true) {
+                        html += `<td><span >` +
+                            `<button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Cancelar" onclick="deleteFile(${data.requisitionFiles[key].id})">` +
+                            `<i class="fas fa-minus-square"></i>` +
+                            `</button>` +
+                            `</span></td>`;
+                    }
+                    html += `</tr>`;
+
                 }
                 $("#bodyFiles").append(html);
             }
@@ -553,4 +621,35 @@ function aprobar(id, status) {
     });
 }
 
+function deleteFile(id) {
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: "DELETE",
+        url: `requisitions/${id}/deleteFile`,
+        /*cache: false,
+        contentType: false,
+        processData: false,*/
+        dataType: 'json',
+        success: function(data) {
 
+            if (data.error == true) {
+                messageAlert(data.msg, "error", "");
+            } else {
+                messageAlert(data.msg, "success", "");
+                location.reload();
+            }
+
+        },
+        error: function(data) {
+            console.log(data.responseJSON);
+            if (data.responseJSON.message == "The given data was invalid.") {
+                messageAlert("Datos incompletos.", "warning");
+            } else {
+                messageAlert("Ha ocurrido un problema.", "error", "");
+            }
+            //messageAlert("Datos incompletos", "error", `${data.responseJSON.errors.apellido_paterno}` + "\n" + `${data.responseJSON.errors.name}`);
+        }
+    });
+}
