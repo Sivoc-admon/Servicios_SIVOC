@@ -42,34 +42,34 @@ class CustomerController extends Controller
             'inputAddressCustomer' => 'required',
             'inputPhoneCustomer' => 'required',
             'inputEmailCustomer' => 'required',
-            
+
         ]);
         $msg="";
         $error=false;
-        
+
         $count = Customer::where('code', $request->input('inputCodeCustomer'))->count();
         if ($count>0) {
             $msg="El codigo ya existe, intente con otro.";
             $error=true;
-            
+
         }else{
             $user=Customer::create([
-                'name' => $request->input('inputNameCustomer'),            
+                'name' => $request->input('inputNameCustomer'),
                 'code' => $request->input('inputCodeCustomer'),
                 'address' => $request->input('inputAddressCustomer'),
                 'phone' => $request->input('inputPhoneCustomer'),
                 'email' => $request->input('inputEmailCustomer'),
-                
+
             ]);
-            
+
             $user->save();
-               
+
         }
 
         $array=["msg"=>$msg, "error"=>$error];
-        
+
         return response()->json($array);
-        
+
     }
 
     /**
@@ -89,9 +89,14 @@ class CustomerController extends Controller
      * @param  \App\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function edit(Customer $customer)
+    public function edit($id)
     {
-        //
+        $msg="";
+        $error=false;
+        $customer = Customer::find($id);
+
+        $array=["msg"=>$msg, "error"=>$error,"customer"=>$customer];
+        return response()->json($array);
     }
 
     /**
@@ -101,9 +106,40 @@ class CustomerController extends Controller
      * @param  \App\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Customer $customer)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'inputNameCustomerEdit' => 'required',
+            'inputCodeCustomerEdit' => 'required',
+            'inputAddressCustomerEdit' => 'required',
+            'inputPhoneCustomerEdit' => 'required',
+            'inputEmailCustomerEdit' => 'required',
+
+        ]);
+        $msg="";
+        $error=false;
+
+        $count = Customer::where('code', $request->input('inputCodeCustomerEdit'))->count();
+        if ($count>0) {
+            $msg="El codigo ya existe, intente con otro.";
+            $error=true;
+
+        }else{
+            $customer = Customer::find($id);
+            $customer->update([
+                'name' => $request->input('inputNameCustomerEdit'),
+                'code' => $request->input('inputCodeCustomerEdit'),
+                'address' => $request->input('inputAddressCustomerEdit'),
+                'phone' => $request->input('inputPhoneCustomerEdit'),
+                'email' => $request->input('inputEmailCustomerEdit'),
+
+            ]);
+
+        }
+
+        $array=["msg"=>$msg, "error"=>$error];
+
+        return response()->json($array);
     }
 
     /**

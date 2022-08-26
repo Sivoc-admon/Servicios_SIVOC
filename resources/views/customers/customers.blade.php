@@ -14,19 +14,19 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        
+
                         <span data-toggle="modal" data-target="#ModalRegisterCustomer">
                             <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Nuevo Cliente">
                                 <i class="fas fa-user-plus"></i>
                             </button>
                         </span>
-                        
-                        
-                        
+
+
+
                         @include('customers.register')
                         @include('customers.edit')
 
-                    
+
                     </div>
                 </div>
             </div>
@@ -59,19 +59,19 @@
                                         <td>{{ $customer->phone }}</td>
                                         <td>{{ $customer->email }}</td>
                                         <td>
-                                            <button class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Editar" onclick="editUser({{$customer->id}});"><i class="fas fa-edit"></i></a>
-                                        
+                                            <button class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Editar" onclick="editCustomer({{$customer->id}});"><i class="fas fa-edit"></i></a>
+
                                             <form action="{{ route('customers.destroy',$customer->id) }}" method="POST">
                                                 @method('DELETE')
                                                 @csrf
                                                 <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="fas fa-minus-square"></i></button>
                                             </form>
-                                            
+
                                         </td>
                                     </tr>
                                 @endforeach
-                                
-                                
+
+
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -101,10 +101,10 @@
                     'csv', 'excel', 'pdf'
                 ]
             });
-            
+
             //table('tableUsers');
         } );
-    </script>  
-    <script src="{{ asset('vendor/myjs/customers.js') }}"></script> 
+    </script>
+    <script src="{{ asset('vendor/myjs/customers.js') }}"></script>
 @stop
 
