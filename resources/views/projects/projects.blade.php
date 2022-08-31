@@ -124,9 +124,9 @@
 
                                         <td>{{ $project->id }}</td>
                                         @if ( $project->adicional == null)
-                                            <td>{{ $project->name_project }}_{{ $project->name_customer }}-{{ $project->name }}</td>
+                                            <td>{{ $project->name_project }}-{{ $project->name }}</td>
                                         @else
-                                            <td>{{ $project->name_project }}_{{ $project->name_customer }}-{{ $project->name }}-{{ $project->adicional }}</td>
+                                            <td>{{ $project->name_project }}-{{ $project->adicional }}_{{ $project->name }}</td>
                                         @endif
 
                                         <td>{{ $project->status }}</td>
