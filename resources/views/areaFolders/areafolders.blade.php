@@ -44,7 +44,7 @@
                             @endif
                             @break
                         @case('calidad')
-                            @if (Auth::user()->hasAnyRole(['calidad', 'admin', lider calidad]))
+                            @if (Auth::user()->hasAnyRole(['calidad', 'admin', 'lider calidad']))
                                 <button type="button" class="btn btn-primary" onclick="newFolder({{ $folders[0]['area_id'] }}, 0)">
                                     Agregar carpeta en el primer nivel
                                 </button>
@@ -62,7 +62,7 @@
                             @endif
                             @break
                         @case('compras')
-                            @if (Auth::user()->hasAnyRole(['compras', 'admin', 'finanzas', lider compras]))
+                            @if (Auth::user()->hasAnyRole(['compras', 'admin', 'finanzas', 'lider compras']))
                                 <button type="button" class="btn btn-primary" onclick="newFolder({{ $folders[0]['area_id'] }}, 0)">
                                     Agregar carpeta en el primer nivel
                                 </button>
