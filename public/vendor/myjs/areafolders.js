@@ -70,6 +70,7 @@ function getFoldersAndFiles(areaId, nivel) {
     $(botonNameModifyTag).html(`Cambiar nombre a la carpeta "${selectTagText}"`);
     $(botonNameModifyTag).attr("onclick", `cambiaNombreFolder(${selectVal}, '${selectTagText}')`);
     proceso();
+    console.log(selectVal);
     if (selectVal !== '') {
         $.ajax({
             type: "GET",
@@ -93,8 +94,8 @@ function getFoldersAndFiles(areaId, nivel) {
                             $(botonFilesTag).fadeIn();
                         }
                         break;
-                    case 7: //AREA INGENIERIA
-                        if (data.idRoleUser == 1 || data.idRoleUser == 8) { //ADMIN, FINANZAS
+                    case 7: //AREA SERVICIO
+                        if (data.idRoleUser == 1 || data.idRoleUser == 8 || data.idRoleUser == 14) { //ADMIN, FINANZAS
                             $(botonNameTag).fadeIn();
                             $(botonNameModifyTag).fadeIn();
                             $(botonFilesTag).fadeIn();
@@ -271,7 +272,7 @@ function newFile(areaId, nivel){
     formData.append('TotalFiles', TotalFiles);
     formData.append('_token', token);
     for (var pair of formData.entries()) {
-        console.log(pair[0]+ ', ' + pair[1]); 
+        console.log(pair[0]+ ', ' + pair[1]);
     }
     let selectNivelTag = `#selectNivel${nivel}`;
     let folderId = (nivel != 0)? $(selectNivelTag).val():0;
@@ -320,12 +321,12 @@ function deleteFile(documentName, documentId, folderId){
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Sí, borrar!',
-        
+
       }).then((result) => {
-          
+
           if (result.value==true) {
                 let token = $("input[name=_token]").val();
-                
+
                 Swal.fire(
                     'Deleted!',
                     'Your file has been deleted.',

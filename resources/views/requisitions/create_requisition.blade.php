@@ -14,9 +14,15 @@
                             <label for="project_id">Departamento Solicita</label>
                             <select class="form-control" id="project_id" name="project_id">
                                 <option value="">Seleccione un area</option>
-                                @foreach ($areas as $area)
-                                    <option value="{{ $area->id }}">{{ $area->name }}</option>
-                                @endforeach
+                                @if (Auth::user()->hasAnyRole('admin'))
+                                    @foreach ($areas as $area)
+                                        <option value="{{ $area->id }}">{{ $area->name }}</option>
+                                    @endforeach
+                                @else
+                                    <option value="{{ $areaUser->id }}">{{ $areaUser->name }}</option>
+                                @endif
+
+
                             </select>
                         </div>
                     </div>

@@ -33,7 +33,7 @@ class RequisitionController extends Controller
         //dd($userAdmin);
 
         $areas = Area::all();
-
+        $areaUser = Area::find($user->area_id);
 
         $test = Requisition::latest()->first();
 
@@ -50,7 +50,7 @@ class RequisitionController extends Controller
             }
         }
 
-        return view('requisitions.requisitions', compact('requisitions','areas'));
+        return view('requisitions.requisitions', compact('requisitions','areas', 'areaUser'));
     }
 
     public function newRequisition(){
@@ -92,7 +92,7 @@ class RequisitionController extends Controller
         $requisition->no_requisition = $request->noRequisition;
         $requisition->id_user = $id_user;
         $requisition->id_area = $request->area_id;
-        $requisition->status = "Creada";
+        $requisition->status = "Procesada";
 
         if ($requisition->save()) {
             for ($i=1; $i <= $request->totalItems; $i++) {
@@ -284,6 +284,12 @@ class RequisitionController extends Controller
             'no_requisition' => $request->noRequisition,
             'id_area' => $request->area_id,
         ];
+        $estatusActual = ['status' =>"Procesada"];
+        $estatusProcesada = 0;
+        $estatusCotizada = 0;
+        $estatusEntregada = 0;
+        $estatusDevolucion = 0;
+        $estatusCancelada = 0;
 
         if ($requisition->update($reqUpdate)) {
             for ($i=1; $i <= $request->totalItems; $i++) {
@@ -302,9 +308,23 @@ class RequisitionController extends Controller
                         'urgency' => $petition['item_urgencia_'.$i],
                         'status' => $petition['item_status_'.$i],
                     ];
-                    /*if($i==4){
-                        dd($detUpdate);
-                    }*/
+                   switch ($petition['item_status_'.$i]) {
+                    case 'Proceso':
+                        $estatusProcesada++;
+                        break;
+                    case 'Cotizada':
+                        $estatusCotizada++;
+                        break;
+                    case 'Entregada':
+                        $estatusEntregada++;
+                        break;
+                    case 'Devolucion':
+                        $estatusDevolucion++;
+                        break;
+                    case 'Cancelada':
+                        $estatusCancelada++;
+                        break;
+                   }
 
                     if(!$detailRequisition->update($detUpdate)){
                         $msg = "Error al actualizar la requisición";
@@ -314,6 +334,23 @@ class RequisitionController extends Controller
                         return response()->json($array);
                     }
                 }else{
+                    switch ($petition['item_status_'.$i]) {
+                        case 'Proceso':
+                            $estatusProcesada++;
+                            break;
+                        case 'Cotizada':
+                            $estatusCotizada++;
+                            break;
+                        case 'Entregada':
+                            $estatusEntregada++;
+                            break;
+                        case 'Devolucion':
+                            $estatusDevolucion++;
+                            break;
+                        case 'Cancelada':
+                            $estatusCancelada++;
+                            break;
+                    }
                     $detailRequisition = new DetailRequisition();
                     $detailRequisition->num_item = $i;
                     $detailRequisition->id_classification = $petition['item_clasificacion_'.$i];
@@ -336,6 +373,21 @@ class RequisitionController extends Controller
                     array_push($deleteItems, $detailRequisition->id);
                 }
             }
+
+            if($estatusProcesada > 0 && ($estatusCotizada > 0 || $estatusEntregada > 0 || $estatusDevolucion > 0)){
+                $estatusActual = ['status' =>"Procesada"];
+            }elseif ($estatusProcesada <= 0 && $estatusCotizada > 0 && $estatusEntregada <= 0 && $estatusDevolucion <= 0) {
+                $estatusActual = ['status' =>"Cotizada"];
+            }elseif ($estatusProcesada <= 0 && $estatusCotizada <= 0 && $estatusEntregada > 0 && $estatusDevolucion <= 0) {
+                $estatusActual = ['status' =>"Entregada"];
+            }elseif ($estatusProcesada <= 0 && $estatusCotizada <= 0 && $estatusEntregada <= 0 && $estatusDevolucion > 0) {
+                $estatusActual = ['status' =>"Devolucion"];
+            }elseif ($estatusCancelada = $request->totalItems) {
+                $estatusActual = ['status' =>"Cancelada"];
+            }
+            //dd($estatusCotizada);
+
+            $requisition->update($estatusActual);
             $objItems = DetailRequisition::where('id_requisition', $requisition->id)->whereNotIn('id', $deleteItems)->get();
             DetailRequisition::destroy($objItems->toArray());
 
