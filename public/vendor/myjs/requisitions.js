@@ -238,6 +238,7 @@ function showRequisition(id) {
                 let clasification = data.detailRequisition[key].id_classification;
                 let status = data.detailRequisition[key].status;
                 let isValid;
+                console.log(data.edit);
                 if (data.edit == true) {
                     isValid = false;
 

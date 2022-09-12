@@ -138,7 +138,105 @@ class RequisitionController extends Controller
         $detailRequisition = DetailRequisition::where("id_requisition", $id)->get();
         $idUser = auth()->id();
         $user = User::find($idUser);
-        $userAdmin = $user->hasAnyRole(['admin', 'direccion', 'compras', 'lider compras']);
+        $userAdmin = false;
+        switch ($requisition->id_area) {
+            case 1:
+                if ($requisition->status=='Creada' && $user->hasAnyRole(['admin', 'direccion', 'lider calidad'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Procesada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Cotizada' && $user->hasAnyRole(['admin', 'direccion'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Aprobada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Entregada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Devolucion' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }
+                break;
+            case 2:
+                if ($requisition->status=='Creada' && $user->hasAnyRole(['admin', 'direccion', 'lider tesoreria'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Procesada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Cotizada' && $user->hasAnyRole(['admin', 'direccion'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Aprobada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Entregada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Devolucion' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }
+                break;
+            case 3:
+                if ($requisition->status=='Creada' && $user->hasAnyRole(['admin', 'direccion', 'lider compras'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Procesada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Cotizada' && $user->hasAnyRole(['admin', 'direccion'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Aprobada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Entregada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Devolucion' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }
+                break;
+
+            case 5:
+                if ($requisition->status=='Creada' && $user->hasAnyRole(['admin', 'direccion', 'lider recursos humanos'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Procesada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Cotizada' && $user->hasAnyRole(['admin', 'direccion'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Aprobada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Entregada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Devolucion' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }
+                break;
+            case 6:
+                if ($requisition->status=='Creada' && $user->hasAnyRole(['admin', 'direccion', 'lider ventas'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Procesada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Cotizada' && $user->hasAnyRole(['admin', 'direccion'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Aprobada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Entregada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Devolucion' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }
+                break;
+            case 7:
+                if ($requisition->status=='Creada' && $user->hasAnyRole(['admin', 'direccion', 'lider ventas'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Procesada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Cotizada' && $user->hasAnyRole(['admin', 'direccion'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Aprobada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Entregada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }elseif ($requisition->status=='Devolucion' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
+                    $userAdmin=true;
+                }
+                break;
+
+
+            default:
+                # code...
+                break;
+        }
         $response = [
             'permission' => $user->area_id,
             'currentUser' => $user->id,
