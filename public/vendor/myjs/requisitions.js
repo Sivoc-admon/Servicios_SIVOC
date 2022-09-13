@@ -85,7 +85,7 @@ function addRow() {
             `</select>`,
             `<textarea id="item_referencia_${row}" class="form-control"></textarea>`,
             `<select id="item_urgencia_${row}"><option value="Alto">Alto</option><option value="Bajo">Bajo</option></select>`,
-            `<select id="item_status_${row}"><option value="Proceso">Proceso</option><option value="Cotizada">Cotizada</option>` +
+            `<select id="item_status_${row}"><option value="Procesada">Procesada</option><option value="Cotizada">Cotizada</option>` +
             `<option value="Entregada">Entregada</option><option value="Devolucion">Devolución</option>` +
             `<option value="Cancelada">Cancelada</option></select>`,
             `<div><button class='btn btn-danger' data-toggle="tooltip" data-placement="top" title="Eliminar" onclick='deleteRow(this)'><i class="fas fa-trash"></i></button>`
@@ -264,7 +264,7 @@ function showRequisition(id) {
                         `<select ${(isValid) ? 'disabled' : ''}   id="item_clasificacion_${row}"><option value="1" ${(clasification === 1) ? 'selected' : ''}>G202001 HERRAMIENTAS EPP</option></select>`,
                         `<input ${(isValid) ? 'disabled' : ''}   type="text" id="item_referencia_${row}" class="form-control" value="${data.detailRequisition[key].preference}"></input>`,
                         `<select ${(isValid) ? 'disabled' : ''}   id="item_urgencia_${row}"><option value="Alto">Alto</optin><option value="Bajo">Bajo</optin></select>`,
-                        `<select ${(isValid) ? 'disabled' : ''}   id="item_status_${row}"><option value="Proceso" ${(status === 'Proceso') ? 'selected' : ''}>Proceso</option><option value="Cotizada" ${(status === 'Cotizada') ? 'selected' : ''}>Cotizada</optin>` +
+                        `<select ${(isValid) ? 'disabled' : ''}   id="item_status_${row}"><option value="Procesada" ${(status === 'Procesada') ? 'selected' : ''}>Procesada</option><option value="Cotizada" ${(status === 'Cotizada') ? 'selected' : ''}>Cotizada</optin>` +
                         `<option value="Entregada" ${(status === 'Entregada') ? 'selected' : ''}>Entregada</optin><option value="Devolucion" ${(status === 'Devolucion') ? 'selected' : ''}>Devolución</optin>` +
                         `<option value="Cancelada" ${(status === 'Cancelada') ? 'selected' : ''}>Cancelada</optin></select>`,
                         `<div><button ${(isValid) ? 'disabled' : ''}

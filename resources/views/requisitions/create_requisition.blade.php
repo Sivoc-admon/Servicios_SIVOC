@@ -14,7 +14,7 @@
                             <label for="project_id">Departamento Solicita</label>
                             <select class="form-control" id="project_id" name="project_id">
                                 <option value="">Seleccione un area</option>
-                                @if (Auth::user()->hasAnyRole('admin'))
+                                @if (Auth::user()->hasAnyRole(['admin', 'compras', 'lider compras', 'direccion']))
                                     @foreach ($areas as $area)
                                         <option value="{{ $area->id }}">{{ $area->name }}</option>
                                     @endforeach

@@ -92,7 +92,7 @@ class RequisitionController extends Controller
         $requisition->no_requisition = $request->noRequisition;
         $requisition->id_user = $id_user;
         $requisition->id_area = $request->area_id;
-        $requisition->status = "Procesada";
+        $requisition->status = "Creada";
 
         if ($requisition->save()) {
             for ($i=1; $i <= $request->totalItems; $i++) {
@@ -217,7 +217,7 @@ class RequisitionController extends Controller
                 }
                 break;
             case 7:
-                if ($requisition->status=='Creada' && $user->hasAnyRole(['admin', 'direccion', 'lider ventas'])) {
+                if ($requisition->status=='Creada' && $user->hasAnyRole(['admin', 'direccion', 'lider servicio'])) {
                     $userAdmin=true;
                 }elseif ($requisition->status=='Procesada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
                     $userAdmin=true;
@@ -407,7 +407,7 @@ class RequisitionController extends Controller
                         'status' => $petition['item_status_'.$i],
                     ];
                    switch ($petition['item_status_'.$i]) {
-                    case 'Proceso':
+                    case 'Procesada':
                         $estatusProcesada++;
                         break;
                     case 'Cotizada':
@@ -433,7 +433,7 @@ class RequisitionController extends Controller
                     }
                 }else{
                     switch ($petition['item_status_'.$i]) {
-                        case 'Proceso':
+                        case 'Procesada':
                             $estatusProcesada++;
                             break;
                         case 'Cotizada':
