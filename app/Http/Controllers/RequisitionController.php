@@ -22,15 +22,25 @@ class RequisitionController extends Controller
      */
     public function index()
     {
+
         $idUser = auth()->id();
         $user = User::find($idUser);
         $userAdmin = $user->hasAnyRole(['admin', 'direccion', 'compras', 'lider compras']);
         if($userAdmin == true){
-            $requisitions = Requisition::orderByDesc('id')->get();
+            //$requisitions = Requisition::orderByDesc('id')->get();
+            $requisitions = DB::table('requisitions')
+            ->join('users', 'users.id', '=', 'requisitions.id_user')
+            ->select('requisitions.*', 'users.name', 'users.last_name')
+            ->orderByDesc('id')->get();
         }else{
-            $requisitions = Requisition::where('id_area', $user->area_id)->orderByDesc('id')->get();
+            //$requisitions = Requisition::where('id_area', $user->area_id)->orderByDesc('id')->get();
+            $requisitions = DB::table('requisitions')
+            ->join('users', 'users.id', '=', 'requisitions.id_user')
+            ->select('requisitions.*', 'users.name', 'users.last_name')
+            ->where('requisitions.id_area', $user->area_id)
+            ->orderByDesc('id')->get();
         }
-        //dd($userAdmin);
+        //dd($requisitions);
 
         $areas = Area::all();
         $areaUser = Area::find($user->area_id);
@@ -382,7 +392,6 @@ class RequisitionController extends Controller
             'no_requisition' => $request->noRequisition,
             'id_area' => $request->area_id,
         ];
-        $estatusActual = ['status' =>"Procesada"];
         $estatusProcesada = 0;
         $estatusCotizada = 0;
         $estatusEntregada = 0;
@@ -471,7 +480,7 @@ class RequisitionController extends Controller
                     array_push($deleteItems, $detailRequisition->id);
                 }
             }
-
+            //dd($estatusProcesada);
             if($estatusProcesada > 0 && ($estatusCotizada > 0 || $estatusEntregada > 0 || $estatusDevolucion > 0)){
                 $estatusActual = ['status' =>"Procesada"];
             }elseif ($estatusProcesada <= 0 && $estatusCotizada > 0 && $estatusEntregada <= 0 && $estatusDevolucion <= 0) {
@@ -480,15 +489,20 @@ class RequisitionController extends Controller
                 $estatusActual = ['status' =>"Entregada"];
             }elseif ($estatusProcesada <= 0 && $estatusCotizada <= 0 && $estatusEntregada <= 0 && $estatusDevolucion > 0) {
                 $estatusActual = ['status' =>"Devolucion"];
-            }elseif ($estatusCancelada = $request->totalItems) {
+            }elseif ($estatusCancelada == $request->totalItems) {
                 $estatusActual = ['status' =>"Cancelada"];
             }
-            //dd($estatusCotizada);
+            //dd($requisition->id);
+            if($requisition->update($estatusActual)){
+                $objItems = DetailRequisition::where('id_requisition', $requisition->id)->whereNotIn('id', $deleteItems)->get();
+                DetailRequisition::destroy($objItems->toArray());
+            }else{
+                $msg = "Error al actualizar la requisición";
+                $error = true;
+                $array=["msg"=>$msg, "error"=>$error];
 
-            $requisition->update($estatusActual);
-            $objItems = DetailRequisition::where('id_requisition', $requisition->id)->whereNotIn('id', $deleteItems)->get();
-            DetailRequisition::destroy($objItems->toArray());
-
+                return response()->json($array);
+            }
 
         } else {
             $msg = "Error al actualizar la requisición";

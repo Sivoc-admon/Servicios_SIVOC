@@ -84,6 +84,7 @@
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>Nombre</th>
                                 <th>Area</th>
                                 <th>Fecha</th>
                                 <th>Estatus</th>
@@ -95,6 +96,7 @@
                                 @foreach ($requisitions as $requisiton)
                                     <tr>
                                         <td>{{ $requisiton->no_requisition }}</td>
+                                        <td>{{ $requisiton->name }} {{ $requisiton->last_name }}</td>
                                         @foreach ($areas as $area)
                                             @if($requisiton->id_area == $area->id)
                                                 <td>{{ $area->name }}</td>

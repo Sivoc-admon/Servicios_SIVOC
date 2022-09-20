@@ -85,7 +85,7 @@ function addRow() {
             `</select>`,
             `<textarea id="item_referencia_${row}" class="form-control"></textarea>`,
             `<select id="item_urgencia_${row}"><option value="Alto">Alto</option><option value="Bajo">Bajo</option></select>`,
-            `<select id="item_status_${row}"><option value="Procesada">Procesada</option><option value="Cotizada">Cotizada</option>` +
+            `<select id="item_status_${row}"><option value="Creada">Creada</option><option value="Procesada">Procesada</option><option value="Cotizada">Cotizada</option>` +
             `<option value="Entregada">Entregada</option><option value="Devolucion">Devolución</option>` +
             `<option value="Cancelada">Cancelada</option></select>`,
             `<div><button class='btn btn-danger' data-toggle="tooltip" data-placement="top" title="Eliminar" onclick='deleteRow(this)'><i class="fas fa-trash"></i></button>`
@@ -342,7 +342,7 @@ function showProvider(detail, quantity) {
         }
     });
 }
-
+//Editar Requisicion
 function editRequisition() {
     let formdata = new FormData();
 
