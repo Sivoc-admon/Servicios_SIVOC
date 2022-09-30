@@ -390,7 +390,7 @@ function editRequisition() {
         contentType: false,
         success: function(data) {
             messageAlert("Requisición Editada.", "success");
-            location.reload();
+            //location.reload();
 
         },
         error: function(data) {

@@ -392,6 +392,7 @@ class RequisitionController extends Controller
             'no_requisition' => $request->noRequisition,
             'id_area' => $request->area_id,
         ];
+        //dd($reqUpdate);
         $estatusProcesada = 0;
         $estatusCotizada = 0;
         $estatusEntregada = 0;
@@ -481,6 +482,7 @@ class RequisitionController extends Controller
                 }
             }
             //dd($estatusProcesada);
+            $estatusActual = ['status' =>"Procesada"];
             if($estatusProcesada > 0 && ($estatusCotizada > 0 || $estatusEntregada > 0 || $estatusDevolucion > 0)){
                 $estatusActual = ['status' =>"Procesada"];
             }elseif ($estatusProcesada <= 0 && $estatusCotizada > 0 && $estatusEntregada <= 0 && $estatusDevolucion <= 0) {
