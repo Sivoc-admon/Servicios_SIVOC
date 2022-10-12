@@ -123,12 +123,12 @@
                                                         <i class="fas fa-list"></i>
                                                     </button>
                                                 </span>
-                                                @if (Auth::user()->hasAnyRole(['admin', 'direccion', 'lider calidad', 'lider compras', 'lider recursos humanos', 'lider servicio', 'lider ventas', 'lider tesoreria']))
+                                                @if (Auth::user()->hasAnyRole(['admin', 'direccion', 'lider calidad', 'lider compras', 'lider recursos humanos', 'lider servicio', 'lider ventas', 'lider tesoreria', 'compras']))
                                                     @switch($requisiton->status)
                                                         @case("Creada")
                                                                 @switch($requisiton->id_area)
                                                                     @case(1)
-                                                                            @if (Auth::user()->hasAnyRole('lider calidad') || Auth::user()->hasAnyRole('admin'))
+                                                                            @if (Auth::user()->hasAnyRole('lider calidad') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion'))
                                                                                 <span >
                                                                                     <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'Procesada')">
                                                                                         <i class="fas fa-check"></i>
@@ -137,7 +137,7 @@
                                                                             @endif
                                                                         @break
                                                                     @case(2)
-                                                                            @if (Auth::user()->hasAnyRole('lider tesoreria') || Auth::user()->hasAnyRole('admin'))
+                                                                            @if (Auth::user()->hasAnyRole('lider tesoreria') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion'))
                                                                                 <span >
                                                                                     <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'Procesada')">
                                                                                         <i class="fas fa-check"></i>
@@ -146,7 +146,7 @@
                                                                             @endif
                                                                         @break
                                                                     @case(3)
-                                                                            @if (Auth::user()->hasAnyRole('lider compras') || Auth::user()->hasAnyRole('admin'))
+                                                                            @if (Auth::user()->hasAnyRole('lider compras') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion'))
                                                                                 <span >
                                                                                     <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'Procesada')">
                                                                                         <i class="fas fa-check"></i>
@@ -155,7 +155,7 @@
                                                                             @endif
                                                                         @break
                                                                     @case(5)
-                                                                            @if (Auth::user()->hasAnyRole('lider recursos humanos') || Auth::user()->hasAnyRole('admin'))
+                                                                            @if (Auth::user()->hasAnyRole('lider recursos humanos') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion'))
                                                                                 <span >
                                                                                     <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'Procesada')">
                                                                                         <i class="fas fa-check"></i>
@@ -164,7 +164,7 @@
                                                                             @endif
                                                                         @break
                                                                     @case(6)
-                                                                            @if (Auth::user()->hasAnyRole('lider ventas') || Auth::user()->hasAnyRole('admin'))
+                                                                            @if (Auth::user()->hasAnyRole('lider ventas') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion'))
                                                                                 <span >
                                                                                     <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'Procesada')">
                                                                                         <i class="fas fa-check"></i>
@@ -173,7 +173,7 @@
                                                                             @endif
                                                                         @break
                                                                     @case(7)
-                                                                            @if (Auth::user()->hasAnyRole('lider servicio') || Auth::user()->hasAnyRole('admin'))
+                                                                            @if (Auth::user()->hasAnyRole('lider servicio') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion'))
                                                                                 <span >
                                                                                     <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'Procesada')">
                                                                                         <i class="fas fa-check"></i>
