@@ -289,7 +289,27 @@ function showRequisition(id) {
                                         `<select ${(isValid) ? 'disabled' : ''}   class="form-control" id="item_unidad_${row}"><option value="Pieza" ${(unit === 1)? 'selected' : ''}>Pieza</option><option value="Servicio" ${(unit === 2)? 'selected' : ''}>Servicio</option></select>`,
                                         `<input ${(isValid) ? 'disabled' : ''}   id="item_descripcion_${row}" class="form-control" value="${data.detailRequisition[key].description}"></input>`,
                                         `<input ${(isValid) ? 'disabled' : ''}   id="item_modelo_${row}" class="form-control"  value="${data.detailRequisition[key].model}"></input>`,
-                                        `<select ${(isValid) ? 'disabled' : ''}   id="item_clasificacion_${row}"><option value="1" ${(clasification === 1) ? 'selected' : ''}>G202001 HERRAMIENTAS EPP</option></select>`,
+                                        `<select ${(isValid) ? 'disabled' : ''}   id="item_clasificacion_${row}">` +
+                                        `<option value="1" ${(clasification === 1) ? 'selected' : ''}>G202001 HERRAMIENTAS EPP</option>` +
+                                        `<option value="2" ${(clasification === 2) ? 'selected' : ''}>G202002 PAPELERÍA Y ARTICULOS DE OFICINA</option>` +
+                                        `<option value="3" ${(clasification === 3) ? 'selected' : ''}>G202003 EQUIPO DE CÓMPUTO </option>` +
+                                        `<option value="4" ${(clasification === 4) ? 'selected' : ''}>G202004 MTTO Y CONSERVACIÓN</option>` +
+                                        `<option value="5" ${(clasification === 5) ? 'selected' : ''}>G202005 SEGURIDAD E HIGIENE</option>` +
+                                        `<option value="6" ${(clasification === 6) ? 'selected' : ''}>G202006 VIÁTICOS</option>` +
+                                        `<option value="7" ${(clasification === 7) ? 'selected' : ''}>G202007 MOBILIARIO Y EQUIPO</option>` +
+                                        `<option value="8" ${(clasification === 8) ? 'selected' : ''}>G202008 PROPAGANDA Y PUBLICIDAD</option>` +
+                                        `<option value="9" ${(clasification === 9) ? 'selected' : ''}>G202009 CAFETERÍA</option>` +
+                                        `<option value="10" ${(clasification === 10) ? 'selected' : ''}>G202010 EQUIPO DE TRANSPORTE</option>` +
+                                        `<option value="11" ${(clasification === 11) ? 'selected' : ''}>G202011 EVENTOS INTERNOS</option>` +
+                                        `<option value="12" ${(clasification === 12) ? 'selected' : ''}>G202012 PAGO DE IMPUESTOS</option>` +
+                                        `<option value="13" ${(clasification === 13) ? 'selected' : ''}>G202013 VIGILANCIA</option>` +
+                                        `<option value="14" ${(clasification === 14) ? 'selected' : ''}>G202014 GASTOS FIJOS</option>` +
+                                        `<option value="15" ${(clasification === 15) ? 'selected' : ''}>G202015 CAFETERIA Y CONSUMIBLES</option>` +
+                                        `<option value="16" ${(clasification === 16) ? 'selected' : ''}>G202016 LIMPIEZA</option>` +
+                                        `<option value="17" ${(clasification === 17) ? 'selected' : ''}>G20218 UNIFORMES</option>` +
+                                        `<option value="18" ${(clasification === 18) ? 'selected' : ''}>G03 GASTOS GENERALES</option>` +
+                                        `<option value="19" ${(clasification === 9) ? 'selected' : ''}>NA</option>` +
+                                        `</select>`,
                                         `<input ${(isValid) ? 'disabled' : ''}   type="text" id="item_referencia_${row}" class="form-control" value="${data.detailRequisition[key].preference}"></input>`,
                                         `<select ${(isValid) ? 'disabled' : ''}   id="item_urgencia_${row}"><option value="Alto">Alto</optin><option value="Bajo">Bajo</optin></select>`,
                                         `<select ${(isValid) ? 'disabled' : ''}   id="item_status_${row}"><option value="Procesada" ${(status === 'Procesada') ? 'selected' : ''}>Procesada</option><option value="Cotizada" ${(status === 'Cotizada') ? 'selected' : ''}>Cotizada</optin>` +
