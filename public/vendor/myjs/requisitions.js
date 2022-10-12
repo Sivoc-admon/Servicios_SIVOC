@@ -280,7 +280,7 @@ function showRequisition(id) {
                                         `<option value="Cancelada" ${(status === 'Cancelada') ? 'selected' : ''}>Cancelada</optin></select>`,
                                         `<div><button ${isVisible} ${(isValid) ? 'disabled' : ''}
                         class='btn btn-danger' data-toggle='tooltip' data-placement='top' title='Eliminar' onclick='deleteRow(this, ${row})'><i class="fas fa-trash"></i></button>
-                        ${(data.permission === 3) ? `<span ${(status === 'Cancelada') ? 'style="display:none"' : 'style="display:block"'} data-toggle='modal' data-target='#modalProvider' data-backdrop='static'><button class='btn btn-primary' onclick='showProvider("+data.detailRequisition[key].id+","+data.detailRequisition[key].quantity+")' data-toggle='tooltip' data-placement='top' title='Agregar Proveedores'><i class='fas fa-box' /></button></span>` : ''}</div>`
+                        ${(data.permission === 3) ? `<span ${(status === 'Cancelada') ? 'style="display:none"' : 'style="display:block"'} data-toggle='modal' data-target='#modalProvider' data-backdrop='static'><button class='btn btn-primary' onclick='showProvider(${data.detailRequisition[key].id},${data.detailRequisition[key].quantity})' data-toggle='tooltip' data-placement='top' title='Agregar Proveedores'><i class='fas fa-box' /></button></span>` : ''}</div>`
                     ])
                     .draw()
                     .node();
