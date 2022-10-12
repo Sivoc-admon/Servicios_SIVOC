@@ -80,8 +80,25 @@ function addRow() {
             `</select>`,
             `<textarea id="item_descripcion_${row}" class="form-control"></textarea>`,
             `<textarea id="item_modelo_${row}" class="form-control"></textarea>`,
-            `<select id="item_clasificacion_${row}">` +
-            `<option value="1">G202001 HERRAMIENTAS EPP</option>` +
+            `<select id="item_clasificacion_${row}"><option value="1">G202001 HERRAMIENTAS EPP</option>` +
+            `<option value="2">G202002 PAPELERÍA Y ARTICULOS DE OFICINA</option>` +
+            `<option value="3">G202003 EQUIPO DE CÓMPUTO </option>` +
+            `<option value="4">G202004 MTTO Y CONSERVACIÓN</option>` +
+            `<option value="5">G202005 SEGURIDAD E HIGIENE</option>` +
+            `<option value="6">G202006 VIÁTICOS</option>` +
+            `<option value="7">G202007 MOBILIARIO Y EQUIPO</option>` +
+            `<option value="8">G202008 PROPAGANDA Y PUBLICIDAD</option>` +
+            `<option value="9">G202009 CAFETERÍA</option>` +
+            `<option value="10">G202010 EQUIPO DE TRANSPORTE</option>` +
+            `<option value="11">G202011 EVENTOS INTERNOS</option>` +
+            `<option value="12">G202012 PAGO DE IMPUESTOS</option>` +
+            `<option value="13">G202013 VIGILANCIA</option>` +
+            `<option value="14">G202014 GASTOS FIJOS</option>` +
+            `<option value="15">G202015 CAFETERIA Y CONSUMIBLES</option>` +
+            `<option value="16">G202016 LIMPIEZA</option>` +
+            `<option value="17">G20218 UNIFORMES</option>` +
+            `<option value="18">G03 GASTOS GENERALES</option>` +
+            `<option value="19">NA</option>` +
             `</select>`,
             `<textarea id="item_referencia_${row}" class="form-control"></textarea>`,
             `<select id="item_urgencia_${row}"><option value="Alto">Alto</option><option value="Bajo">Bajo</option></select>`,
