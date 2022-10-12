@@ -217,59 +217,70 @@ function saveRequisition(action = null) {
 }
 
 function showRequisition(id) {
+    var table = $('#createRequisition').DataTable();
+
+    table.clear().draw();
+
     $('#edit_req').show();
     $('#save_req').hide();
     $.ajax({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        type: "GET",
-        url: `requisitions/${id}`,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "GET",
+                url: `requisitions/${id}`,
 
-        success: function(data) {
-            $('#project_id').val(data.id_area);
-            $('#name_project').val(data.no_requisition);
-            $('#requisition_').val(data.requisition);
-            console.log(data);
-            items = [];
-            for (const key in data.detailRequisition) {
-                items.push(parseInt(key) + 1);
-                let unit = (data.detailRequisition[key].unit === 'Servicio') ? 2 : 1;
-                let clasification = data.detailRequisition[key].id_classification;
-                let status = data.detailRequisition[key].status;
-                let isValid;
-                console.log(data.edit);
-                if (data.edit == true) {
-                    isValid = false;
+                success: function(data) {
+                        $('#project_id').val(data.id_area);
+                        $('#name_project').val(data.no_requisition);
+                        $('#requisition_').val(data.requisition);
+                        console.log(data);
+                        items = [];
+                        for (const key in data.detailRequisition) {
+                            items.push(parseInt(key) + 1);
+                            let unit = (data.detailRequisition[key].unit === 'Servicio') ? 2 : 1;
+                            let clasification = data.detailRequisition[key].id_classification;
+                            let status = data.detailRequisition[key].status;
+                            let isValid;
+                            let isVisible;
+                            console.log(data.edit);
+                            if (data.edit == true) {
+                                isValid = false;
 
-                } else {
-                    isValid = true;
-                }
+                            } else {
+                                isValid = true;
+                            }
 
-                //let isValid = (data.currentUser === data.id_user) ? false : true;
-                let row = parseInt(key) + 1;
-                let statusRequisition = data.requisition_status;
-                if (statusRequisition == "cancelada") {
-                    $('#edit_req').hide();
-                }
+                            //let isValid = (data.currentUser === data.id_user) ? false : true;
+                            let row = parseInt(key) + 1;
+                            let statusRequisition = data.requisition_status;
+                            if (statusRequisition == "Cancelada") {
+                                $('#edit_req').hide();
+                            }
+                            if (statusRequisition == "Creada") {
+                                isVisible = "style = 'display:block'";
+                            } else {
+                                isVisible = "style = 'display:none'";
+                            }
+                            console.log()
 
-                let rowNode = $("#createRequisition").DataTable()
-                    .row.add([
-                        `<input type="text" style="display:none" disabled class="form-control" id="item_id_${row}" name="item_id_${row}"  value="${data.detailRequisition[key].id}">
+                            let rowNode = $("#createRequisition").DataTable()
+                                .row.add([
+                                        `<input type="text" style="display:none" disabled class="form-control" id="item_id_${row}" name="item_id_${row}"  value="${data.detailRequisition[key].id}">
                         <input type="text" disabled class="form-control" value="${data.detailRequisition[key].num_item}">`,
-                        `<input type="number" ${(isValid) ? 'disabled' : ''}  class="form-control" id="item_cantidad_${row}" name="item_cantidad_${row}" placeholder="Cantidad" value="${data.detailRequisition[key].quantity}">`,
-                        `<select ${(isValid) ? 'disabled' : ''}   class="form-control" id="item_unidad_${row}"><option value="Pieza" ${(unit === 1)? 'selected' : ''}>Pieza</option><option value="Servicio" ${(unit === 2)? 'selected' : ''}>Servicio</option></select>`,
-                        `<input ${(isValid) ? 'disabled' : ''}   id="item_descripcion_${row}" class="form-control" value="${data.detailRequisition[key].description}"></input>`,
-                        `<input ${(isValid) ? 'disabled' : ''}   id="item_modelo_${row}" class="form-control"  value="${data.detailRequisition[key].model}"></input>`,
-                        `<select ${(isValid) ? 'disabled' : ''}   id="item_clasificacion_${row}"><option value="1" ${(clasification === 1) ? 'selected' : ''}>G202001 HERRAMIENTAS EPP</option></select>`,
-                        `<input ${(isValid) ? 'disabled' : ''}   type="text" id="item_referencia_${row}" class="form-control" value="${data.detailRequisition[key].preference}"></input>`,
-                        `<select ${(isValid) ? 'disabled' : ''}   id="item_urgencia_${row}"><option value="Alto">Alto</optin><option value="Bajo">Bajo</optin></select>`,
-                        `<select ${(isValid) ? 'disabled' : ''}   id="item_status_${row}"><option value="Procesada" ${(status === 'Procesada') ? 'selected' : ''}>Procesada</option><option value="Cotizada" ${(status === 'Cotizada') ? 'selected' : ''}>Cotizada</optin>` +
-                        `<option value="Entregada" ${(status === 'Entregada') ? 'selected' : ''}>Entregada</optin><option value="Devolucion" ${(status === 'Devolucion') ? 'selected' : ''}>Devolución</optin>` +
-                        `<option value="Cancelada" ${(status === 'Cancelada') ? 'selected' : ''}>Cancelada</optin></select>`,
-                        `<div><button ${(isValid) ? 'disabled' : ''}
-                        class='btn btn-danger' data-toggle="tooltip" data-placement="top" title="Eliminar" onclick='deleteRow(this, ${row})'><i class="fas fa-trash"></i></button>
-                        ${(data.permission === 3) ? "<span data-toggle='modal' data-target='#modalProvider' data-backdrop='static'><button class='btn btn-primary' onclick='showProvider("+data.detailRequisition[key].id+","+data.detailRequisition[key].quantity+")' data-toggle='tooltip' data-placement='top' title='Agregar Proveedores'><i class='fas fa-box' /></button></span>" : ''}</div>`
+                                        `<input type="number" ${(isValid) ? 'disabled' : ''}  class="form-control" id="item_cantidad_${row}" name="item_cantidad_${row}" placeholder="Cantidad" value="${data.detailRequisition[key].quantity}">`,
+                                        `<select ${(isValid) ? 'disabled' : ''}   class="form-control" id="item_unidad_${row}"><option value="Pieza" ${(unit === 1)? 'selected' : ''}>Pieza</option><option value="Servicio" ${(unit === 2)? 'selected' : ''}>Servicio</option></select>`,
+                                        `<input ${(isValid) ? 'disabled' : ''}   id="item_descripcion_${row}" class="form-control" value="${data.detailRequisition[key].description}"></input>`,
+                                        `<input ${(isValid) ? 'disabled' : ''}   id="item_modelo_${row}" class="form-control"  value="${data.detailRequisition[key].model}"></input>`,
+                                        `<select ${(isValid) ? 'disabled' : ''}   id="item_clasificacion_${row}"><option value="1" ${(clasification === 1) ? 'selected' : ''}>G202001 HERRAMIENTAS EPP</option></select>`,
+                                        `<input ${(isValid) ? 'disabled' : ''}   type="text" id="item_referencia_${row}" class="form-control" value="${data.detailRequisition[key].preference}"></input>`,
+                                        `<select ${(isValid) ? 'disabled' : ''}   id="item_urgencia_${row}"><option value="Alto">Alto</optin><option value="Bajo">Bajo</optin></select>`,
+                                        `<select ${(isValid) ? 'disabled' : ''}   id="item_status_${row}"><option value="Procesada" ${(status === 'Procesada') ? 'selected' : ''}>Procesada</option><option value="Cotizada" ${(status === 'Cotizada') ? 'selected' : ''}>Cotizada</optin>` +
+                                        `<option value="Entregada" ${(status === 'Entregada') ? 'selected' : ''}>Entregada</optin><option value="Devolucion" ${(status === 'Devolucion') ? 'selected' : ''}>Devolución</optin>` +
+                                        `<option value="Cancelada" ${(status === 'Cancelada') ? 'selected' : ''}>Cancelada</optin></select>`,
+                                        `<div><button ${isVisible} ${(isValid) ? 'disabled' : ''}
+                        class='btn btn-danger' data-toggle='tooltip' data-placement='top' title='Eliminar' onclick='deleteRow(this, ${row})'><i class="fas fa-trash"></i></button>
+                        ${(data.permission === 3) ? `<span ${(status === 'Cancelada') ? 'style="display:none"' : 'style="display:block"'} data-toggle='modal' data-target='#modalProvider' data-backdrop='static'><button class='btn btn-primary' onclick='showProvider("+data.detailRequisition[key].id+","+data.detailRequisition[key].quantity+")' data-toggle='tooltip' data-placement='top' title='Agregar Proveedores'><i class='fas fa-box' /></button></span>` : ''}</div>`
                     ])
                     .draw()
                     .node();
