@@ -524,6 +524,7 @@ function consultaFolder(area, id_padre) {
 }
 
 function newFolder() {
+
     let id_padre = $("#hideIDPadreFolder").val();
     let id_project = $("#hideIDProject").val();
     let folderName = $("#inputNewFolder").val();
@@ -541,6 +542,7 @@ function newFolder() {
                 "_token": $("meta[name='csrf-token']").attr("content")
             },
             success: function(data) {
+                $("#ModalShowFoldersProject").modal('hide');
                 messageAlert("Carpeta Creada.", "success");
                 showFolders();
             },
@@ -673,6 +675,7 @@ function showModal(modal, idFolder, idProject, tipo) {
     } else {
         $("#hideIDPadreFolder").val(idFolder);
         $("#hideIDProject").val(idProject);
+        $("#inputNewFolder").val("");
     }
 
 
