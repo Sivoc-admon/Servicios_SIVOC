@@ -93,16 +93,25 @@ class RequisitionController extends Controller
     {
         $error = false;
         $msg = "";
+        $trueDireccion="false";
 
         $id_user = auth()->user()->id;
         $petition = $request->all();
         //print_r($petition['item_descripcion_1']);
-
         $requisition = new Requisition();
         $requisition->no_requisition = $request->noRequisition;
         $requisition->id_user = $id_user;
         $requisition->id_area = $request->area_id;
-        $requisition->status = "Creada";
+        //si el usuario tiene el rol de direccion la requisicon se crea con estatus Procesada
+        foreach (auth()->user()->roles as $roles) {
+            if($roles->name == 'direccion'){
+                $requisition->status = "Procesada";
+                $trueDireccion="true";
+                break;
+            }else{
+                $requisition->status = "Creada";
+            }
+        }
 
         if ($requisition->save()) {
             for ($i=1; $i <= $request->totalItems; $i++) {
@@ -116,7 +125,13 @@ class RequisitionController extends Controller
                 $detailRequisition->model = $petition['item_modelo_'.$i];
                 $detailRequisition->preference = $petition['item_referencia_'.$i];
                 $detailRequisition->urgency = $petition['item_urgencia_'.$i];
-                $detailRequisition->status = $petition['item_status_'.$i];
+                //si el rol del usuario es direccion, el stratus de la partida sera procesada
+                if($trueDireccion){
+                    $detailRequisition->status = "Procesada";
+                }else{
+                    $detailRequisition->status = $petition['item_status_'.$i];
+                }
+
                 $detailRequisition->save();
             }
         } else {

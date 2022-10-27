@@ -145,17 +145,17 @@ function graficaIndicador() {
             } else {
                 let valores = [];
                 let table = "";
-                
+
                 //datos de graficacion
                 for (const i in data.indicatorsGraph) {
                     table += `<tr>"
                         <td> ${data.indicatorsGraph[i].area}</td>
                         <td> ${data.indicatorsGraph[i].tipo_indicador}</td>
-                        <td> ${data.indicatorsGraph[i].value}</td> 
+                        <td> ${data.indicatorsGraph[i].value}</td>
                         <td>
                             <a href="storage/Documents/Indicadores/${data.indicatorsGraph[i].file_name}" target="_blank">${data.indicatorsGraph[i].file_name}</a>
                         </td>"
-                        <td> ${data.indicatorsGraph[i].registration_date}</td> 
+                        <td> ${data.indicatorsGraph[i].registration_date}</td>
                     </tr>`;
 
                 }
@@ -187,7 +187,9 @@ function graficaIndicador() {
 
 
                 }
+                //maximos
                 let objetivos = {
+                    type: 'line',
                     label: 'Valor Objetivo',
                     data: [data.minMax.max,
                         data.minMax.max,
@@ -202,36 +204,53 @@ function graficaIndicador() {
                         data.minMax.max,
                         data.minMax.max
                     ],
-                    backgroundColor: 'rgba(0, 99, 132, 0.6)',
-                    borderColor: 'rgba(0, 99, 132, 1)',
+                    order: 1,
+                    fill: false,
+                    pointRadius: 5,
+                    pointBackgroundColor: 'rgba(0, 99, 132, 1)',
+                    //backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                    borderColor: 'rgba(0, 99, 132)',
                     //yAxisID: "y-axis-density"
                 };
+                //minimos
+                let min = {
+                    type: 'line',
+                    label: 'Valor Minimo',
+                    data: [data.minMax.min,
+                        data.minMax.min,
+                        data.minMax.min,
+                        data.minMax.min,
+                        data.minMax.min,
+                        data.minMax.min,
+                        data.minMax.min,
+                        data.minMax.min,
+                        data.minMax.min,
+                        data.minMax.min,
+                        data.minMax.min,
+                        data.minMax.min
+                    ],
+                    order: 0,
+                    fill: false,
+                    pointRadius: 5,
+                    pointBackgroundColor: 'rgba(255, 0, 0, 1)',
+                    //backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                    borderColor: 'rgba(255, 0, 0)',
+                    //yAxisID: "y-axis-density"
+                };
+
                 let obtenidos = {
                     label: 'Valor Obtenido',
                     data: valores,
-                    backgroundColor: 'rgba(99, 132, 0, 0.6)',
-                    borderColor: 'rgba(99, 132, 0, 1)',
+                    order: 2,
+                    backgroundColor: 'rgba(99, 152, 0, 1)',
+                    borderColor: 'rgba(99, 152, 0, 1)',
                     //yAxisID: "y-axis-gravity"
                 };
 
                 let indicators = {
                     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-                    datasets: [objetivos, obtenidos]
+                    datasets: [obtenidos, objetivos, min]
                 };
-                /* let chartOptions = {
-                    scales: {
-                        xAxes: [{
-                            barPercentage: 1,
-                            categoryPercentage: 0.6
-                        }],
-                        yAxes: [{
-                            id: "y-axis-density"
-                        }, {
-                            id: "y-axis-gravity"
-                        }]
-                    }
-                }; */
-
 
 
                 $("#ModalGraficaIndicator").modal('hide');
