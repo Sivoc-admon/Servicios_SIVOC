@@ -204,7 +204,7 @@ function graficaIndicador() {
                         data.minMax.max,
                         data.minMax.max
                     ],
-                    order: 1,
+                    order: 2,
                     fill: false,
                     pointRadius: 5,
                     pointBackgroundColor: 'rgba(0, 99, 132, 1)',
@@ -229,7 +229,7 @@ function graficaIndicador() {
                         data.minMax.min,
                         data.minMax.min
                     ],
-                    order: 0,
+                    order: 1,
                     fill: false,
                     pointRadius: 5,
                     pointBackgroundColor: 'rgba(255, 0, 0, 1)',
@@ -241,9 +241,10 @@ function graficaIndicador() {
                 let obtenidos = {
                     label: 'Valor Obtenido',
                     data: valores,
-                    order: 2,
-                    backgroundColor: 'rgba(99, 152, 0, 1)',
+                    order: 0,
+                    backgroundColor: 'rgba(99, 152, 0, 0.5)',
                     borderColor: 'rgba(99, 152, 0, 1)',
+                    borderWidth: 1,
                     //yAxisID: "y-axis-gravity"
                 };
 
