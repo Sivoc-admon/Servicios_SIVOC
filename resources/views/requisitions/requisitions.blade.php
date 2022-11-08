@@ -128,7 +128,14 @@
                                                         @case("Creada")
                                                                 @switch($requisiton->id_area)
                                                                     @case(1)
-                                                                            @if (Auth::user()->hasAnyRole('lider calidad') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion'))
+                                                                            @if ($requisiton->role == 9 && (Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion')))
+                                                                                <span >
+                                                                                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'Procesada')">
+                                                                                        <i class="fas fa-check"></i>
+                                                                                    </button>
+                                                                                </span>
+
+                                                                            @elseif ($requisiton->role != 9 && (Auth::user()->hasAnyRole('lider calidad') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion')))
                                                                                 <span >
                                                                                     <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'Procesada')">
                                                                                         <i class="fas fa-check"></i>
@@ -137,7 +144,13 @@
                                                                             @endif
                                                                         @break
                                                                     @case(2)
-                                                                            @if (Auth::user()->hasAnyRole('lider tesoreria') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion'))
+                                                                            @if ($requisiton->role == 12 && (Auth::user()->hasAnyRole('lider tesoreria') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion')))
+                                                                                <span >
+                                                                                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'Procesada')">
+                                                                                        <i class="fas fa-check"></i>
+                                                                                    </button>
+                                                                                </span>
+                                                                            @elseif ($requisiton->role != 12 && (Auth::user()->hasAnyRole('lider tesoreria') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion')))
                                                                                 <span >
                                                                                     <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'Procesada')">
                                                                                         <i class="fas fa-check"></i>
@@ -146,7 +159,13 @@
                                                                             @endif
                                                                         @break
                                                                     @case(3)
-                                                                            @if (Auth::user()->hasAnyRole('lider compras') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion'))
+                                                                            @if ($requisiton->role == 10 && (Auth::user()->hasAnyRole('lider compras') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion')))
+                                                                                <span >
+                                                                                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'Procesada')">
+                                                                                        <i class="fas fa-check"></i>
+                                                                                    </button>
+                                                                                </span>
+                                                                            @elseif ($requisiton->role != 10 && (Auth::user()->hasAnyRole('lider compras') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion')))
                                                                                 <span >
                                                                                     <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'Procesada')">
                                                                                         <i class="fas fa-check"></i>
@@ -155,7 +174,13 @@
                                                                             @endif
                                                                         @break
                                                                     @case(5)
-                                                                            @if (Auth::user()->hasAnyRole('lider recursos humanos') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion'))
+                                                                            @if ($requisiton->role == 11 && (Auth::user()->hasAnyRole('lider recursos humanos') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion')))
+                                                                                <span >
+                                                                                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'Procesada')">
+                                                                                        <i class="fas fa-check"></i>
+                                                                                    </button>
+                                                                                </span>
+                                                                            @elseif ($requisiton->role != 11 && (Auth::user()->hasAnyRole('lider recursos humanos') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion')))
                                                                                 <span >
                                                                                     <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'Procesada')">
                                                                                         <i class="fas fa-check"></i>
@@ -164,7 +189,13 @@
                                                                             @endif
                                                                         @break
                                                                     @case(6)
-                                                                            @if (Auth::user()->hasAnyRole('lider ventas') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion'))
+                                                                            @if ($requisiton->role == 13 && (Auth::user()->hasAnyRole('lider ventas') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion')))
+                                                                                <span >
+                                                                                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'Procesada')">
+                                                                                        <i class="fas fa-check"></i>
+                                                                                    </button>
+                                                                                </span>
+                                                                            @elseif ($requisiton->role == 13 && (Auth::user()->hasAnyRole('lider ventas') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion')))
                                                                                 <span >
                                                                                     <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'Procesada')">
                                                                                         <i class="fas fa-check"></i>
@@ -173,7 +204,13 @@
                                                                             @endif
                                                                         @break
                                                                     @case(7)
-                                                                            @if (Auth::user()->hasAnyRole('lider servicio') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion'))
+                                                                            @if ($requisiton->role == 14 && (Auth::user()->hasAnyRole('lider servicio') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion')))
+                                                                                <span >
+                                                                                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'Procesada')">
+                                                                                        <i class="fas fa-check"></i>
+                                                                                    </button>
+                                                                                </span>
+                                                                            @elseif ($requisiton->role != 14 && (Auth::user()->hasAnyRole('lider servicio') || Auth::user()->hasAnyRole('admin') || Auth::user()->hasAnyRole('direccion')))
                                                                                 <span >
                                                                                     <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Aprobar" onclick="aprobar({{$requisiton->id}}, 'Procesada')">
                                                                                         <i class="fas fa-check"></i>

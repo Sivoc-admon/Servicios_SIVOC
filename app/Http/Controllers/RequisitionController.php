@@ -30,13 +30,15 @@ class RequisitionController extends Controller
             //$requisitions = Requisition::orderByDesc('id')->get();
             $requisitions = DB::table('requisitions')
             ->join('users', 'users.id', '=', 'requisitions.id_user')
-            ->select('requisitions.*', 'users.name', 'users.last_name')
+            ->join('role_user', 'role_user.user_id', '=', 'users.id')
+            ->select('requisitions.*', 'users.name', 'users.last_name', 'role_user.role_id as role')
             ->orderByDesc('id')->get();
         }else{
             //$requisitions = Requisition::where('id_area', $user->area_id)->orderByDesc('id')->get();
             $requisitions = DB::table('requisitions')
             ->join('users', 'users.id', '=', 'requisitions.id_user')
-            ->select('requisitions.*', 'users.name', 'users.last_name')
+            ->join('role_user', 'role_user.user_id', '=', 'users.id')
+            ->select('requisitions.*', 'users.name', 'users.last_name', 'role_user.role_id as role')
             ->where('requisitions.id_area', $user->area_id)
             ->orderByDesc('id')->get();
         }
@@ -97,14 +99,17 @@ class RequisitionController extends Controller
 
         $id_user = auth()->user()->id;
         $petition = $request->all();
+        //dd($petition);
         //print_r($petition['item_descripcion_1']);
+
+
         $requisition = new Requisition();
         $requisition->no_requisition = $request->noRequisition;
         $requisition->id_user = $id_user;
         $requisition->id_area = $request->area_id;
         //si el usuario tiene el rol de direccion la requisicon se crea con estatus Procesada
         foreach (auth()->user()->roles as $roles) {
-            if($roles->name == 'direccion'){
+            if($roles->name == 'direccion' || $roles->name == 'admin'){
                 $requisition->status = "Procesada";
                 $trueDireccion="true";
                 break;
@@ -112,8 +117,38 @@ class RequisitionController extends Controller
                 $requisition->status = "Creada";
             }
         }
+        DB::beginTransaction();
 
-        if ($requisition->save()) {
+        try {
+            $requisition->save();
+            for ($i=1; $i <= $request->totalItems; $i++) {
+                $detailRequisition = new DetailRequisition();
+                $detailRequisition->num_item = $i;
+                $detailRequisition->id_classification = $petition['item_clasificacion_'.$i];
+                $detailRequisition->id_requisition = $requisition->id;
+                $detailRequisition->quantity = $petition['item_cantidad_'.$i];
+                $detailRequisition->unit = $petition['item_unidad_'.$i];
+                $detailRequisition->description = $petition['item_descripcion_'.$i];
+                $detailRequisition->model = $petition['item_modelo_'.$i] == null? '' : $petition['item_modelo_'.$i];
+                $detailRequisition->preference = $petition['item_referencia_'.$i] == null? '' : $petition['item_referencia_'.$i];
+                $detailRequisition->urgency = $petition['item_urgencia_'.$i];
+                //si el rol del usuario es direccion, el stratus de la partida sera procesada
+                if($trueDireccion){
+                    $detailRequisition->status = "Procesada";
+                }else{
+                    $detailRequisition->status = $petition['item_status_'.$i];
+                }
+
+                $detailRequisition->save();
+            }
+            DB::commit();
+        }
+        catch (\Throwable $e) {
+            DB::rollback();
+            throw $e;
+        }
+
+        /*if ($requisition->save()) {
             for ($i=1; $i <= $request->totalItems; $i++) {
                 $detailRequisition = new DetailRequisition();
                 $detailRequisition->num_item = $i;
@@ -140,7 +175,7 @@ class RequisitionController extends Controller
             $array=["msg"=>$msg, "error"=>$error];
 
             return response()->json($array);
-        }
+        }*/
 
         $msg = "Requisición guardada correctamente";
         $array=["msg"=>$msg, "error"=>$error];

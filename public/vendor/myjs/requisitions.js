@@ -271,6 +271,12 @@ function showRequisition(id) {
                             //let isValid = (data.currentUser === data.id_user) ? false : true;
                             let row = parseInt(key) + 1;
                             let statusRequisition = data.requisition_status;
+                            //se muestra u oculta el boton para agregar items
+                            if (data.requisition_status == "Creada") {
+                                $("#btn_new_item").show();
+                            } else {
+                                $("#btn_new_item").hide();
+                            }
                             if (statusRequisition == "Cancelada") {
                                 $('#edit_req').hide();
                             }
@@ -311,7 +317,7 @@ function showRequisition(id) {
                                         `<option value="19" ${(clasification === 9) ? 'selected' : ''}>NA</option>` +
                                         `</select>`,
                                         `<input ${(isValid) ? 'disabled' : ''}   type="text" id="item_referencia_${row}" class="form-control" value="${data.detailRequisition[key].preference}"></input>`,
-                                        `<select ${(isValid) ? 'disabled' : ''}   id="item_urgencia_${row}"><option value="Alto">Alto</optin><option value="Bajo">Bajo</optin></select>`,
+                                        `<select ${(isValid) ? 'disabled' : ''}   id="item_urgencia_${row}"><option value="Alto" ${(data.detailRequisition[key].urgency === 'Alto') ? 'selected' : ''}>Alto</optin><option value="Bajo" ${(data.detailRequisition[key].urgency === 'Bajo') ? 'selected' : ''}>Bajo</optin></select>`,
                                         `<select ${(isValid) ? 'disabled' : ''}   id="item_status_${row}"><option value="Procesada" ${(status === 'Procesada') ? 'selected' : ''}>Procesada</option><option value="Cotizada" ${(status === 'Cotizada') ? 'selected' : ''}>Cotizada</optin>` +
                                         `<option value="Entregada" ${(status === 'Entregada') ? 'selected' : ''}>Entregada</optin><option value="Devolucion" ${(status === 'Devolucion') ? 'selected' : ''}>Devolución</optin>` +
                                         `<option value="Cancelada" ${(status === 'Cancelada') ? 'selected' : ''}>Cancelada</optin></select>`,

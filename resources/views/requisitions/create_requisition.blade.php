@@ -38,7 +38,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
 
-                            <button type="submit" class="btn btn-success" onclick="addRow()">Nuevo item</button>
+                            <button type="submit" id="btn_new_item" class="btn btn-success" onclick="addRow()">Nuevo item</button>
                         </div>
                     </div>
                 </div>
