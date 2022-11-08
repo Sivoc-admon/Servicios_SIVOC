@@ -31,6 +31,7 @@ function newRequisition() {
     $('#name_project').val('');
     $('#edit_req').hide();
     $('#save_req').show();
+    $("#btn_new_item").show();
     let table = $("#createRequisition").DataTable();
 
     $.ajax({
