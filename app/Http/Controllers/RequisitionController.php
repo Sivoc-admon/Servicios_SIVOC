@@ -210,7 +210,7 @@ class RequisitionController extends Controller
                 }elseif ($requisition->status=='Aprobada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
                     $userAdmin=true;
                 }elseif ($requisition->status=='Entregada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
-                    $userAdmin=true;
+                    //$userAdmin=true;
                 }elseif ($requisition->status=='Devolucion' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
                     $userAdmin=true;
                 }
@@ -225,7 +225,7 @@ class RequisitionController extends Controller
                 }elseif ($requisition->status=='Aprobada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
                     $userAdmin=true;
                 }elseif ($requisition->status=='Entregada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
-                    $userAdmin=true;
+                    //$userAdmin=true;
                 }elseif ($requisition->status=='Devolucion' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
                     $userAdmin=true;
                 }
@@ -240,7 +240,7 @@ class RequisitionController extends Controller
                 }elseif ($requisition->status=='Aprobada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
                     $userAdmin=true;
                 }elseif ($requisition->status=='Entregada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
-                    $userAdmin=true;
+                    //$userAdmin=true;
                 }elseif ($requisition->status=='Devolucion' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
                     $userAdmin=true;
                 }
@@ -256,7 +256,7 @@ class RequisitionController extends Controller
                 }elseif ($requisition->status=='Aprobada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
                     $userAdmin=true;
                 }elseif ($requisition->status=='Entregada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
-                    $userAdmin=true;
+                    //$userAdmin=true;
                 }elseif ($requisition->status=='Devolucion' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
                     $userAdmin=true;
                 }
@@ -271,7 +271,7 @@ class RequisitionController extends Controller
                 }elseif ($requisition->status=='Aprobada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
                     $userAdmin=true;
                 }elseif ($requisition->status=='Entregada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
-                    $userAdmin=true;
+                    //$userAdmin=true;
                 }elseif ($requisition->status=='Devolucion' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
                     $userAdmin=true;
                 }
@@ -286,7 +286,7 @@ class RequisitionController extends Controller
                 }elseif ($requisition->status=='Aprobada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
                     $userAdmin=true;
                 }elseif ($requisition->status=='Entregada' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
-                    $userAdmin=true;
+                    //$userAdmin=true;
                 }elseif ($requisition->status=='Devolucion' && $user->hasAnyRole(['admin', 'lider compras', 'compras'])) {
                     $userAdmin=true;
                 }
@@ -367,6 +367,7 @@ class RequisitionController extends Controller
                 'requisition_id' => $request->id,
                 'name' => $archivo->getClientOriginalName(),
                 'ruta' => 'storage/Documents/Requisitions/Files/'.$idRequisition.'/'.$tipo,
+                'comment' =>'',
 
             ]);
             $path = $archivo->storeAs(
@@ -438,11 +439,12 @@ class RequisitionController extends Controller
         $deleteItems = [];
         $petition = $request->all();
         $requisition = Requisition::find($id);
+
         $reqUpdate = [
             'no_requisition' => $request->noRequisition,
             'id_area' => $request->area_id,
         ];
-        //dd($reqUpdate);
+
         $estatusProcesada = 0;
         $estatusCotizada = 0;
         $estatusEntregada = 0;
@@ -532,7 +534,7 @@ class RequisitionController extends Controller
                 }
             }
             //dd($estatusProcesada);
-            $estatusActual = ['status' =>"Procesada"];
+            $estatusActual = ['status' =>"Creada"];
             if($estatusProcesada > 0 && ($estatusCotizada > 0 || $estatusEntregada > 0 || $estatusDevolucion > 0)){
                 $estatusActual = ['status' =>"Procesada"];
             }elseif ($estatusProcesada <= 0 && $estatusCotizada > 0 && $estatusEntregada <= 0 && $estatusDevolucion <= 0) {
@@ -544,7 +546,7 @@ class RequisitionController extends Controller
             }elseif ($estatusCancelada == $request->totalItems) {
                 $estatusActual = ['status' =>"Cancelada"];
             }
-            //dd($requisition->id);
+
             if($requisition->update($estatusActual)){
                 $objItems = DetailRequisition::where('id_requisition', $requisition->id)->whereNotIn('id', $deleteItems)->get();
                 DetailRequisition::destroy($objItems->toArray());
@@ -581,8 +583,9 @@ class RequisitionController extends Controller
         $idUser = auth()->id();
         $user = User::find($idUser);
         $userAdmin = $user->hasRole('admin');
+        $userCompras = $user->hasAnyRole(['compras', 'lider compras']);
 
-        $array=["requisitionFiles"=>$requisitionFiles, "userAdmin"=>$userAdmin, "totalFacturas"=>$totalFacturas];
+        $array=["requisitionFiles"=>$requisitionFiles, "userAdmin"=>$userAdmin, "totalFacturas"=>$totalFacturas, "userCompras"=>$userCompras];
 
         return response()->json($array);
     }
@@ -591,12 +594,38 @@ class RequisitionController extends Controller
         $msg = "";
         $error = false;
         $requisition = Requisition::find($id);
+        $detailRequisition = [];
+        switch ($request->status) {
+            case 'Creada':
+                $detailRequisition = DetailRequisition::where('status', '!=', 'Cancelada')->get();
+                break;
+            case 'Procesada':
+                $detailRequisition = DetailRequisition::where('status', '!=', 'Cancelada')->get();
+                break;
+            case 'Cotizada':
+                $detailRequisition = DetailRequisition::where('status', '!=', 'Cancelada')->get();
+                break;
+            case 'Aprobada':
+                $detailRequisition = DetailRequisition::where('status', '!=', 'Cancelada')->get();
+                break;
+            case 'Entregada':
+                $detailRequisition = DetailRequisition::where('status', '!=', 'Cancelada')->get();
+                break;
+
+            default:
+                # code...
+                break;
+        }
         $requisition->status = $request->status;
 
         if(!$requisition->update()){
             $error = true;
             $msg = "Error al actualizar el status";
         }{
+            foreach ($detailRequisition as $detail) {
+                $detail->status = $request->status;
+                $detail->update();
+            }
             $msg = "Se actualizo el status de la requisición";
         }
 
@@ -623,4 +652,18 @@ class RequisitionController extends Controller
 
         return response()->json($array);
     }
+
+    public function saveComment(Request $request, $id){
+        $file = RequisitionFile::find($id);
+        $file->comment = $request->comment;
+        $error = false;
+        $msg = "";
+        if(!$file->save()){
+            $msg = " No se pudo Guardar el comentario";
+            $error = true;
+        }
+        $array = ["mgs"=>$msg, "error"=>$error];
+        return response()->json($array);
+    }
+
 }

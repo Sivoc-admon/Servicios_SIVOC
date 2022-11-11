@@ -14,7 +14,8 @@ class RequisitionFile extends Model
     protected $fillable = [
         'requisition_id',
         'name',
-        'ruta'
+        'ruta',
+        'comment'
     ];
 
     public function requisition()

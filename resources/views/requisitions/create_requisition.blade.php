@@ -12,6 +12,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="project_id">Departamento Solicita</label>
+                            <input type="hidden" name="input_status" id="input_status" value="Creada">
                             <select class="form-control" id="project_id" name="project_id">
                                 <option value="">Seleccione un area</option>
                                 @if (Auth::user()->hasAnyRole(['admin', 'compras', 'lider compras', 'direccion']))
@@ -44,24 +45,24 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                            <div style="overflow-x: scroll">
-                                <table id="createRequisition" class="table table-striped" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Cant</th>
-                                            <th>Unidad</th>
-                                            <th>Descripción</th>
-                                            <th>Modelo</th>
-                                            <th>Clasificación</th>
-                                            <th>Referencia</th>
-                                            <th>Nivel de Urgencia</th>
-                                            <th>Estatus</th>
-                                            <th>Accion</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
+                        <div style="overflow-x: scroll">
+                            <table id="createRequisition" class="table table-striped" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Cant</th>
+                                        <th>Unidad</th>
+                                        <th>Descripción</th>
+                                        <th>Modelo</th>
+                                        <th>Clasificación</th>
+                                        <th>Referencia</th>
+                                        <th>Nivel de Urgencia</th>
+                                        <th>Estatus</th>
+                                        <th>Accion</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
@@ -70,7 +71,7 @@
           <div class="modal-footer">
             <button type="submit" class="btn btn-success" id="save_req" onclick="saveRequisition()">Guardar</button>
             <button type="button" class="btn btn-success" id="edit_req" onclick="editRequisition()">Editar</button>
-            <button type="button" class="btn btn-secondary" onclick="limpiaTabla()">Close</button>
+            <button type="button" class="btn btn-secondary" onclick="limpiaTabla()">Cerrar</button>
           </div>
       </div>
     </div>
@@ -124,7 +125,7 @@
             </table>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" onclick="closeModalProvider()">Close</button>
+            <button type="button" class="btn btn-secondary" onclick="closeModalProvider()">Cerrar</button>
           </div>
       </div>
     </div>

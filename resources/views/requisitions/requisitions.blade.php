@@ -44,7 +44,7 @@
                 display: block;
             }
             .modal-lg {
-                max-width: 90%;
+                max-width: 100%;
             }
         </style>
     @stop
