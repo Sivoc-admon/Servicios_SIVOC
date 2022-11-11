@@ -309,7 +309,7 @@ function showRequisition(id) {
                             } else {
                                 $("#btn_new_item").hide();
                             }
-                            if (statusRequisition == "Cancelada") {
+                            if (statusRequisition == "Cancelada" || statusRequisition == "Aprobada") {
                                 $('#edit_req').hide();
                             }
                             if (statusRequisition == "Creada") {
