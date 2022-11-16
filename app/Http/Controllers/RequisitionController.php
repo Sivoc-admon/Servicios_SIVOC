@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\RequisitionFile;
 use App\User;
+use App\Project;
 use Illuminate\Support\Facades\Storage;
 
 class RequisitionController extends Controller
@@ -31,14 +32,16 @@ class RequisitionController extends Controller
             $requisitions = DB::table('requisitions')
             ->join('users', 'users.id', '=', 'requisitions.id_user')
             ->join('role_user', 'role_user.user_id', '=', 'users.id')
-            ->select('requisitions.*', 'users.name', 'users.last_name', 'role_user.role_id as role')
+            ->join('projects', 'requisitions.id_project', '=', 'projects.id')
+            ->select('requisitions.*', 'users.name', 'users.last_name', 'role_user.role_id as role', 'projects.name_project as name_project', 'projects.adicional')
             ->orderByDesc('id')->get();
         }else{
             //$requisitions = Requisition::where('id_area', $user->area_id)->orderByDesc('id')->get();
             $requisitions = DB::table('requisitions')
             ->join('users', 'users.id', '=', 'requisitions.id_user')
             ->join('role_user', 'role_user.user_id', '=', 'users.id')
-            ->select('requisitions.*', 'users.name', 'users.last_name', 'role_user.role_id as role')
+            ->join('projects', 'requisitions.id_project', '=', 'projects.id')
+            ->select('requisitions.*', 'users.name', 'users.last_name', 'role_user.role_id as role', 'projects.name_project as name_project', 'projects.adicional')
             ->where('requisitions.id_area', $user->area_id)
             ->orderByDesc('id')->get();
         }
@@ -62,7 +65,10 @@ class RequisitionController extends Controller
             }
         }
 
-        return view('requisitions.requisitions', compact('requisitions','areas', 'areaUser'));
+        //PROYECTOS
+        $proyectos = Project::orderBy('name_project', 'DESC')->get();
+
+        return view('requisitions.requisitions', compact('requisitions','areas', 'areaUser', 'proyectos'));
     }
 
     public function newRequisition(){
@@ -73,16 +79,6 @@ class RequisitionController extends Controller
         $array=["msg"=>$msg, "error"=>$error, 'newRequisition'=>$newRequisition];
 
         return response()->json($array);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -102,11 +98,22 @@ class RequisitionController extends Controller
         //dd($petition);
         //print_r($petition['item_descripcion_1']);
 
+        $valRequi = Requisition::where('no_requisition', $request->noRequisition)->first();
+        $newRequi = "";
 
         $requisition = new Requisition();
-        $requisition->no_requisition = $request->noRequisition;
+        //se valida si ya existe la requisicion crea una nueva
+        if($valRequi){
+            $arrayRequi = explode('-',$valRequi->no_requisition);
+            $newRequi = 'R-'. ($arrayRequi[1] + 1);
+            $requisition->no_requisition = $newRequi;
+        }else{
+            $requisition->no_requisition = $request->noRequisition;
+        }
+
         $requisition->id_user = $id_user;
         $requisition->id_area = $request->area_id;
+        $requisition->id_project = $request->project_id;
         //si el usuario tiene el rol de direccion la requisicon se crea con estatus Procesada
         foreach (auth()->user()->roles as $roles) {
             if($roles->name == 'direccion' || $roles->name == 'admin'){
@@ -305,6 +312,7 @@ class RequisitionController extends Controller
             'no_requisition'=>$requisition['no_requisition'],
             'id_area'=>$requisition['id_area'],
             'id_user'=>$requisition['id_user'],
+            'id_project'=>$requisition['id_project'],
             'detailRequisition'=>$detailRequisition,
             'edit'=>$userAdmin
         ];
@@ -443,6 +451,7 @@ class RequisitionController extends Controller
         $reqUpdate = [
             'no_requisition' => $request->noRequisition,
             'id_area' => $request->area_id,
+            'id_project' => $request->project_id,
         ];
 
         $estatusProcesada = 0;

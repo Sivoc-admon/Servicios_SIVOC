@@ -14,6 +14,7 @@ class Requisition extends Model
     protected $fillable = [
         'no_requisition',
         'id_area',
+        'id_project',
         'id_user',
         'status'
     ];

@@ -60,6 +60,7 @@ function newRequisition() {
 
 }
 
+
 function addRow() {
     //let rowCount = $('#tableBodyCreateRequisition tr').length;
     let rowCount = $('#createRequisition').DataTable().rows().data().length;
@@ -101,7 +102,7 @@ function addRow() {
 
     let rowNode = $('#createRequisition').DataTable()
         .row.add([row,
-            `<input type="number" class="form-control" id="item_cantidad_${row}" name="item_cantidad_${row}" placeholder="Cantidad" min="1" value="1">`,
+            `<input type="number" class="form-control" id="item_cantidad_${row}" name="item_cantidad_${row}" onChange="validaCantidad(${row})" placeholder="Cantidad" min="1" value="1">`,
             `<select class="form-control" id="item_unidad_${row}">` +
             `<option value="Pieza">Pieza</option>` +
             `<option value="Servicio">Servicio</option>` +
@@ -135,10 +136,14 @@ function addRow() {
         ])
         .draw()
         .node();
-    /*$("#tableBodyCreateRequisition").append(
-        cell
-    ); */
 
+
+}
+
+function validaCantidad(id) {
+    if ($(`#item_cantidad_${row}`).val() <= 0) {
+        $(`#item_cantidad_${row}`).val(1);
+    }
 }
 
 function calculaPrecio() {
@@ -172,7 +177,7 @@ function addProvider() {
 
     let rowNode = table
         .row.add([row,
-            `<input type="number" class="form-control" id="item_cantidad_${row}" name="item_cantidad_${row}" placeholder="Cantidad" value="0">`,
+            `<input type="number" class="form-control" id="item_cantidad_${row}" name="item_cantidad_${row}" pattern="([0-9])" placeholder="Cantidad" value="1">`,
             `<select class="form-control" id="item_unidad_${row}"><option value="Pieza">Pieza</option><option value="Servicio">Servicio</option></select>`,
             `<textarea id="item_descripcion_${row}" class="form-control"></textarea>`,
             `<textarea id="item_modelo_${row}" class="form-control"></textarea>`,
@@ -210,6 +215,10 @@ function saveRequisition(action = null) {
         messageAlert("Debe seleccionar el area.", "warning");
         return;
     }
+    if ($("#slt_project_id").val() == 0) {
+        messageAlert("Debe seleccionar el proyecto.", "warning");
+        return;
+    }
 
     if (items.length <= 0) {
         console.log("No hay items");
@@ -221,6 +230,7 @@ function saveRequisition(action = null) {
     let i = 1;
     for (const key in items) {
         formdata.append("area_id", $("#project_id").val());
+        formdata.append("project_id", $("#slt_project_id").val());
         formdata.append("item_cantidad_" + i, $("#item_cantidad_" + items[key]).val());
         formdata.append("item_unidad_" + i, $("#item_unidad_" + items[key]).val());
         formdata.append("item_descripcion_" + i, $("#item_descripcion_" + items[key]).val());
@@ -277,6 +287,7 @@ function showRequisition(id) {
                         $('#project_id').val(data.id_area);
                         $('#name_project').val(data.no_requisition);
                         $('#requisition_').val(data.requisition);
+                        $('#slt_project_id').val(data.id_project);
                         console.log(data);
                         items = [];
                         for (const key in data.detailRequisition) {
@@ -286,7 +297,7 @@ function showRequisition(id) {
                             let status = data.detailRequisition[key].status;
                             let isValid;
                             let isVisible;
-                            console.log(data.edit);
+
                             if (data.edit == true) {
                                 isValid = false;
                                 $('#edit_req').show();
@@ -472,6 +483,7 @@ function editRequisition() {
     for (const key in items) {
         console.log(key);
         formdata.append("area_id", $("#project_id").val());
+        formdata.append("project_id", $("#slt_project_id").val());
         formdata.append("item_id_" + i, ($("#item_id_" + items[key]).val()) === undefined ? null : $("#item_id_" + items[key]).val());
         formdata.append("item_cantidad_" + i, $("#item_cantidad_" + items[key]).val());
         formdata.append("item_unidad_" + i, $("#item_unidad_" + items[key]).val());

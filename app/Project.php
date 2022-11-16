@@ -18,6 +18,7 @@ class Project extends Model
         'client',
         'adicional',
         'status',
+        'id_user',
 
     ];
 

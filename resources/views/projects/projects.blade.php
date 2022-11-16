@@ -90,6 +90,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Nombre de proyecto</th>
+                                <th>Usuario</th>
                                 <th>Estatus</th>
                                 <th>Acción</th>
                             </tr>
@@ -128,6 +129,7 @@
                                         @else
                                             <td>{{ $project->name_project }}-{{ $project->adicional }}_{{ $project->name }}</td>
                                         @endif
+                                        <td>{{ $project->user_name }} {{ $project->last_name }} {{ $project->mother_last_name }}</td>
 
                                         <td>{{ $project->status }}</td>
 
@@ -158,6 +160,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Nombre de proyecto</th>
+                                <th>Usuario</th>
                                 <th>Estatus</th>
                                 <th>Acción</th>
                             </tr>

@@ -86,6 +86,7 @@
                                 <th>#</th>
                                 <th>Nombre</th>
                                 <th>Area</th>
+                                <th>Proyecto</th>
                                 <th>Fecha</th>
                                 <th>Estatus</th>
                                 <th>Acción</th>
@@ -103,6 +104,14 @@
 
                                             @endif
                                         @endforeach
+                                        <td>
+                                            @if ($requisiton->adicional)
+                                                {{ $requisiton->name_project }}-{{ $requisiton->adicional }}
+                                            @else
+                                                {{ $requisiton->name_project }}
+                                            @endif
+
+                                        </td>
                                         <td>{{ $requisiton->created_at }}</td>
                                         @if ($requisiton->status == "Cancelada")
                                             <td style="color:red">{{ $requisiton->status }}</td>
@@ -250,6 +259,11 @@
                                                                         </button>
                                                                     </span>
                                                                     <span >
+                                                                        <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="aprobar({{$requisiton->id}}, 'Procesada')">
+                                                                            <i class="fas fa-reply"></i>
+                                                                        </button>
+                                                                    </span>
+                                                                    <span >
                                                                         <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Cancelar" onclick="aprobar({{$requisiton->id}}, 'Cancelada')">
                                                                             <i class="fas fa-minus-square"></i>
                                                                         </button>
@@ -307,7 +321,9 @@
                         <tfoot>
                             <tr>
                                 <th>#</th>
+                                <th>Nombre</th>
                                 <th>Area</th>
+                                <th>Proyecto</th>
                                 <th>Fecha</th>
                                 <th>Estatus</th>
                                 <th>Acción</th>

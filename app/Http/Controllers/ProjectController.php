@@ -30,7 +30,8 @@ class ProjectController extends Controller
 
         $projects = DB::table('projects')
         ->join('customers', 'projects.client', '=', 'customers.id')
-        ->select('projects.*', 'customers.code as name_customer')
+        ->join('users', 'projects.id_user', '=', 'users.id')
+        ->select('projects.*', 'customers.code as name_customer', 'users.name as user_name', 'users.last_name', 'users.mother_last_name')
         ->whereNull('adicional')
         ->get();
         $areas = DB::table('areas')->get();
@@ -42,15 +43,6 @@ class ProjectController extends Controller
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -68,6 +60,7 @@ class ProjectController extends Controller
         $project->client = $request->input('sltCliente');
         $project->name_project = $request->input('inputNameProject');
         $project->status = $request->input('inputEstatus');
+        $project->id_user = auth()->id();
 
         if($request->input('adicionalProject'))
         {

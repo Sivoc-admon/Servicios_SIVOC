@@ -9,7 +9,7 @@
             <div class="container-fluid">
 
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="project_id">Departamento Solicita</label>
                             <input type="hidden" name="input_status" id="input_status" value="Creada">
@@ -27,7 +27,23 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="project_id">Proyecto</label>
+                            <select class="form-control" id="slt_project_id" name="slt_project_id">
+                                <option value="">Seleccione un proyecto</option>
+                                @foreach ($proyectos as $proyecto)
+                                    @if ($proyecto->adicional)
+                                        <option value="{{ $proyecto->id }}">{{ $proyecto->name_project }}-{{ $proyecto->adicional }}</option>
+                                    @else
+                                        <option value="{{ $proyecto->id }}">{{ $proyecto->name_project }}</option>
+                                    @endif
+
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="name_project">No. Requisición</label>
                             <input type="text" class="form-control" id="name_project" name="name_project" readonly>
