@@ -34,9 +34,9 @@
                                 <option value="">Seleccione un proyecto</option>
                                 @foreach ($proyectos as $proyecto)
                                     @if ($proyecto->adicional)
-                                        <option value="{{ $proyecto->id }}">{{ $proyecto->name_project }}-{{ $proyecto->adicional }}</option>
+                                        <option value="{{ $proyecto->id }}">{{ $proyecto->name_project }}-{{ $proyecto->adicional }}_{{ $proyecto->name }}</option>
                                     @else
-                                        <option value="{{ $proyecto->id }}">{{ $proyecto->name_project }}</option>
+                                        <option value="{{ $proyecto->id }}">{{ $proyecto->name_project }}_{{ $proyecto->name }}</option>
                                     @endif
 
                                 @endforeach
