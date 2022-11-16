@@ -542,9 +542,10 @@ class RequisitionController extends Controller
                     array_push($deleteItems, $detailRequisition->id);
                 }
             }
-            //dd($estatusProcesada);
+
             $estatusActual = ['status' =>"Creada"];
-            if($estatusProcesada > 0 && ($estatusCotizada < 0 || $estatusEntregada < 0 || $estatusDevolucion < 0)){
+            if($estatusProcesada > 0 || ($estatusCotizada < 0 || $estatusEntregada < 0 || $estatusDevolucion < 0)){
+                $estatusActual = ['status' =>"Procesada"];
 
             }elseif($estatusProcesada > 0 && ($estatusCotizada > 0 || $estatusEntregada > 0 || $estatusDevolucion > 0)){
                 $estatusActual = ['status' =>"Procesada"];
@@ -557,7 +558,7 @@ class RequisitionController extends Controller
             }elseif ($estatusCancelada == $request->totalItems) {
                 $estatusActual = ['status' =>"Cancelada"];
             }
-
+            //dd($estatusActual);
             if($requisition->update($estatusActual)){
                 $objItems = DetailRequisition::where('id_requisition', $requisition->id)->whereNotIn('id', $deleteItems)->get();
                 DetailRequisition::destroy($objItems->toArray());
