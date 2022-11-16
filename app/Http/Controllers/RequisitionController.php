@@ -544,7 +544,9 @@ class RequisitionController extends Controller
             }
             //dd($estatusProcesada);
             $estatusActual = ['status' =>"Creada"];
-            if($estatusProcesada > 0 && ($estatusCotizada > 0 || $estatusEntregada > 0 || $estatusDevolucion > 0)){
+            if($estatusProcesada > 0 && ($estatusCotizada < 0 || $estatusEntregada < 0 || $estatusDevolucion < 0)){
+
+            }elseif($estatusProcesada > 0 && ($estatusCotizada > 0 || $estatusEntregada > 0 || $estatusDevolucion > 0)){
                 $estatusActual = ['status' =>"Procesada"];
             }elseif ($estatusProcesada <= 0 && $estatusCotizada > 0 && $estatusEntregada <= 0 && $estatusDevolucion <= 0) {
                 $estatusActual = ['status' =>"Cotizada"];
