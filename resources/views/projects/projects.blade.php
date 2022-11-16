@@ -129,7 +129,17 @@
                                         @else
                                             <td>{{ $project->name_project }}-{{ $project->adicional }}_{{ $project->name }}</td>
                                         @endif
-                                        <td>{{ $project->user_name }} {{ $project->last_name }} {{ $project->mother_last_name }}</td>
+                                        @if ($project->id_user == 0)
+                                            <td></td>
+                                        @else
+                                            @foreach ($users as $user)
+                                                @if ($project->id_user == $user->id)
+                                                    <td>{{ $user->name }} {{ $user->last_name }} {{ $user->mother_last_name }}</td>
+
+                                                @endif
+                                            @endforeach
+                                        @endif
+
 
                                         <td>{{ $project->status }}</td>
 

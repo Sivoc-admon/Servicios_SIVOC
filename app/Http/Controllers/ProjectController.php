@@ -30,8 +30,8 @@ class ProjectController extends Controller
 
         $projects = DB::table('projects')
         ->join('customers', 'projects.client', '=', 'customers.id')
-        ->join('users', 'projects.id_user', '=', 'users.id')
-        ->select('projects.*', 'customers.code as name_customer', 'users.name as user_name', 'users.last_name', 'users.mother_last_name')
+        //->join('users', 'projects.id_user', '=', 'users.id')
+        ->select('projects.*', 'customers.code as name_customer')
         ->whereNull('adicional')
         ->get();
         $areas = DB::table('areas')->get();
