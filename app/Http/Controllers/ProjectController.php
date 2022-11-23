@@ -529,9 +529,11 @@ class ProjectController extends Controller
         return response()->json(['project' => $project->name_project, 'totalAdicional'=>$totalAdicional], Response::HTTP_OK);
     }
 
-    public function totalProyectos()
+    public function totalProyectos(Request $request)
     {
-        $projects = Project::whereNull('adicional')
+        //dd($request->tipo_proyecto);
+        $projects = Project::where('type', '=', $request->tipo_proyecto)
+                ->whereNull('adicional')
                 ->get();
 
         $totalProyectos=0;

@@ -689,13 +689,10 @@ function tipoProyecto(tipo) {
     $.ajax({
         type: "GET",
         url: `projects/total`,
-        /*data: {
-            "folder": folderName,
-            "id_padre": id_padre,
-            "id_proyecto": $("#hideModalIdProjectFolder").val(),
-            "id_area": area,
-            "_token": $("meta[name='csrf-token']").attr("content")
-        },*/
+        data: {
+            "tipo_proyecto": tipoProyecto
+
+        },
         success: function(data) {
             console.log(data);
             let consecutivo = data.totalProyectos.toString().padStart(3, 0);
