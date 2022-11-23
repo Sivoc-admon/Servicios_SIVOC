@@ -335,7 +335,7 @@ function showRequisition(id) {
                                     statusOptionItem = '<option value="Creada">Creada</option>';
                                     break;
                                 case "Procesada":
-                                    statusOptionItem = `<option value="Procesada" selected>Procesada</option><option value="Cotizada">Cotizada</option>`;
+                                    statusOptionItem = `<option value="Procesada" selected>Procesada</option><option value="Cotizada">Cotizada</option><option value="Cancelada">Cancelada</option>`;
                                     break;
                                 case "Cotizada":
                                     statusOptionItem = '<option value="Cotizada" selected>Cotizada</option><option value="Cancelada">Cancelada</option>';
