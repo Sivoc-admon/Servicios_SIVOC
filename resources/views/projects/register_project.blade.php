@@ -23,6 +23,7 @@
                             <select class="form-control" id="sltTypeProject" name="sltTypeProject" placeholder="Tipo de proyecto" required>
                               <option value="0">---</option>
                               <option value="PS">Proyecto de Servicio</option>
+                              <option value="GE">Proyecto General</option>
 
                             </select>
                           </div>

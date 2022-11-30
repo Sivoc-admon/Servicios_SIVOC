@@ -53,7 +53,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    @if(Auth::user()->hasAnyRole(['admin', 'calidad', 'tesoreria', 'manufactura', 'servicio', 'ventas', 'lider calidad', 'lider compras', 'lider recursos humanos', 'lider tesoreria', 'lider ventas', 'lider servicio']))
+                    @if(Auth::user()->hasAnyRole(['admin', 'calidad', 'compras', 'tesoreria', 'manufactura', 'servicio', 'ventas', 'lider calidad', 'lider compras', 'lider recursos humanos', 'lider tesoreria', 'lider ventas', 'lider servicio']))
                     <span >
                         <button type="button" class="btn btn-info" onclick="showDiv('divProject')" title="Mostrar Proyectos">
                             <i class="fas fa-project-diagram"></i>
@@ -88,9 +88,9 @@
                     <table id="tableProjects" style="width: 100%" class="table table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th></th>
                                 <th>#</th>
                                 <th>Nombre de proyecto</th>
+                                <th>Usuario</th>
                                 <th>Estatus</th>
                                 <th>Acción</th>
                             </tr>
@@ -99,12 +99,12 @@
                             @isset($projects)
                                 @foreach ($projects as $project)
                                     <tr>
-                                        <td>
-                                            <!-- <span data-toggle="modal" data-target="#ModalShowFilesProject">
+                                        <!-- <td>
+                                            <span data-toggle="modal" data-target="#ModalShowFilesProject">
                                                 <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Mostrar archivos" onclick="showProjectFile({{$project->id}})">
                                                     <i class="fas fa-list"></i>
                                                 </button>
-                                            </span> -->
+                                            </span>
                                             <span data-toggle="modal" data-target="#ModalShowFoldersProject">
                                                 <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Mostrar archivos" onclick="consultaProyectoFolder({{$project->id}})">
                                                     <i class="fas fa-list"></i>
@@ -112,22 +112,34 @@
                                             </span>
                                         @if (Auth::user()->hasAnyRole(['admin', 'calidad', 'tesoreria', 'manufactura', 'servicio', 'ventas']))
 
-                                            <!-- <span data-toggle="modal" data-target="#ModalShowBoard">
+                                            <span data-toggle="modal" data-target="#ModalShowBoard">
                                                 <button type="button" class="btn btn-info" data-toggle="tooltip" data-placement="top" title="Mostrar Tableros" onclick="showBoards({{$project->id}})">
                                                     <i class="fas fa-list"></i>
                                                 </button>
-                                            </span> -->
+                                            </span>
 
 
-                                        </td>
+
                                         @endif
+                                        </td>-->
 
                                         <td>{{ $project->id }}</td>
                                         @if ( $project->adicional == null)
-                                            <td>{{ $project->name_project }}_{{ $project->name_customer }}-{{ $project->name }}</td>
+                                            <td>{{ $project->name_project }}-{{ $project->name }}</td>
                                         @else
-                                            <td>{{ $project->name_project }}_{{ $project->name_customer }}-{{ $project->name }}-{{ $project->adicional }}</td>
+                                            <td>{{ $project->name_project }}-{{ $project->adicional }}_{{ $project->name }}</td>
                                         @endif
+                                        @if ($project->id_user == 0)
+                                            <td></td>
+                                        @else
+                                            @foreach ($users as $user)
+                                                @if ($project->id_user == $user->id)
+                                                    <td>{{ $user->name }} {{ $user->last_name }} {{ $user->mother_last_name }}</td>
+
+                                                @endif
+                                            @endforeach
+                                        @endif
+
 
                                         <td>{{ $project->status }}</td>
 
@@ -156,9 +168,9 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th></th>
                                 <th>#</th>
                                 <th>Nombre de proyecto</th>
+                                <th>Usuario</th>
                                 <th>Estatus</th>
                                 <th>Acción</th>
                             </tr>
@@ -216,9 +228,9 @@
                             @isset($projects)
                                 @foreach ($projects as $project)
                                     @if ($project->adicional == null)
-                                        <option value="{{$project->id}}">{{$project->name_project}}_{{$project->name_customer}}-{{$project->name}}</option>
+                                        <option value="{{$project->id}}">{{$project->name_project}}-{{$project->name}}</option>
                                     @else
-                                        <option value="{{$project->id}}">{{$project->name_project}}_{{$project->name_customer}}-{{$project->name}}-{{$project->adicional}}</option>
+                                        <option value="{{$project->id}}">{{$project->name_project}}-{{$project->adicional}}_{{$project->name}}</option>
                                     @endif
 
                                 @endforeach

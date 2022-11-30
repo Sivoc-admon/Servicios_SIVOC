@@ -197,6 +197,7 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::post('requisitions/{id}/updateStatusRequisition', 'RequisitionController@updateStatusRequisition')->name('requisitions.updateStatusRequisition');
     Route::delete('requisitions/{id}/deleteFile', 'RequisitionController@deleteFile')->name('requisitions.deleteFile');
     Route::get('requisitions/newRequisition', 'RequisitionController@newRequisition')->name('requisitions.newRequisition');
+    Route::post('requisitions/{id}/comment', 'RequisitionController@saveComment')->name('requisitions.saveComment');
     Route::resource('requisitions', 'RequisitionController');
 });
 

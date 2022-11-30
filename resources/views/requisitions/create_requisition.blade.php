@@ -9,18 +9,41 @@
             <div class="container-fluid">
 
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="project_id">Departamento Solicita</label>
+                            <input type="hidden" name="input_status" id="input_status" value="Creada">
                             <select class="form-control" id="project_id" name="project_id">
                                 <option value="">Seleccione un area</option>
-                                @foreach ($areas as $area)
-                                    <option value="{{ $area->id }}">{{ $area->name }}</option>
+                                @if (Auth::user()->hasAnyRole(['admin', 'compras', 'lider compras', 'direccion']))
+                                    @foreach ($areas as $area)
+                                        <option value="{{ $area->id }}">{{ $area->name }}</option>
+                                    @endforeach
+                                @else
+                                    <option value="{{ $areaUser->id }}">{{ $areaUser->name }}</option>
+                                @endif
+
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="project_id">Proyecto</label>
+                            <select class="form-control" id="slt_project_id" name="slt_project_id">
+                                <option value="">Seleccione un proyecto</option>
+                                @foreach ($proyectos as $proyecto)
+                                    @if ($proyecto->adicional)
+                                        <option value="{{ $proyecto->id }}">{{ $proyecto->name_project }}-{{ $proyecto->adicional }}_{{ $proyecto->name }}</option>
+                                    @else
+                                        <option value="{{ $proyecto->id }}">{{ $proyecto->name_project }}_{{ $proyecto->name }}</option>
+                                    @endif
+
                                 @endforeach
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="name_project">No. Requisición</label>
                             <input type="text" class="form-control" id="name_project" name="name_project" readonly>
@@ -32,30 +55,30 @@
                     <div class="col-md-6">
                         <div class="form-group">
 
-                            <button type="submit" class="btn btn-success" onclick="addRow()">Nuevo item</button>
+                            <button type="submit" id="btn_new_item" class="btn btn-success" onclick="addRow()">Nuevo item</button>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12">
-                            <div style="overflow-x: scroll">
-                                <table id="createRequisition" class="table table-striped" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Cant</th>
-                                            <th>Unidad</th>
-                                            <th>Descripción</th>
-                                            <th>Modelo</th>
-                                            <th>Clasificación</th>
-                                            <th>Referencia</th>
-                                            <th>Nivel de Urgencia</th>
-                                            <th>Estatus</th>
-                                            <th>Accion</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
+                        <div style="overflow-x: scroll">
+                            <table id="createRequisition" class="table table-striped" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Cant</th>
+                                        <th>Unidad</th>
+                                        <th>Descripción</th>
+                                        <th>Modelo</th>
+                                        <th>Clasificación</th>
+                                        <th>Referencia</th>
+                                        <th>Nivel de Urgencia</th>
+                                        <th>Estatus</th>
+                                        <th>Accion</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
@@ -64,7 +87,7 @@
           <div class="modal-footer">
             <button type="submit" class="btn btn-success" id="save_req" onclick="saveRequisition()">Guardar</button>
             <button type="button" class="btn btn-success" id="edit_req" onclick="editRequisition()">Editar</button>
-            <button type="button" class="btn btn-secondary" onclick="limpiaTabla()">Close</button>
+            <button type="button" class="btn btn-secondary" onclick="limpiaTabla()">Cerrar</button>
           </div>
       </div>
     </div>
@@ -118,7 +141,7 @@
             </table>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" onclick="closeModalProvider()">Close</button>
+            <button type="button" class="btn btn-secondary" onclick="closeModalProvider()">Cerrar</button>
           </div>
       </div>
     </div>

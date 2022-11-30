@@ -31,7 +31,9 @@ function newRequisition() {
     $('#name_project').val('');
     $('#edit_req').hide();
     $('#save_req').show();
+    $("#btn_new_item").show();
     let table = $("#createRequisition").DataTable();
+    //table.columns.adjust().draw();
 
     $.ajax({
         headers: {
@@ -58,9 +60,13 @@ function newRequisition() {
 
 }
 
+
 function addRow() {
     //let rowCount = $('#tableBodyCreateRequisition tr').length;
     let rowCount = $('#createRequisition').DataTable().rows().data().length;
+    let statusRow = $("#input_status").val();
+    let statusOptionItem = "";
+
 
     if (rowCount > 0) {
         row = rowCount + 1;
@@ -68,34 +74,76 @@ function addRow() {
     } else {
         row = 1;
     }
+    switch (statusRow) {
+        case "Creada":
+            statusOptionItem = '<option value="Creada">Creada</option>';
+            break;
+        case "Procesada":
+            statusOptionItem = '<option value="Procesada">Procesada</option>';
+            break;
+        case "Cotizada":
+            statusOptionItem = '<option value="Cotizada">Cotizada</option>';
+            break;
+        case "Aprobada":
+            statusOptionItem = '<option value="Aprobada">Aprobada</option>';
+            break;
+        case "Entregada":
+            statusOptionItem = '<option value="Entregada">Entregada</option>';
+            break;
+        case "Devolucion":
+            statusOptionItem = '<option value="Devolucion">Devolución</option>';
+            break;
+        case "Cancelada":
+            statusOptionItem = '<option value="Cancelada">Cancelada</option>';
+            break;
+    }
 
     items.push(row);
 
     let rowNode = $('#createRequisition').DataTable()
         .row.add([row,
-            `<input type="number" class="form-control" id="item_cantidad_${row}" name="item_cantidad_${row}" placeholder="Cantidad" value="0">`,
+            `<input type="number" class="form-control" id="item_cantidad_${row}" name="item_cantidad_${row}" onChange="validaCantidad(${row})" placeholder="Cantidad" min="1" value="1">`,
             `<select class="form-control" id="item_unidad_${row}">` +
             `<option value="Pieza">Pieza</option>` +
             `<option value="Servicio">Servicio</option>` +
             `</select>`,
             `<textarea id="item_descripcion_${row}" class="form-control"></textarea>`,
             `<textarea id="item_modelo_${row}" class="form-control"></textarea>`,
-            `<select id="item_clasificacion_${row}">` +
-            `<option value="1">G202001 HERRAMIENTAS EPP</option>` +
+            `<select id="item_clasificacion_${row}"><option value="1">HERRAMIENTAS EPP</option>` +
+            `<option value="2">PAPELERÍA Y ARTICULOS DE OFICINA</option>` +
+            `<option value="3">EQUIPO DE CÓMPUTO </option>` +
+            `<option value="4">MTTO Y CONSERVACIÓN</option>` +
+            `<option value="5">SEGURIDAD E HIGIENE</option>` +
+            `<option value="6">VIÁTICOS</option>` +
+            `<option value="7"> MOBILIARIO Y EQUIPO</option>` +
+            `<option value="8">PROPAGANDA Y PUBLICIDAD</option>` +
+            `<option value="9">CAFETERÍA</option>` +
+            `<option value="10">EQUIPO DE TRANSPORTE</option>` +
+            `<option value="11">EVENTOS INTERNOS</option>` +
+            `<option value="12">PAGO DE IMPUESTOS</option>` +
+            `<option value="13">VIGILANCIA</option>` +
+            `<option value="14">GASTOS FIJOS</option>` +
+            `<option value="15">CAFETERIA Y CONSUMIBLES</option>` +
+            `<option value="16">LIMPIEZA</option>` +
+            `<option value="17">UNIFORMES</option>` +
+            `<option value="18">GASTOS GENERALES</option>` +
+            `<option value="19">NA</option>` +
             `</select>`,
             `<textarea id="item_referencia_${row}" class="form-control"></textarea>`,
             `<select id="item_urgencia_${row}"><option value="Alto">Alto</option><option value="Bajo">Bajo</option></select>`,
-            `<select id="item_status_${row}"><option value="Proceso">Proceso</option><option value="Cotizado">Cotizado</option>` +
-            `<option value="Entregado">Entregado</option><option value="Devolucion">Devolución</option>` +
-            `<option value="Cancelada">Cancelada</option></select>`,
+            `<select id="item_status_${row}">${statusOptionItem}</select>`,
             `<div><button class='btn btn-danger' data-toggle="tooltip" data-placement="top" title="Eliminar" onclick='deleteRow(this)'><i class="fas fa-trash"></i></button>`
         ])
         .draw()
         .node();
-    /*$("#tableBodyCreateRequisition").append(
-        cell
-    ); */
 
+
+}
+
+function validaCantidad(id) {
+    if ($(`#item_cantidad_${row}`).val() <= 0) {
+        $(`#item_cantidad_${row}`).val(1);
+    }
 }
 
 function calculaPrecio() {
@@ -129,7 +177,7 @@ function addProvider() {
 
     let rowNode = table
         .row.add([row,
-            `<input type="number" class="form-control" id="item_cantidad_${row}" name="item_cantidad_${row}" placeholder="Cantidad" value="0">`,
+            `<input type="number" class="form-control" id="item_cantidad_${row}" name="item_cantidad_${row}" pattern="([0-9])" placeholder="Cantidad" value="1">`,
             `<select class="form-control" id="item_unidad_${row}"><option value="Pieza">Pieza</option><option value="Servicio">Servicio</option></select>`,
             `<textarea id="item_descripcion_${row}" class="form-control"></textarea>`,
             `<textarea id="item_modelo_${row}" class="form-control"></textarea>`,
@@ -167,6 +215,10 @@ function saveRequisition(action = null) {
         messageAlert("Debe seleccionar el area.", "warning");
         return;
     }
+    if ($("#slt_project_id").val() == 0) {
+        messageAlert("Debe seleccionar el proyecto.", "warning");
+        return;
+    }
 
     if (items.length <= 0) {
         console.log("No hay items");
@@ -178,6 +230,7 @@ function saveRequisition(action = null) {
     let i = 1;
     for (const key in items) {
         formdata.append("area_id", $("#project_id").val());
+        formdata.append("project_id", $("#slt_project_id").val());
         formdata.append("item_cantidad_" + i, $("#item_cantidad_" + items[key]).val());
         formdata.append("item_unidad_" + i, $("#item_unidad_" + items[key]).val());
         formdata.append("item_descripcion_" + i, $("#item_descripcion_" + items[key]).val());
@@ -217,58 +270,125 @@ function saveRequisition(action = null) {
 }
 
 function showRequisition(id) {
-    $('#edit_req').show();
+    var table = $('#createRequisition').DataTable();
+
+    table.clear().draw();
+
+
     $('#save_req').hide();
     $.ajax({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        type: "GET",
-        url: `requisitions/${id}`,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "GET",
+                url: `requisitions/${id}`,
 
-        success: function(data) {
-            $('#project_id').val(data.id_area);
-            $('#name_project').val(data.no_requisition);
-            $('#requisition_').val(data.requisition);
-            console.log(data);
-            items = [];
-            for (const key in data.detailRequisition) {
-                items.push(parseInt(key) + 1);
-                let unit = (data.detailRequisition[key].unit === 'Servicio') ? 2 : 1;
-                let clasification = data.detailRequisition[key].id_classification;
-                let status = data.detailRequisition[key].status;
-                let isValid;
-                if (data.edit == true) {
-                    isValid = false;
+                success: function(data) {
+                        $('#project_id').val(data.id_area);
+                        $('#name_project').val(data.no_requisition);
+                        $('#requisition_').val(data.requisition);
+                        $('#slt_project_id').val(data.id_project);
+                        console.log(data);
+                        items = [];
+                        for (const key in data.detailRequisition) {
+                            items.push(parseInt(key) + 1);
+                            let unit = (data.detailRequisition[key].unit === 'Servicio') ? 2 : 1;
+                            let clasification = data.detailRequisition[key].id_classification;
+                            let status = data.detailRequisition[key].status;
+                            let isValid;
+                            let isVisible;
 
-                } else {
-                    isValid = true;
-                }
+                            if (data.edit == true) {
+                                isValid = false;
+                                $('#edit_req').show();
 
-                //let isValid = (data.currentUser === data.id_user) ? false : true;
-                let row = parseInt(key) + 1;
-                let statusRequisition = data.requisition_status;
-                if (statusRequisition == "cancelada") {
-                    $('#edit_req').hide();
-                }
+                            } else {
+                                isValid = true;
+                                $('#edit_req').hide();
+                            }
+                            //si la partida esta cancelada no se podra editar
+                            if (status == "Cancelada" || status == "Aprobada") {
+                                isValid = true;
+                            }
 
-                let rowNode = $("#createRequisition").DataTable()
-                    .row.add([
-                        `<input type="text" style="display:none" disabled class="form-control" id="item_id_${row}" name="item_id_${row}"  value="${data.detailRequisition[key].id}">
+                            //let isValid = (data.currentUser === data.id_user) ? false : true;
+                            let row = parseInt(key) + 1;
+                            let statusRequisition = data.requisition_status;
+                            //se muestra u oculta el boton para agregar items
+                            if (data.requisition_status == "Creada") {
+                                $("#btn_new_item").show();
+                            } else {
+                                $("#btn_new_item").hide();
+                            }
+                            if (statusRequisition == "Cancelada" || statusRequisition == "Aprobada") {
+                                $('#edit_req').hide();
+                            }
+                            if (statusRequisition == "Creada") {
+                                isVisible = "style = 'display:block'";
+                            } else {
+                                isVisible = "style = 'display:none'";
+                            }
+
+                            let statusOptionItem = "";
+                            switch (status) {
+                                case "Creada":
+                                    statusOptionItem = '<option value="Creada">Creada</option>';
+                                    break;
+                                case "Procesada":
+                                    statusOptionItem = `<option value="Procesada" selected>Procesada</option><option value="Cotizada">Cotizada</option><option value="Cancelada">Cancelada</option>`;
+                                    break;
+                                case "Cotizada":
+                                    statusOptionItem = '<option value="Cotizada" selected>Cotizada</option><option value="Cancelada">Cancelada</option>';
+                                    break;
+                                case "Aprobada":
+                                    statusOptionItem = '<option value="Aprobada">Aprobada</option>';
+                                    break;
+                                case "Entregada":
+                                    statusOptionItem = '<option value="Entregada">Entregada</option>';
+                                    break;
+                                case "Devolucion":
+                                    statusOptionItem = '<option value="Devolucion">Devolución</option>';
+                                    break;
+                                case "Cancelada":
+                                    statusOptionItem = '<option value="Cancelada">Cancelada</option>';
+                                    break;
+                            }
+
+                            let rowNode = $("#createRequisition").DataTable()
+                                .row.add([
+                                        `<input type="text" style="display:none" disabled class="form-control" id="item_id_${row}" name="item_id_${row}"  value="${data.detailRequisition[key].id}">
                         <input type="text" disabled class="form-control" value="${data.detailRequisition[key].num_item}">`,
-                        `<input type="number" ${(isValid) ? 'disabled' : ''}  class="form-control" id="item_cantidad_${row}" name="item_cantidad_${row}" placeholder="Cantidad" value="${data.detailRequisition[key].quantity}">`,
-                        `<select ${(isValid) ? 'disabled' : ''}   class="form-control" id="item_unidad_${row}"><option value="Pieza" ${(unit === 1)? 'selected' : ''}>Pieza</option><option value="Servicio" ${(unit === 2)? 'selected' : ''}>Servicio</option></select>`,
-                        `<input ${(isValid) ? 'disabled' : ''}   id="item_descripcion_${row}" class="form-control" value="${data.detailRequisition[key].description}"></input>`,
-                        `<input ${(isValid) ? 'disabled' : ''}   id="item_modelo_${row}" class="form-control"  value="${data.detailRequisition[key].model}"></input>`,
-                        `<select ${(isValid) ? 'disabled' : ''}   id="item_clasificacion_${row}"><option value="1" ${(clasification === 1) ? 'selected' : ''}>G202001 HERRAMIENTAS EPP</option></select>`,
-                        `<input ${(isValid) ? 'disabled' : ''}   type="text" id="item_referencia_${row}" class="form-control" value="${data.detailRequisition[key].preference}"></input>`,
-                        `<select ${(isValid) ? 'disabled' : ''}   id="item_urgencia_${row}"><option value="Alto">Alto</optin><option value="Bajo">Bajo</optin></select>`,
-                        `<select ${(isValid) ? 'disabled' : ''}   id="item_status_${row}"><option value="Proceso" ${(status === 'Proceso') ? 'selected' : ''}>Proceso</option><option value="Cotizado" ${(status === 'Cotizado') ? 'selected' : ''}>Cotizado</optin>` +
-                        `<option value="Entregado" ${(status === 'Entregado') ? 'selected' : ''}>Entregado</optin><option value="Devolucion" ${(status === 'Devolucion') ? 'selected' : ''}>Devolución</optin>` +
-                        `<option value="Cancelada" ${(status === 'Cancelada') ? 'selected' : ''}>Cancelada</optin></select>`,
-                        `<div><button ${(isValid) ? 'disabled' : ''}
-                        class='btn btn-danger' data-toggle="tooltip" data-placement="top" title="Eliminar" onclick='deleteRow(this, ${row})'><i class="fas fa-trash"></i></button>
-                        ${(data.permission === 3) ? "<span data-toggle='modal' data-target='#modalProvider' data-backdrop='static'><button class='btn btn-primary' onclick='showProvider("+data.detailRequisition[key].id+","+data.detailRequisition[key].quantity+")' data-toggle='tooltip' data-placement='top' title='Agregar Proveedores'><i class='fas fa-box' /></button></span>" : ''}</div>`
+                                        `<input type="number" ${(isValid) ? 'disabled' : ''}  class="form-control" id="item_cantidad_${row}" name="item_cantidad_${row}" placeholder="Cantidad" value="${data.detailRequisition[key].quantity}">`,
+                                        `<select ${(isValid) ? 'disabled' : ''}   class="form-control" id="item_unidad_${row}"><option value="Pieza" ${(unit === 1)? 'selected' : ''}>Pieza</option><option value="Servicio" ${(unit === 2)? 'selected' : ''}>Servicio</option></select>`,
+                                        `<textarea ${(isValid) ? 'disabled' : ''}   id="item_descripcion_${row}" class="form-control" cols="40">${data.detailRequisition[key].description}</textarea>`,
+                                        `<input ${(isValid) ? 'disabled' : ''}   id="item_modelo_${row}" class="form-control"  value="${data.detailRequisition[key].model}"></input>`,
+                                        `<select ${(isValid) ? 'disabled' : ''}   id="item_clasificacion_${row}">` +
+                                        `<option value="1" ${(clasification === 1) ? 'selected' : ''}>HERRAMIENTAS EPP</option>` +
+                                        `<option value="2" ${(clasification === 2) ? 'selected' : ''}>PAPELERÍA Y ARTICULOS DE OFICINA</option>` +
+                                        `<option value="3" ${(clasification === 3) ? 'selected' : ''}>EQUIPO DE CÓMPUTO </option>` +
+                                        `<option value="4" ${(clasification === 4) ? 'selected' : ''}>MTTO Y CONSERVACIÓN</option>` +
+                                        `<option value="5" ${(clasification === 5) ? 'selected' : ''}>SEGURIDAD E HIGIENE</option>` +
+                                        `<option value="6" ${(clasification === 6) ? 'selected' : ''}>VIÁTICOS</option>` +
+                                        `<option value="7" ${(clasification === 7) ? 'selected' : ''}>MOBILIARIO Y EQUIPO</option>` +
+                                        `<option value="8" ${(clasification === 8) ? 'selected' : ''}>PROPAGANDA Y PUBLICIDAD</option>` +
+                                        `<option value="9" ${(clasification === 9) ? 'selected' : ''}>CAFETERÍA</option>` +
+                                        `<option value="10" ${(clasification === 10) ? 'selected' : ''}>EQUIPO DE TRANSPORTE</option>` +
+                                        `<option value="11" ${(clasification === 11) ? 'selected' : ''}>EVENTOS INTERNOS</option>` +
+                                        `<option value="12" ${(clasification === 12) ? 'selected' : ''}>PAGO DE IMPUESTOS</option>` +
+                                        `<option value="13" ${(clasification === 13) ? 'selected' : ''}>VIGILANCIA</option>` +
+                                        `<option value="14" ${(clasification === 14) ? 'selected' : ''}>GASTOS FIJOS</option>` +
+                                        `<option value="15" ${(clasification === 15) ? 'selected' : ''}>CAFETERIA Y CONSUMIBLES</option>` +
+                                        `<option value="16" ${(clasification === 16) ? 'selected' : ''}>LIMPIEZA</option>` +
+                                        `<option value="17" ${(clasification === 17) ? 'selected' : ''}>UNIFORMES</option>` +
+                                        `<option value="18" ${(clasification === 18) ? 'selected' : ''}>GASTOS GENERALES</option>` +
+                                        `<option value="19" ${(clasification === 9) ? 'selected' : ''}>NA</option>` +
+                                        `</select>`,
+                                        `<input ${(isValid) ? 'disabled' : ''}   type="text" id="item_referencia_${row}" class="form-control" value="${data.detailRequisition[key].preference}"></input>`,
+                                        `<select ${(isValid) ? 'disabled' : ''}   id="item_urgencia_${row}"><option value="Alto" ${(data.detailRequisition[key].urgency === 'Alto') ? 'selected' : ''}>Alto</optin><option value="Bajo" ${(data.detailRequisition[key].urgency === 'Bajo') ? 'selected' : ''}>Bajo</optin></select>`,
+                                        `<select ${(isValid) ? 'disabled' : ''}   id="item_status_${row}">${statusOptionItem}</select>`,
+                                        `<div><button ${isVisible} ${(isValid) ? 'disabled' : ''}
+                        class='btn btn-danger' data-toggle='tooltip' data-placement='top' title='Eliminar' onclick='deleteRow(this, ${row})'><i class="fas fa-trash"></i></button>
+                        ${(data.permission === 3) ? `<span ${(status === 'Cancelada') ? 'style="display:none"' : 'style="display:block"'} data-toggle='modal' data-target='#modalProvider' data-backdrop='static'><button class='btn btn-primary' onclick='showProvider(${data.detailRequisition[key].id},${data.detailRequisition[key].quantity})' data-toggle='tooltip' data-placement='top' title='Agregar Proveedores'><i class='fas fa-box' /></button></span>` : ''}</div>`
                     ])
                     .draw()
                     .node();
@@ -341,7 +461,7 @@ function showProvider(detail, quantity) {
         }
     });
 }
-
+//Editar Requisicion
 function editRequisition() {
     let formdata = new FormData();
 
@@ -363,6 +483,7 @@ function editRequisition() {
     for (const key in items) {
         console.log(key);
         formdata.append("area_id", $("#project_id").val());
+        formdata.append("project_id", $("#slt_project_id").val());
         formdata.append("item_id_" + i, ($("#item_id_" + items[key]).val()) === undefined ? null : $("#item_id_" + items[key]).val());
         formdata.append("item_cantidad_" + i, $("#item_cantidad_" + items[key]).val());
         formdata.append("item_unidad_" + i, $("#item_unidad_" + items[key]).val());
@@ -552,21 +673,31 @@ function showModalFile(id) {
                 console.log(data.userAdmin);
                 let html = "";
                 var url = "{{asset('')}}";
+                console.log(data);
                 if (data.totalFacturas <= 0) {
                     $("#divFactura").show();
                 }
                 for (const key in data.requisitionFiles) {
                     html += `<tr>` +
                         `<td>${data.requisitionFiles[key].id}</td>` +
-                        `<td><a href="${data.requisitionFiles[key].ruta}/${data.requisitionFiles[key].name}" target="_blank">${data.requisitionFiles[key].name}</a></td>`;
+                        `<td><a href="${data.requisitionFiles[key].ruta}/${data.requisitionFiles[key].name}" target="_blank">${data.requisitionFiles[key].name}</a></td>`+
+                        `<td><textarea name ="txt_comentario_${data.requisitionFiles[key].id}" id="txt_comentario_${data.requisitionFiles[key].id}">${data.requisitionFiles[key].comment}</textarea></td>`+
+                        `<td>`;
+                    if (data.userCompras == true) {
+                        html += `<span>`+
+                        `<button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Guardar Comentario" onclick="saveComment(${data.requisitionFiles[key].id})">`+
+                            `<i class="fas fa-check"></i>`+
+                        `</button>`+
+                        `</span>`;
+                    }
                     if (data.userAdmin == true) {
-                        html += `<td><span >` +
+                        html += `<span >` +
                             `<button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Cancelar" onclick="deleteFile(${data.requisitionFiles[key].id})">` +
                             `<i class="fas fa-minus-square"></i>` +
                             `</button>` +
-                            `</span></td>`;
+                            `</span>`;
                     }
-                    html += `</tr>`;
+                    html += `</td></tr>`;
 
                 }
                 $("#bodyFiles").append(html);
@@ -652,4 +783,42 @@ function deleteFile(id) {
             //messageAlert("Datos incompletos", "error", `${data.responseJSON.errors.apellido_paterno}` + "\n" + `${data.responseJSON.errors.name}`);
         }
     });
+}
+
+function saveComment(idFile) {
+    let comentario = $("#txt_comentario_"+idFile).val();
+    console.log(idFile);
+    console.log($("#txt_comentario_"+idFile).val());
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: "POST",
+        url: `requisitions/${idFile}/comment`,
+        data: {"comment": comentario},
+        /*cache: false,
+        contentType: false,
+        processData: false,*/
+        dataType: 'json',
+        success: function(data) {
+
+            if (data.error == true) {
+                messageAlert(data.msg, "error", "");
+            } else {
+                messageAlert("Comentario Guardado.", "success");
+
+            }
+
+        },
+        error: function(data) {
+            console.log(data.responseJSON);
+            if (data.responseJSON.message == "The given data was invalid.") {
+                messageAlert("Datos incompletos.", "warning");
+            } else {
+                messageAlert("Ha ocurrido un problema.", "error", "");
+            }
+            //messageAlert("Datos incompletos", "error", `${data.responseJSON.errors.apellido_paterno}` + "\n" + `${data.responseJSON.errors.name}`);
+        }
+    });
+
 }

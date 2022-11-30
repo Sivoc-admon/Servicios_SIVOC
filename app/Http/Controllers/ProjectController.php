@@ -30,7 +30,9 @@ class ProjectController extends Controller
 
         $projects = DB::table('projects')
         ->join('customers', 'projects.client', '=', 'customers.id')
+        //->join('users', 'projects.id_user', '=', 'users.id')
         ->select('projects.*', 'customers.code as name_customer')
+        ->whereNull('adicional')
         ->get();
         $areas = DB::table('areas')->get();
         $colocado= Project::where("status","Colocado")->count();
@@ -41,15 +43,6 @@ class ProjectController extends Controller
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -67,6 +60,7 @@ class ProjectController extends Controller
         $project->client = $request->input('sltCliente');
         $project->name_project = $request->input('inputNameProject');
         $project->status = $request->input('inputEstatus');
+        $project->id_user = auth()->id();
 
         if($request->input('adicionalProject'))
         {
@@ -361,24 +355,38 @@ class ProjectController extends Controller
     {
 
         $project = Project::find($idProject);
-        $folders = ProjectFolder::where('id_padre', '=', '0')
-        ->where('project_id', '=', $idProject)
+        $projectsAditionals = Project::where('name_project', '=', $project->name_project)
+        #->whereNotNull('adicional')
         ->get();
+        $tree ="";
+        foreach ($projectsAditionals as $adicional) {
+            $folders = ProjectFolder::where('id_padre', '=', '0')
+            ->where('project_id', '=', $adicional->id)
+            ->get();
 
-        $tree = "<li><span class='caret'>".$project->name_project."</span>";
-        $tree .= "<ul class='nested'>";
-        foreach ($folders as $folder) {
-            $tree.="<li><span class='caret'>".$folder->name."</span><i style='padding-left: 5px; color: orange;' class='fas fa-folder' onClick='showModal(\"ModalShowFoldersProject\",".$folder->id.", ".$idProject.", \"folder\")'></i><i style='padding-left: 5px; color: darkcyan;' class='fas fa-file' onClick='showModal(\"ModalShowFilesProject\",".$folder->id.", ".$idProject.", \"file\")'></i>";
-
-            if(count($folder->childs)){
-
-                $tree .= $this->childView($folder, $idProject);
+            if(!$adicional->adicional){
+                $tree .= "<li><span class='caret'>".$adicional->name_project."_".$adicional->name."</span>";
+            }else{
+                $tree .= "<li><span class='caret'>".$adicional->name_project."-".$adicional->adicional."_".$adicional->name."</span>";
             }
 
+            $tree .= "<ul class='nested'>";
+            foreach ($folders as $folder) {
+                $tree.="<li><span class='caret'>".$folder->name."</span><i style='padding-left: 5px; color: orange;' class='fas fa-folder' onClick='showModal(\"ModalShowFoldersProject\",".$folder->id.", ".$adicional->id.", \"folder\")'></i><i style='padding-left: 5px; color: darkcyan;' class='fas fa-file' onClick='showModal(\"ModalShowFilesProject\",".$folder->id.", ".$adicional->id.", \"file\")'></i>";
+
+                if(count($folder->childs)){
+
+                    $tree .= $this->childView($folder, $adicional->id);
+                }
 
 
+
+            }
+            $tree .= "</li></ul></li>";
         }
-        $tree .= "</li></ul></li>";
+
+
+
 
 
         return response()->json(['data' => $tree], Response::HTTP_OK);
@@ -521,9 +529,11 @@ class ProjectController extends Controller
         return response()->json(['project' => $project->name_project, 'totalAdicional'=>$totalAdicional], Response::HTTP_OK);
     }
 
-    public function totalProyectos()
+    public function totalProyectos(Request $request)
     {
-        $projects = Project::whereNull('adicional')
+        //dd($request->tipo_proyecto);
+        $projects = Project::where('type', '=', $request->tipo_proyecto)
+                ->whereNull('adicional')
                 ->get();
 
         $totalProyectos=0;

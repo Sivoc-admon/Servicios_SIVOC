@@ -524,6 +524,7 @@ function consultaFolder(area, id_padre) {
 }
 
 function newFolder() {
+
     let id_padre = $("#hideIDPadreFolder").val();
     let id_project = $("#hideIDProject").val();
     let folderName = $("#inputNewFolder").val();
@@ -541,6 +542,7 @@ function newFolder() {
                 "_token": $("meta[name='csrf-token']").attr("content")
             },
             success: function(data) {
+                $("#ModalShowFoldersProject").modal('hide');
                 messageAlert("Carpeta Creada.", "success");
                 showFolders();
             },
@@ -673,6 +675,7 @@ function showModal(modal, idFolder, idProject, tipo) {
     } else {
         $("#hideIDPadreFolder").val(idFolder);
         $("#hideIDProject").val(idProject);
+        $("#inputNewFolder").val("");
     }
 
 
@@ -686,13 +689,10 @@ function tipoProyecto(tipo) {
     $.ajax({
         type: "GET",
         url: `projects/total`,
-        /*data: {
-            "folder": folderName,
-            "id_padre": id_padre,
-            "id_proyecto": $("#hideModalIdProjectFolder").val(),
-            "id_area": area,
-            "_token": $("meta[name='csrf-token']").attr("content")
-        },*/
+        data: {
+            "tipo_proyecto": tipoProyecto
+
+        },
         success: function(data) {
             console.log(data);
             let consecutivo = data.totalProyectos.toString().padStart(3, 0);
