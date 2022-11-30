@@ -271,6 +271,11 @@ return [
             'icon' => 'fas fa-project-diagram',
         ],
         [
+            'text' => 'Lista Maestra',
+            'url'  => 'listaMaestra',
+            'icon' => 'fas fa-project-diagram',
+        ],
+        [
             'text' => 'Clientes',
             'url'  => 'customers',
             'icon' => 'fas fa-project-diagram',
@@ -505,6 +510,21 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js',
+                ],
+            ],
+        ],
+        'Jstree' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/jstree/dist/jstree.min.js/',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/jstree/dist/themes/default/style.min.css',
                 ],
             ],
         ],

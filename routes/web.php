@@ -201,6 +201,11 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::resource('requisitions', 'RequisitionController');
 });
 
+//LISTA MAESTRA
+Route::middleware(['auth', 'verified'])->group(function(){
+    Route::resource('listaMaestra','ListaMaestraController');
+});
+
 
 
 
