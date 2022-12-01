@@ -31,7 +31,7 @@
                     </span>
                     @include('indicators.modalsIndicator')
 
-                   
+
                 </div>
             </div>
         </div>
@@ -51,31 +51,41 @@
                                 <th>Valor</th>
                                 <th>Archivo</th>
                                 <th>Fecha Registro</th>
+                                <th>Acción</th>
                             </tr>
                         </thead>
                         <tbody>
                             @isset($indicators)
-    
-                            @foreach ($indicators as $indicator)
-                                <tr>
-                                    <td>{{ $indicator->area }}</td>
-                                    <td>{{ $indicator->tipo_indicador }}</td>
-                                    <td>{{ $indicator->value }}</td>
-                                    <td><a href="{{asset('storage/Documents/Indicadores/'.$indicator->file_name)}}">{{ $indicator->file_name }}</a></td>
-                                    <td>{{ $indicator->registration_date }}</td>
-                                </tr>
-                            @endforeach
-                            
+                                @foreach ($indicators as $indicator)
+                                    <tr>
+                                        <td>{{ $indicator->area }}</td>
+                                        <td>{{ $indicator->tipo_indicador }}</td>
+                                        <td>{{ $indicator->value }}</td>
+                                        <td><a href="{{asset('storage/Documents/Indicadores/'.$indicator->file_name)}}">{{ $indicator->file_name }}</a></td>
+                                        <td>{{ $indicator->registration_date }}</td>
+                                        @if (Auth::user()->hasAnyRole(['admin']))
+                                            <td>
+                                                <form action="{{ route('indicators.destroy',$indicator->id) }}" method="POST">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="fas fa-minus-square"></i></button>
+                                                </form>
+                                            </td>
+                                        @else
+                                            <td></td>
+                                        @endif
+                                    </tr>
+                                @endforeach
                             @endisset
-                            
-                            
                         </tbody>
                         <tfoot>
                             <tr>
                                 <th>Área</th>
                                 <th>Tipo Indicador</th>
                                 <th>Valor</th>
+                                <th>Archivo</th>
                                 <th>Fecha Registro</th>
+                                <th>Acción</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -101,7 +111,7 @@
                             </tr>
                         </thead>
                         <tbody id="bodyIndicatorsDos">
-                            
+
                         </tbody>
                         <tfoot>
                             <tr>
@@ -135,9 +145,9 @@
 @stop
 
 @section('js')
-    
+
     <script>
-        
+
         $(document).ready(function() {
             $("#tableIndicators").DataTable({
                 dom: 'Bfrtip',
@@ -146,9 +156,9 @@
                 ]
             });
 
-            
+
         } );
-    </script>  
-    <script src="{{ asset('vendor/myjs/indicators.js') }}"></script> 
+    </script>
+    <script src="{{ asset('vendor/myjs/indicators.js') }}"></script>
 @stop
 

@@ -28,7 +28,7 @@ class IndicatorController extends Controller
         ->get();
 
         return view('indicators.indicators')->with('areas', $areas)->with('indicators', $indicators)->with('indicatorTypes', $indicatorTypes);
-        
+
     }
 
     /**
@@ -53,7 +53,7 @@ class IndicatorController extends Controller
         $indicator = new Indicator;
         $pathFile = 'public/Documents/Indicadores';
         $file = $request->files;
-        
+
         $indicator->area_id = $request->idArea;
         $indicator->indicator_type_id = $request->typeIndicator;
         $indicator->value = $request->valorOptenido;
@@ -67,10 +67,10 @@ class IndicatorController extends Controller
 
         $indicator->save();
 
-        
+
 
         return redirect()->action([IndicatorController::class, 'index']);
-        
+
     }
 
     //FUNCION PARA CREAR TIPOS DE INDICADORES
@@ -78,26 +78,26 @@ class IndicatorController extends Controller
     {
         $indicatorType = new IndicatorType;
 
-        
+
         $indicatorType->name = $request->input('inputName');
         $indicatorType->formula = $request->input('inputFormula');
         $indicatorType->min = $request->input('inputMinimo');
         $indicatorType->max = $request->input('inputMaximo');
-        
+
 
         $indicatorType->save();
 
-        
+
         return redirect()->action([IndicatorController::class, 'index']);
-        
+
     }
 
     public function getMinMax(Request $request)
     {
-        
-        $indicatorType = $request->indicatorType; 
+
+        $indicatorType = $request->indicatorType;
         $minMax = IndicatorType::where('id', $indicatorType)->get();
-        
+
         return response()->json(["message" => "Exitoso.", "minMax" => $minMax], Response::HTTP_OK);
     }
 
@@ -106,8 +106,8 @@ class IndicatorController extends Controller
         $area = $request->input('sltAreaGrafica');
         $indicatorType = $request->input('inputIndicatorTypeGrafica');
         $fechaInicial = $request->input('fechaInicial');
-        
-        
+
+
         $grafica = DB::table('indicators')
         ->where('area_id', $area)
         ->where('indicator_type_id', $indicatorType)
@@ -116,10 +116,10 @@ class IndicatorController extends Controller
         ->orderBy('month')
         ->get();
 
-        
+
         $minMax = IndicatorType::find($indicatorType);
 
-        
+
         $indicators = DB::table('indicators')
         ->join('areas', 'indicators.area_id', '=', 'areas.id')
         ->join('indicator_type', 'indicators.indicator_type_id', '=', 'indicator_type.id')
@@ -176,6 +176,8 @@ class IndicatorController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $indicator = Indicator::find($id);
+        $indicator->delete();
+        return redirect()->route('indicators.index');
     }
 }
