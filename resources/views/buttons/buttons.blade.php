@@ -24,16 +24,16 @@
 <div class="tab-content" id="nav-tabContent">
   <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
     @if(Auth::user()->hasRole('admin'))
-    <div class="btn-content">
-        <span data-toggle="modal" data-target="#ModalRegisterButton">
-            <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Nuevo Boton">
-                Agregar Boton
-                <i class="fas fa-plus"></i>
-            </button>
-        </span>
+        <div class="btn-content">
+            <span data-toggle="modal" data-target="#ModalRegisterButton">
+                <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Nuevo Boton">
+                    Agregar Boton
+                    <i class="fas fa-plus"></i>
+                </button>
+            </span>
 
-        @include('buttons.register')
-    </div>
+            @include('buttons.register')
+        </div>
 
         <div class="row">
             <div class="col-12">
@@ -56,19 +56,28 @@
                                         <td>{{ $button->name }}</td>
                                         <td>{{ $button->color }}</td>
                                         <td>
-                                            <span data-toggle="modal" data-target="#ModalShowButtonFiles">
-                                                <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Mostrar archivos" onclick="showButtonFile({{$button->id}})">
-                                                    <i class="fas fa-list"></i>
-                                                </button>
-                                            </span>
-                                            <button class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Editar" onclick="editButton({{$button->id}});"><i class="fas fa-edit"></i></a>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <span data-toggle="modal" data-target="#ModalShowButtonFiles">
+                                                        <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Mostrar archivos" onclick="showButtonFile({{$button->id}})">
+                                                            <i class="fas fa-list"></i>
+                                                        </button>
+                                                    </span>
+                                                    <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Editar" onclick="editButton({{$button->id}});"><i class="fas fa-edit"></i></button>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                    <form action="{{ route('inicio.destroy',$button->id) }}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <div class="form-group mb-2">
 
-                                            <form action="{{ route('inicio.destroy',$button->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
+                                                            <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="fas fa-minus-square"></i></button>
+                                                        </div>
+                                                     </form>
+                                                    </div>
+                                            </div>
 
-                                                <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="fas fa-minus-square"></i></button>
-                                            </form>
+
 
 
                                         </td>
