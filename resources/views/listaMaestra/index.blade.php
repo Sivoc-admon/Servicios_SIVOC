@@ -61,7 +61,7 @@
                             <i class="fas fa-plus"></i>
                         </button>
                     </span>
-                    <span >
+                    <!-- <span >
                         <button type="button" class="btn btn-info" onclick="showDiv('divProject')" title="Mostrar Proyectos">
                             <i class="fas fa-project-diagram"></i>
                         </button>
@@ -70,7 +70,7 @@
                         <button type="button" class="btn btn-success" onclick="showDiv('divFiles')" title="Archivos">
                             <i class="fas fa-folder"></i>
                         </button>
-                    </span>
+                    </span> -->
 
                     @endif
 
@@ -87,13 +87,25 @@
                 <div class="card-body">
                     <div id="listasMaestras">
                         <ul>
-                            <li >nodo 1</li>
-                            <li >nodo 2
+                            <li >Proyecto 1</li>
+                            <li >Proyecto 2
                                 <ul>
-                                    <li data-jstree='{"opened":false, "type":"file"}'>subnodo 1</li>
-                                    <li data-jstree='{"opened":false, "type":"file"}'>subnodo 2</li>
+                                    <li data-jstree='{"opened":false, "type":"file"}'>sección 1</li>
+                                    <li data-jstree='{"opened":false, "type":"file"}'>sección 2</li>
                                 </ul>
                             </li>
+                            <li >Proyecto 2</li>
+                            <li >Proyecto 3
+                                <ul>
+                                    <li data-jstree='{"opened":false, "type":"file"}'>sección 1</li>
+                                    <li data-jstree='{"opened":false, "type":"file"}'>sección 2</li>
+                                    <li data-jstree='{"opened":false, "type":"file"}'>sección 3</li>
+                                    <li data-jstree='{"opened":false, "type":"file"}'>sección 4</li>
+                                </ul>
+                            </li>
+                            <li >Proyecto 4</li>
+                            <li >Proyecto 5</li>
+                            <li >Proyecto 6</li>
                         </ul>
                     </div>
                 </div>
