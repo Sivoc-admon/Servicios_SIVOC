@@ -532,7 +532,7 @@ class ProjectController extends Controller
     public function totalProyectos(Request $request)
     {
         //dd($request->tipo_proyecto);
-        $projects = Project::where('type', '=', $request->tipo_proyecto)
+        $projects = Project::where('name_project', 'like', $request->tipo_proyecto .'-' . $request->year . '%')
                 ->whereNull('adicional')
                 ->get();
 

@@ -690,7 +690,8 @@ function tipoProyecto(tipo) {
         type: "GET",
         url: `projects/total`,
         data: {
-            "tipo_proyecto": tipoProyecto
+            "tipo_proyecto": tipoProyecto,
+            "year": year
 
         },
         success: function(data) {
