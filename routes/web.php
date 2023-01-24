@@ -63,6 +63,7 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::get('projects/{folder}/files', 'ProjectController@showFolderFiles')->name('projects.showFolderFiles');
     Route::get('projects/total', 'ProjectController@totalProyectos')->name('projects.totalProyectos');
     Route::get('projects/folder/adicional/{id_project}', 'ProjectController@adicional')->name('projects.adicional');
+    Route::get('projects/filtro/{ano}', 'ProjectController@filtroAno')->name('projects.filtroAno');
     Route::resource('projects', 'ProjectController');
 
 });

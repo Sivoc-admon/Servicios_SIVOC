@@ -757,3 +757,57 @@ function creaAdiccional() {
         }
     });
 }
+
+//filtro por año
+function filtroAno() {
+    let ano = $("#sltAnoProyecto").val();
+
+    if (!ano || ano <= 0) {
+        return;
+    }
+    $.ajax({
+        type: "GET",
+        url: `projects/filtro/${ano}`,
+        /*data: {
+            "folder": folderName,
+            "id_padre": id_padre,
+            "id_proyecto": $("#hideModalIdProjectFolder").val(),
+            "id_area": area,
+            "_token": $("meta[name='csrf-token']").attr("content")
+        },*/
+        success: function(data) {
+
+            $("#tableProjects").DataTable({
+                dom: 'Bfrtip',
+                bDestroy: true,
+                data: data.projects,
+                buttons: [
+                    'csv', 'excel', 'pdf'
+                ],
+                responsive: {
+                    details: {
+                        type: 'column',
+                        target: -1
+                    }
+                },
+                columnDefs: [{
+                    className: 'control',
+                    orderable: false,
+                    targets: -1
+                }]
+            });
+
+
+        },
+        error: function(data) {
+            console.log(data.responseJSON);
+            if (data.responseJSON.message == "The given data was invalid.") {
+                messageAlert("Datos incompletos.", "warning");
+            } else {
+                messageAlert("Ha ocurrido un problema.", "error", "");
+            }
+            //messageAlert("Datos incompletos", "error", `${data.responseJSON.errors.apellido_paterno}` + "\n" + `${data.responseJSON.errors.name}`);
+        }
+    });
+
+}

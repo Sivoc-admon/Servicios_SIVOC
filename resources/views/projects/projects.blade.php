@@ -79,12 +79,36 @@
             </div>
         </div>
     </div>
+    <br>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="input-group">
 
+                <form class="form-inline" action="{{ route('projects.index') }}" method="GET">
+                    <select class="custom-select" id="sltAnoProyecto" name="sltAnoProyecto" >
+                        <option value="0" selected>Seleccione Año</option>
+                        <option value="19">2019</option>
+                        <option value="20">2020</option>
+                        <option value="21">2021</option>
+                        <option value="22">2022</option>
+                        <option value="23">2023</option>
+                        <option value="24">2024</option>
+                        <option value="25">2025</option>
+                    </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+    <br>
     <div class="row" id="divProject">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-
                     <table id="tableProjects" style="width: 100%" class="table table-striped table-bordered">
                         <thead>
                             <tr>
@@ -176,8 +200,6 @@
                             </tr>
                         </tfoot>
                     </table>
-
-
                 </div>
             </div>
         </div>

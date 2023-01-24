@@ -22,18 +22,28 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //$projects = Project::get();
+
+        if ($request->sltAnoProyecto) {
+            //dd($request->sltAnoProyecto);
+            $projects = DB::table('projects')
+            ->join('customers', 'projects.client', '=', 'customers.id')
+            ->select('projects.*', 'customers.code as name_customer')
+            ->where('projects.name_project', 'like', '%' . $request->sltAnoProyecto . '%')
+            ->whereNull('projects.adicional')
+            ->get();
+
+        }else{
+            $projects = DB::table('projects')
+            ->join('customers', 'projects.client', '=', 'customers.id')
+            ->select('projects.*', 'customers.code as name_customer')
+            ->whereNull('adicional')
+            ->get();
+        }
         $customers = Customer::get();
         $users = User::get();
 
-        $projects = DB::table('projects')
-        ->join('customers', 'projects.client', '=', 'customers.id')
-        //->join('users', 'projects.id_user', '=', 'users.id')
-        ->select('projects.*', 'customers.code as name_customer')
-        ->whereNull('adicional')
-        ->get();
         $areas = DB::table('areas')->get();
         $colocado= Project::where("status","Colocado")->count();
         $proceso= Project::where("status","Proceso")->count();
@@ -569,5 +579,32 @@ class ProjectController extends Controller
         $array=["msg"=>$msg, "error"=>$error];
 
         return response()->json($array);
+    }
+
+    public function filtroAno($ano)
+    {
+       /* $projects = Project::where('name_project', 'like', '%' . $ano . '%')
+        ->whereNull('adicional')
+        ->get();*/
+
+        $customers = Customer::get();
+        $users = User::get();
+
+        $projects = DB::table('projects')
+        ->join('customers', 'projects.client', '=', 'customers.id')
+        //->join('users', 'projects.id_user', '=', 'users.id')
+        ->select('projects.*', 'customers.code as name_customer')
+        ->where('projects.name_project', 'like', '%' . $ano . '%')
+        ->whereNull('projects.adicional')
+        ->get();
+        $areas = DB::table('areas')->get();
+        $colocado= Project::where("status","Colocado")->count();
+        $proceso= Project::where("status","Proceso")->count();
+        $terminado= Project::where("status","Terminado")->count();
+
+        return view('projects.projects', compact('projects','customers', 'colocado', 'proceso', 'terminado', 'users', 'areas'));
+
+
+        return response()->json(['projects' => $projects], Response::HTTP_OK);
     }
 }
