@@ -159,14 +159,7 @@
             </div>
             <div class="modal-body">
                 <ul class="list-group vertical-steps" id="step">
-                    <li class="list-group-item completed">
-                        <span>Status / Fecha / empleado.</span>
-
-                    </li>
-                    <li class="list-group-item completed">
-                        <span>Aliquam.</span>
-                    </li>
-
+                    
                 </ul>
             </div>
             <div class="modal-footer">
