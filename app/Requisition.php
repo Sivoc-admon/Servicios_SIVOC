@@ -23,4 +23,9 @@ class Requisition extends Model
     {
         return $this->hasMany('App\RequisitionFile');
     }
+
+    public function requisitionHistory()
+    {
+        return $this->hasMany('App\RequisitionHistory');
+    }
 }

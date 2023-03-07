@@ -407,19 +407,6 @@ function showRequisition(id) {
     });
 
 
-
-    /*ajax({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        type: "GET",
-        url: `requisitions/${id}`,
-        success: function(data) {
-            console.log(data);
-        }
-    });*/
-
-
 }
 
 function limpiaTabla() {
@@ -821,4 +808,37 @@ function saveComment(idFile) {
         }
     });
 
+}
+
+function history(id) {
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: "GET",
+        url: `requisitions/history/${id}`,
+
+        success: function(data) {
+            $('#step').empty();
+            let html = ``;
+
+            for (const key in data.requisitionHistory) {
+                console.log(data.requisitionHistory[key]);
+                html+= `<li class="list-group-item completed">`;
+                html+= `<span>${data.requisitionHistory[key].status} / ${data.requisitionHistory[key].created_at} / ${data.requisitionHistory[key].name} ${data.requisitionHistory[key].last_name}.</span>`;
+                html+= `</li>`;
+            }
+            $('#step').append(html);
+            console.log(items);
+        },
+        error: function(data) {
+            console.log(data.responseJSON);
+            if (data.responseJSON.message == "The given data was invalid.") {
+                messageAlert("Datos incompletos.", "warning");
+            } else {
+                messageAlert("Ha ocurrido un problema.", "error", "");
+            }
+            //messageAlert("Datos incompletos", "error", `${data.responseJSON.errors.apellido_paterno}` + "\n" + `${data.responseJSON.errors.name}`);
+        }
+    });
 }

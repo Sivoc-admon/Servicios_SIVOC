@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\RequisitionFile;
 use App\User;
 use App\Project;
+use App\RequisitionHistory;
 use Illuminate\Support\Facades\Storage;
 
 class RequisitionController extends Controller
@@ -148,6 +149,12 @@ class RequisitionController extends Controller
 
                 $detailRequisition->save();
             }
+            //se crea registro para el historial
+            $requisitionHistory = new RequisitionHistory();
+            $requisitionHistory->requisition_id = $requisition->id;
+            $requisitionHistory->status = $requisition->status;
+            $requisitionHistory->user_id = $id_user;
+            $requisitionHistory->save();
             DB::commit();
         }
         catch (\Throwable $e) {
@@ -155,34 +162,7 @@ class RequisitionController extends Controller
             throw $e;
         }
 
-        /*if ($requisition->save()) {
-            for ($i=1; $i <= $request->totalItems; $i++) {
-                $detailRequisition = new DetailRequisition();
-                $detailRequisition->num_item = $i;
-                $detailRequisition->id_classification = $petition['item_clasificacion_'.$i];
-                $detailRequisition->id_requisition = $requisition->id;
-                $detailRequisition->quantity = $petition['item_cantidad_'.$i];
-                $detailRequisition->unit = $petition['item_unidad_'.$i];
-                $detailRequisition->description = $petition['item_descripcion_'.$i];
-                $detailRequisition->model = $petition['item_modelo_'.$i];
-                $detailRequisition->preference = $petition['item_referencia_'.$i];
-                $detailRequisition->urgency = $petition['item_urgencia_'.$i];
-                //si el rol del usuario es direccion, el stratus de la partida sera procesada
-                if($trueDireccion){
-                    $detailRequisition->status = "Procesada";
-                }else{
-                    $detailRequisition->status = $petition['item_status_'.$i];
-                }
 
-                $detailRequisition->save();
-            }
-        } else {
-            $msg = "Error al guardar la requisición";
-            $error = true;
-            $array=["msg"=>$msg, "error"=>$error];
-
-            return response()->json($array);
-        }*/
 
         $msg = "Requisición guardada correctamente";
         $array=["msg"=>$msg, "error"=>$error];
@@ -447,6 +427,7 @@ class RequisitionController extends Controller
         $deleteItems = [];
         $petition = $request->all();
         $requisition = Requisition::find($id);
+        $idUser = auth()->user()->id;
 
         $reqUpdate = [
             'no_requisition' => $request->noRequisition,
@@ -561,6 +542,14 @@ class RequisitionController extends Controller
             //dd($estatusActual);
             if($requisition->update($estatusActual)){
                 $objItems = DetailRequisition::where('id_requisition', $requisition->id)->whereNotIn('id', $deleteItems)->get();
+
+                //se crea registro para el historial
+                $requisitionHistory = new RequisitionHistory();
+                $requisitionHistory->requisition_id = $requisition->id;
+                $requisitionHistory->status = $requisition->status;
+                $requisitionHistory->user_id = $idUser;
+                $requisitionHistory->save();
+
                 DetailRequisition::destroy($objItems->toArray());
             }else{
                 $msg = "Error al actualizar la requisición";
@@ -607,6 +596,8 @@ class RequisitionController extends Controller
         $error = false;
         $requisition = Requisition::find($id);
         $detailRequisition = [];
+        $idUser = auth()->user()->id;
+
         switch ($request->status) {
             case 'Creada':
                 $detailRequisition = DetailRequisition::where('status', '!=', 'Cancelada')->get();
@@ -638,6 +629,12 @@ class RequisitionController extends Controller
                 $detail->status = $request->status;
                 $detail->update();
             }
+            //se crea registro para el historial
+            $requisitionHistory = new RequisitionHistory();
+            $requisitionHistory->requisition_id = $requisition->id;
+            $requisitionHistory->status = $requisition->status;
+            $requisitionHistory->user_id = $idUser;
+            $requisitionHistory->save();
             $msg = "Se actualizo el status de la requisición";
         }
 
@@ -675,6 +672,21 @@ class RequisitionController extends Controller
             $error = true;
         }
         $array = ["mgs"=>$msg, "error"=>$error];
+        return response()->json($array);
+    }
+
+    public function history($id)
+    {
+        $requisitionHistory = DB::table('requisition_histories')
+            ->join('users', 'users.id', '=', 'requisition_histories.user_id')
+            ->join('requisitions', 'requisitions.id', '=', 'requisition_histories.requisition_id')
+            ->select('requisition_histories.*', 'users.name', 'users.last_name')
+            ->where('requisition_histories.requisition_id', $id)
+            ->get();
+
+        $msg = "";
+        $error=false;
+        $array = ["mgs"=>$msg, "error"=>$error, "requisitionHistory"=>$requisitionHistory];
         return response()->json($array);
     }
 

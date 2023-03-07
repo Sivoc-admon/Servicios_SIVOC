@@ -146,3 +146,32 @@
       </div>
     </div>
 </div>
+
+<!-- Modal  HISTORICO-->
+<div class="modal fade" id="modalHistorial">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Historial</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group vertical-steps" id="step">
+                    <li class="list-group-item completed">
+                        <span>Status / Fecha / empleado.</span>
+
+                    </li>
+                    <li class="list-group-item completed">
+                        <span>Aliquam.</span>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

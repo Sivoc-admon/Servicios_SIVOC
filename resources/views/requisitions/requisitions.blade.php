@@ -46,6 +46,65 @@
             .modal-lg {
                 max-width: 100%;
             }
+
+            /*Vertical Steps*/
+            .list-group.vertical-steps{
+                padding-left:10px;
+            }
+            .list-group.vertical-steps .list-group-item{
+                border:none;
+                border-left:3px solid #ece5dd;
+                box-sizing:border-box;
+                border-radius:0;
+                counter-increment: step-counter;
+                padding-left:20px;
+                padding-right:0px;
+                padding-bottom:20px;
+                padding-top:0px;
+            }
+            .list-group.vertical-steps .list-group-item.active{
+                background-color:transparent;
+                color:inherit;
+            }
+            .list-group.vertical-steps .list-group-item:last-child{
+                border-left:3px solid transparent;
+                padding-bottom:0;
+            }
+            .list-group.vertical-steps .list-group-item::before {
+                border-radius: 50%;
+                background-color:#ece5dd;
+                color:#555;
+                content: counter(step-counter);
+                display:inline-block;
+                float:left;
+                height:25px;
+                line-height:25px;
+                margin-left:-35px;
+                text-align:center;
+                width:25px;
+            }
+            .list-group.vertical-steps .list-group-item span,
+            .list-group.vertical-steps .list-group-item a{
+                display:block;
+                overflow:hidden;
+                padding-top:2px;
+            }
+
+            /*Active/ Completed States*/
+            .list-group.vertical-steps .list-group-item.active::before{
+                background-color:#0052c2;
+                color:#fff;
+            }
+            .list-group.vertical-steps .list-group-item.completed{
+                border-left:3px solid #0052c2;
+            }
+            .list-group.vertical-steps .list-group-item.completed::before{
+                background-color:#0052c2;
+                color:#fff;
+            }
+            .list-group.vertical-steps .list-group-item.completed:last-child{
+                border-left:3px solid transparent;
+            }
         </style>
     @stop
     <h1 class="m-0 text-dark">Requisiciones</h1>
@@ -63,13 +122,9 @@
                             <i class="fas fa-plus"></i>
                         </button>
                     </span>
-
-
                     @endif
                     @include('requisitions.create_requisition')
                     @include('requisitions.files')
-
-
                 </div>
             </div>
         </div>
@@ -80,7 +135,7 @@
             <div class="card">
                 <div class="card-body">
 
-                    <table id="tableRequisitions" style="width: 100%" class="table table-striped table-bordered">
+                    <table id="tableRequisitions"  class="table table-striped table-bordered" style="width:100%">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -130,6 +185,11 @@
                                                 <span data-toggle="modal" data-target="#modalFilesRequisition">
                                                     <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Archivos" onclick="showModalFile({{$requisiton->id}})">
                                                         <i class="fas fa-list"></i>
+                                                    </button>
+                                                </span>
+                                                <span data-toggle="modal" data-target="#modalHistorial">
+                                                    <button type="button" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Historial" onclick="history({{$requisiton->id}})"">
+                                                        <i class="fas fa-clock"></i>
                                                     </button>
                                                 </span>
                                                 @if (Auth::user()->hasAnyRole(['admin', 'direccion', 'lider calidad', 'lider compras', 'lider recursos humanos', 'lider servicio', 'lider ventas', 'lider tesoreria', 'compras']))

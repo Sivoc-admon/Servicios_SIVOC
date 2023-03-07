@@ -199,6 +199,7 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::delete('requisitions/{id}/deleteFile', 'RequisitionController@deleteFile')->name('requisitions.deleteFile');
     Route::get('requisitions/newRequisition', 'RequisitionController@newRequisition')->name('requisitions.newRequisition');
     Route::post('requisitions/{id}/comment', 'RequisitionController@saveComment')->name('requisitions.saveComment');
+    Route::get('requisitions/history/{id}', 'RequisitionController@history')->name('requisitions.history');
     Route::resource('requisitions', 'RequisitionController');
 });
 
