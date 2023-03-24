@@ -14,7 +14,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        
+
                         <span data-toggle="modal" data-target="#ModalRegisterUser">
                             <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Nuevo Usuario">
                                 <i class="fas fa-user-plus"></i>
@@ -25,12 +25,12 @@
                                 <i class="fas fa-user-plus"></i>
                             </button>
                         </span>
-                        
+
 
                         @include('users.register')
                         @include('users.edit')
 
-                    
+
                     </div>
                 </div>
             </div>
@@ -63,24 +63,24 @@
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->area_name }}</td>
                                         <td>
-                                            @if ($user->area_name != 'Direccion')
+                                            @if (Auth::user()->hasAnyRole(['admi', 'direccion']))
                                                 <button class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Editar" onclick="editUser({{$user->id}});"><i class="fas fa-edit"></i></a>
-                                            
+
                                                 <form action="{{ route('users.destroy',$user->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                    
+
                                                     <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="fas fa-minus-square"></i></button>
                                                 </form>
                                             @else
-                                                
+
                                             @endif
-                                            
+
                                         </td>
                                     </tr>
                                 @endforeach
-                                
-                                
+
+
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -110,10 +110,10 @@
                     'csv', 'excel', 'pdf'
                 ]
             });
-            
+
             //table('tableUsers');
         } );
-    </script>  
-    <script src="{{ asset('vendor/myjs/users.js') }}"></script> 
+    </script>
+    <script src="{{ asset('vendor/myjs/users.js') }}"></script>
 @stop
 
