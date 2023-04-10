@@ -31,14 +31,14 @@ class ProjectController extends Controller
             ->join('customers', 'projects.client', '=', 'customers.id')
             ->select('projects.*', 'customers.code as name_customer')
             ->where('projects.name_project', 'like', '%' . $request->sltAnoProyecto . '%')
-            ->whereNull('projects.adicional')
+            //->whereNull('projects.adicional')
             ->get();
 
         }else{
             $projects = DB::table('projects')
             ->join('customers', 'projects.client', '=', 'customers.id')
             ->select('projects.*', 'customers.code as name_customer')
-            ->whereNull('adicional')
+            //->whereNull('adicional')
             ->get();
         }
         $customers = Customer::get();
