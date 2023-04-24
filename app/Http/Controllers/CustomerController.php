@@ -120,7 +120,7 @@ class CustomerController extends Controller
         $error=false;
 
         $count = Customer::where('code', $request->input('inputCodeCustomerEdit'))->count();
-        if ($count>0) {
+        if ($count>1) {
             $msg="El codigo ya existe, intente con otro.";
             $error=true;
 
