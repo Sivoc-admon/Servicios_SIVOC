@@ -23,7 +23,7 @@
 </nav>
 <div class="tab-content" id="nav-tabContent">
   <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-    @if(Auth::user()->hasRole('admin'))
+    @if(Auth::user()->hasAnyRole(['admin', 'calidad']))
         <div class="btn-content">
             <span data-toggle="modal" data-target="#ModalRegisterButton">
                 <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Nuevo Boton">
@@ -102,7 +102,7 @@
     @endif
   </div>
   <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-    @if(Auth::user()->hasRole('admin'))
+    @if(Auth::user()->hasAnyRole(['admin', 'calidad']))
         <div class="btn-content">
             <span data-toggle="modal" data-target="#ModalRegisterImage">
                 <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Nueva Imagen">
