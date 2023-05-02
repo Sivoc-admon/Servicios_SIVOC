@@ -14,7 +14,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        @if(Auth::user()->hasRole('admin'))
+                        @if(Auth::user()->hasAnyRole(['admin', 'direccion']))
                         <span data-toggle="modal" data-target="#ModalRegisterSGC">
                             <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Nuevo Documento SGC">
                                 <i class="fas fa-user-plus"></i>
@@ -22,12 +22,12 @@
                         </span>
 
                         @endif
-                        
+
 
                         @include('sgc.register')
                         @include('sgc.edit')
 
-                    
+
                     </div>
                 </div>
             </div>
@@ -60,7 +60,7 @@
                                         <td>{{ $sgc->update_date }}</td>
                                         <td>{{ $sgc->user_name }} {{ $sgc->last_name }} {{ $sgc->mother_last_name }}</td>
                                         <td>
-                                            
+
                                             <div class="btn-group" role="group" aria-label="Basic example">
                                                 <span data-toggle="modal" data-target="#ModalShowSgcFiles">
                                                     <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="" onclick="showSgcFile({{$sgc->id}})" data-original-title="Mostrar archivos">
@@ -68,23 +68,23 @@
                                                     </button>
                                                 </span>
                                                 @if(Auth::user()->hasAnyRole(['admin', 'calidad']))
-                                                
+
                                                     <button class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Editar" onclick="editSgc({{$sgc->id}});"><i class="fas fa-edit"></i></a></button>
-                                                    
+
                                                     <form action="{{ route('sgc.destroy',$sgc->id) }}" method="POST">
                                                         @csrf
                                                         @method('DELETE')
-                                        
+
                                                         <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="fas fa-minus-square"></i></button>
                                                     </form>
                                                 @endif
                                             </div>
-                                            
+
                                         </td>
                                     </tr>
                                 @endforeach
-                                
-                                
+
+
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -102,7 +102,7 @@
                 </div>
             </div>
         </div>
-    
+
 @stop
 
 @section('js')
@@ -133,10 +133,10 @@
                     } )
                 ]
             });
-            
+
             //table('tableUsers');
         } );
-    </script>  
-    <script src="{{ asset('vendor/myjs/sgc.js') }}"></script> 
+    </script>
+    <script src="{{ asset('vendor/myjs/sgc.js') }}"></script>
 @stop
 
