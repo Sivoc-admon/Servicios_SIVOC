@@ -14,7 +14,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        @if(Auth::user()->hasAnyRole(['admin', 'direccion']))
+                        @if(Auth::user()->hasAnyRole(['admin', 'direccion', 'calidad']))
                         <span data-toggle="modal" data-target="#ModalRegisterSGC">
                             <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Nuevo Documento SGC">
                                 <i class="fas fa-user-plus"></i>

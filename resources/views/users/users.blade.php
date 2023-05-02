@@ -9,7 +9,7 @@
 @stop
 
 @section('content')
-    @if(Auth::user()->hasRole('admin'))
+    @if(Auth::user()->hasAnyRole(['admin', 'calidad']))
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -63,7 +63,7 @@
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->area_name }}</td>
                                         <td>
-                                            @if (Auth::user()->hasAnyRole(['admin', 'direccion']))
+                                            @if (Auth::user()->hasAnyRole(['admin', 'direccion', 'calidad']))
                                                 <button class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Editar" onclick="editUser({{$user->id}});"><i class="fas fa-edit"></i></a>
 
                                                 <form action="{{ route('users.destroy',$user->id) }}" method="POST">
