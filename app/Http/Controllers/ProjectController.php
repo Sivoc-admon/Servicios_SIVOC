@@ -26,19 +26,17 @@ class ProjectController extends Controller
     {
 
         if ($request->sltAnoProyecto) {
-            //dd($request->sltAnoProyecto);
+
             $projects = DB::table('projects')
             ->join('customers', 'projects.client', '=', 'customers.id')
             ->select('projects.*', 'customers.code as name_customer')
             ->where('projects.name_project', 'like', '%' . $request->sltAnoProyecto . '%')
-            //->whereNull('projects.adicional')
             ->get();
 
         }else{
             $projects = DB::table('projects')
             ->join('customers', 'projects.client', '=', 'customers.id')
             ->select('projects.*', 'customers.code as name_customer')
-            //->whereNull('adicional')
             ->get();
         }
         $customers = Customer::get();
