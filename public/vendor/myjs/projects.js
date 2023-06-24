@@ -146,10 +146,10 @@ function editProject(id) {
 
                 if (data.project.type == "PE") {
                     tipo = "<option value='PE' selected>PUESTA EN MARCHA</option>" +
-                        "<option value='PS'>Proyecto de ServicioL</option>" +
+                        "<option value='PS'>Proyecto de Servicio</option>" +
                         "<option value='GE'>Proyecto General</option>";
                 } else {
-                    tipo = "<option value='PS' selected>Proyecto de ServicioLL</option>" +
+                    tipo = "<option value='PS' selected>Proyecto de Servicio</option>" +
                         "<option value='GE'>Proyecto General</option>";
                 }
 
