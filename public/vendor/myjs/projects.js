@@ -143,12 +143,14 @@ function editProject(id) {
                 let tipo = "";
                 let customerOption = "";
                 let statusOption = "";
+
                 if (data.project.type == "PE") {
                     tipo = "<option value='PE' selected>PUESTA EN MARCHA</option>" +
-                        "<option value='PO'>OPERACIONAL</option>";
+                        "<option value='PS'>Proyecto de ServicioL</option>" +
+                        "<option value='GE'>Proyecto General</option>";
                 } else {
-                    tipo = "<option value='PE'>PUESTA EN MARCHA</option>" +
-                        "<option value='PO' selected>OPERACIONAL</option>";
+                    tipo = "<option value='PS' selected>Proyecto de ServicioLL</option>" +
+                        "<option value='GE'>Proyecto General</option>";
                 }
 
                 for (const i in data.users) {
